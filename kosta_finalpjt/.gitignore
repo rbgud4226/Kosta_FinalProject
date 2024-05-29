@@ -14,8 +14,6 @@ local.properties
 .loadpath
 .recommenders
 
-!src/main/resources/
-
 # External tool builders
 .externalToolBuilders/
 
@@ -240,7 +238,9 @@ buildNumber.properties
 # Eclipse Core
 .project
 # JDT-specific (Eclipse Java Development Tools)
-.classpath
+!.classpath/
+.classpath/*
+!src/main/resources/
 
 ### VisualStudioCode ###
 .vscode/*
