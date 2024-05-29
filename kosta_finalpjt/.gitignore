@@ -14,6 +14,8 @@ local.properties
 .loadpath
 .recommenders
 
+!src/main/resources/
+
 # External tool builders
 .externalToolBuilders/
 
