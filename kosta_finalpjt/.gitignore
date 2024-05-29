@@ -240,8 +240,9 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 #
+!src/main/resources/
+src/main/resources/application.properties
 !src/main/resources/**
-**/application.properties
 
 ### VisualStudioCode ###
 .vscode/*
