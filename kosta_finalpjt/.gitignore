@@ -239,7 +239,8 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
-!**/main/resources/*
+!**/main/resources/static
+!**/main/resources/templates
 application.properties
 
 ### VisualStudioCode ###
