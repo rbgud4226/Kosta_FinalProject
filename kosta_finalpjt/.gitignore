@@ -241,6 +241,7 @@ buildNumber.properties
 .classpath
 #
 !src/main/resources/**
+**/application.properties
 
 ### VisualStudioCode ###
 .vscode/*
