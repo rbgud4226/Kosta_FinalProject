@@ -1,4 +1,4 @@
-package com.example.demo.member;
+package com.example.demo.users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,11 +13,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-public class Member {
+public class Users {
 	@Id
 	private String id;
+	private String usernm;
 	private String pwd;
-	private String name;
-	private String email;
-	private String type; // admin, seller, consumer
+	private String type;
+	private int aprov;
 }
