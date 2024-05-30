@@ -9,6 +9,6 @@ import com.example.demo.member.Member;
 
 @Repository
 public interface DocxDao extends JpaRepository<Docx, Integer> {
-	ArrayList<Docx> findByWriter (Member writer);
+	ArrayList<Docx> findByWriter (Members writer);
 	ArrayList<Docx> findByTitleLike (String title);
 }

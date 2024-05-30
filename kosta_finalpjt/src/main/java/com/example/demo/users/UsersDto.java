@@ -1,4 +1,4 @@
-package com.example.demo.member;
+package com.example.demo.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,10 +12,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-public class MemberDto {
+public class UsersDto {
 	private String id;
+	private String usernm;
 	private String pwd;
-	private String name;
-	private String email;
 	private String type;
+	private int aprov;
 }

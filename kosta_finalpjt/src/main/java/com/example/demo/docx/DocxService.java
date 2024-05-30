@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.member.Member;
+import com.example.demo.members.Members;
 
 @Service
 public class DocxService {
@@ -48,7 +48,7 @@ public class DocxService {
 	}
 
 	// 문서 작성자 검색
-	public ArrayList<DocxDto> getByWriter(Member writer) {
+	public ArrayList<DocxDto> getByWriter(Members writer) {
 		List<Docx> l = dao.findByWriter(writer);
 		if (l == null) {
 			return null;
