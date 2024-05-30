@@ -1,11 +1,9 @@
 package com.example.demo.members;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.departments.Departments;
 import com.example.demo.users.Users;
 
 import lombok.AllArgsConstructor;
