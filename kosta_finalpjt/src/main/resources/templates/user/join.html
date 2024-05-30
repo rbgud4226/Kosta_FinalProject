@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="/join" method="post">
+<table border="1">
+	<tr>
+		<th>ID</th>
+		<td>
+			<input type="text" name="id" id="id">
+			<input type="button" value="중복체크" onclick="a()"><br/>
+			<span id="res"></span>
+		</td>
+	</tr>
+	<tr>
+		<th>PWD</th><td><input type="password" name="pwd"></td>
+	</tr>
+	<tr>
+		<th>NAME</th><td><input type="text" name="usernm"></td>
+	</tr>
+	<tr>
+		<th>TYPE</th>
+		<td> 
+			<input type="radio" name="type" value="emp">직원  
+			<input type="radio" name="type" value="admin">관리자 
+		</td>
+	</tr>
+</table>
+<input type="submit" value="가입">
+</form>
+<a href="/">홈</a><br/>
+</body>
+</html>
