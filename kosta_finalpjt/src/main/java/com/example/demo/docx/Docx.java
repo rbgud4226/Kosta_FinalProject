@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
@@ -39,6 +40,9 @@ public class Docx {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Members writer;
 	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Members senior;
 	private Date startdt;
 	private Date enddt;
