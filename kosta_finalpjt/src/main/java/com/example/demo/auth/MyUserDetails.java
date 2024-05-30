@@ -8,44 +8,51 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.demo.member.Member;
+import com.example.demo.users.Users;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class TokenUserDetails implements UserDetails {
+public class MyUserDetails implements UserDetails {
 
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final Member m;
+	private final Users u;
 
-	public TokenUserDetails(Member m) {
-		this.m = m;
+	public MyUserDetails(Users u) {
+		this.u = u;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
 		List<GrantedAuthority> list = new ArrayList<>();
-		list.add(new SimpleGrantedAuthority(m.getType()));
+		String role = "";
+		if (u.getType().equals("admin")) {
+			role = "ROLE_ADMIN";
+		} else if (u.getType().equals("emp")) {
+			role = "ROLE_EMP";
+		}
+		list.add(new SimpleGrantedAuthority(role));
 		return list;
 	}
 
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return m.getPwd();
+		System.out.println("MyUserDetails:" + u.getPwd());
+		return u.getPwd();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return m.getId();
+		return u.getId();
 	}
 
 	@Override
