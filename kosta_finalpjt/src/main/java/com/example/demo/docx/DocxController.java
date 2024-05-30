@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.demo.member.Member;
+import com.example.demo.members.Members;
 
 @Controller
 @RequestMapping("/docx")
@@ -72,7 +72,7 @@ public class DocxController {
 	}
 
 	@RequestMapping("/writerlist")
-	public String writerList(Member writer, ModelMap map) {
+	public String writerList(Members writer, ModelMap map) {
 		map.addAttribute("wlist", service.getByWriter(writer));
 		return "docx/list";
 	}

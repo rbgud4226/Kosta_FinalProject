@@ -3,7 +3,7 @@ package com.example.demo.docx;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.example.demo.member.Member;
+import com.example.demo.members.Members;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +18,8 @@ import lombok.ToString;
 @ToString
 public class DocxDto {
 	private int formnum;
-	private Member writer;
-	private Member senior;
+	private Members writer;
+	private Members senior;
 	private Date startdt;
 	private Date enddt;
 	private String title;
