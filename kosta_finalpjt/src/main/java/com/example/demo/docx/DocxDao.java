@@ -1,0 +1,14 @@
+package com.example.demo.docx;
+
+import java.util.ArrayList;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.demo.member.Member;
+
+@Repository
+public interface DocxDao extends JpaRepository<Docx, Integer> {
+	ArrayList<Docx> findByWriter (Member writer);
+	ArrayList<Docx> findByTitleLike (String title);
+}
