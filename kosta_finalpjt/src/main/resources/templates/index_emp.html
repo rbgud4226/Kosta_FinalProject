@@ -6,8 +6,8 @@
 </head>
 <body>
 <h3>emp 페이지</h3>
-<div th:text="${session.loginId }"></div>
-<div th:text="${session.type }"></div>
-<a href="/member/add">내이력정보입력</a>
+<div th:replace="~{/common/leftbar :: leftBar}"></div>
+
+<div th:replace="~{/common/footer :: footerFragment}"></div>
 </body>
 </html>
