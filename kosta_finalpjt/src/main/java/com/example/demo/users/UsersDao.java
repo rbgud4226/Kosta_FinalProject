@@ -7,11 +7,13 @@ import org.springframework.stereotype.Repository;
 
 /*
  * ==================================================================
+ * ????
  * aprov 검색 추가
  * ==================================================================
 */
 
 @Repository
 public interface UsersDao extends JpaRepository<Users, String> {
+	Users findByUsernm(String usernm);
 	ArrayList<Users> findByAprov(int aprov);
 }
