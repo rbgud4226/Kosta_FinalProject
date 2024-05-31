@@ -6,7 +6,8 @@ import java.util.Date;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.example.demo.member.Member;
+import com.example.demo.members.Members;
+import com.example.demo.users.Users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,9 +38,12 @@ public class Docx {
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Member writer;
+	private Users writer;
 	
-	private Member senior;
+//	@ManyToOne
+//	@JoinColumn(nullable = false)
+//	@OnDelete(action = OnDeleteAction.CASCADE)
+//	private Members senior;
 	private Date startdt;
 	private Date enddt;
 	private String title;

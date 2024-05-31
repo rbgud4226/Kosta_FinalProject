@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.demo.member.Member;
+import com.example.demo.members.Members;
 
 @Controller
-@RequestMapping("/docx")
+@RequestMapping("/auth/docx")
 public class DocxController {
 
 	@Autowired
@@ -22,12 +22,39 @@ public class DocxController {
 //	private AuthenticationManagerBuilder abuilder;
 
 	@GetMapping("/add")
-	public void addForm() {
-
+	public String addForm() {
+		return "docx/list";
+	}
+	
+	@GetMapping("/addreport")
+	public String reportForm() {
+		return "docx/addreport";
 	}
 
-	@PostMapping("/add")
-	public String add(DocxDto dto) {
+	@PostMapping("/addreport")
+	public String addreport(DocxDto dto) {
+		service.save(dto);
+		return "redirect:/index";
+	}
+	
+	@GetMapping("/addmeet")
+	public String meetForm() {
+		return "docx/addmeet";
+	}
+
+	@PostMapping("/addmeet")
+	public String addmeet(DocxDto dto) {
+		service.save(dto);
+		return "redirect:/index";
+	}
+	
+	@GetMapping("/addvacation")
+	public String vacationForm() {
+		return "docx/addvacation";
+	}
+
+	@PostMapping("/addvacation")
+	public String addvacation(DocxDto dto) {
 		service.save(dto);
 		return "redirect:/index";
 	}
@@ -72,7 +99,7 @@ public class DocxController {
 	}
 
 	@RequestMapping("/writerlist")
-	public String writerList(Member writer, ModelMap map) {
+	public String writerList(Members writer, ModelMap map) {
 		map.addAttribute("wlist", service.getByWriter(writer));
 		return "docx/list";
 	}

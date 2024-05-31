@@ -1,4 +1,6 @@
-package com.example.demo.member;
+package com.example.demo.departments;
+
+import com.example.demo.members.Members;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,10 +14,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-public class MemberDto {
-	private String id;
-	private String pwd;
-	private String name;
-	private String email;
-	private String type;
+public class DepartmentsDto {
+	private int deptid;
+	private String deptnm;
+	private Members mgrid;
 }
