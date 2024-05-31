@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.example.demo.members.Members;
+import com.example.demo.users.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +19,8 @@ import lombok.ToString;
 @ToString
 public class DocxDto {
 	private int formnum;
-	private Members writer;
-	private Members senior;
+	private Users writer;
+//	private Members senior;
 	private Date startdt;
 	private Date enddt;
 	private String title;
