@@ -36,6 +36,7 @@ public class HomeController {
 
 	@PostMapping("/join")
 	public String join(UsersDto dto) {
+		dto.setAprov(0);
 		service.save(dto);
 		return "redirect:/";
 	}
@@ -45,11 +46,22 @@ public class HomeController {
 		return "user/login";
 	}
 
-
+//	@GetMapping("/auth/login")
+//	public void authlogin() {
+//
+//	}
+	
 	@GetMapping("/auth/logout")
 	public String authlogout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/";
+	}
+	
+	@GetMapping("/auth/info")
+	public String myinfo(HttpSession session, ModelMap map) {
+		String loginId = (String) session.getAttribute("loginId");
+		map.addAttribute("users", service.getById(loginId));
+		return "user/info";
 	}
 
 	@RequestMapping("/index_admin")
