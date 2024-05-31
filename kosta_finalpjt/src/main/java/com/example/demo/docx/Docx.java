@@ -7,13 +7,13 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.example.demo.members.Members;
+import com.example.demo.users.Users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
@@ -38,12 +38,12 @@ public class Docx {
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Members writer;
+	private Users writer;
 	
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Members senior;
+//	@ManyToOne
+//	@JoinColumn(nullable = false)
+//	@OnDelete(action = OnDeleteAction.CASCADE)
+//	private Members senior;
 	private Date startdt;
 	private Date enddt;
 	private String title;

@@ -3,22 +3,24 @@ package com.example.demo.docx;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.members.Members;
 
 @Service
 public class DocxService {
+	@Autowired
 	private DocxDao dao;
 
 	// 문서 작성 , 수정
 	public DocxDto save(DocxDto dto) {
-		Docx d = dao.save(new Docx(dto.getFormnum(), dto.getWriter(), dto.getSenior(), dto.getStartdt(), dto.getEnddt(),
+		Docx d = dao.save(new Docx(dto.getFormnum(), dto.getWriter(), dto.getStartdt(), dto.getEnddt(),
 				dto.getTitle(), dto.getContent(), dto.getNote(), dto.getTaskclasf(), dto.getTaskplan(),
 				dto.getTaskprocs(), dto.getTaskprocsres(), dto.getDeptandmeetloc(), dto.getDayoffclasf(),
 				dto.getParticipant(), dto.getFormtype(), dto.getAprovdoc()));
 
-		return new DocxDto(d.getFormnum(), d.getWriter(), d.getSenior(), d.getStartdt(), d.getEnddt(), d.getTitle(),
+		return new DocxDto(d.getFormnum(), d.getWriter(), d.getStartdt(), d.getEnddt(), d.getTitle(),
 				d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(), d.getTaskprocsres(),
 				d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(), d.getAprovdoc());
 	}
@@ -29,7 +31,7 @@ public class DocxService {
 		if (d == null) {
 			return null;
 		}
-		return new DocxDto(d.getFormnum(), d.getWriter(), d.getSenior(), d.getStartdt(), d.getEnddt(), d.getTitle(),
+		return new DocxDto(d.getFormnum(), d.getWriter(), d.getStartdt(), d.getEnddt(), d.getTitle(),
 				d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(), d.getTaskprocsres(),
 				d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(), d.getAprovdoc());
 	}
@@ -39,7 +41,7 @@ public class DocxService {
 		List<Docx> l = dao.findAll();
 		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
 		for (Docx d : l) {
-			list.add(new DocxDto(d.getFormnum(), d.getWriter(), d.getSenior(), d.getStartdt(), d.getEnddt(),
+			list.add(new DocxDto(d.getFormnum(), d.getWriter(), d.getStartdt(), d.getEnddt(),
 					d.getTitle(), d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(),
 					d.getTaskprocsres(), d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(),
 					d.getAprovdoc()));
@@ -55,7 +57,7 @@ public class DocxService {
 		}
 		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
 		for (Docx d : l) {
-			list.add(new DocxDto(d.getFormnum(), d.getWriter(), d.getSenior(), d.getStartdt(), d.getEnddt(),
+			list.add(new DocxDto(d.getFormnum(), d.getWriter(), d.getStartdt(), d.getEnddt(),
 					d.getTitle(), d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(),
 					d.getTaskprocsres(), d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(),
 					d.getAprovdoc()));
@@ -71,7 +73,7 @@ public class DocxService {
 		}
 		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
 		for (Docx d : l) {
-			list.add(new DocxDto(d.getFormnum(), d.getWriter(), d.getSenior(), d.getStartdt(), d.getEnddt(),
+			list.add(new DocxDto(d.getFormnum(), d.getWriter(),d.getStartdt(), d.getEnddt(),
 					d.getTitle(), d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(),
 					d.getTaskprocsres(), d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(),
 					d.getAprovdoc()));

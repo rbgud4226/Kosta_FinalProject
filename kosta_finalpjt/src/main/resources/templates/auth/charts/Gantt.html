@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script type="text/javascript">
+      $(document).ready(function (){
+          google.charts.load('current', {'packages':['gantt']});
+          google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+
+              $.ajax({
+                  url : "/auth/chart/data",
+                  dataType : 'json',
+                  method : 'GET'
+              }).done(function (list){
+                  var data = new google.visualization.DataTable();
+                  data.addColumn('string', 'Task ID');
+                  data.addColumn('string', 'Task Name');
+                  data.addColumn('date', 'Start Date');
+                  data.addColumn('date', 'End Date');
+                  data.addColumn('number', 'Duration');
+                  data.addColumn('number', 'Percent Complete');
+                  data.addColumn('string', 'Dependencies');
+
+                  list.forEach(function (row){
+                      console.log(row);
+                      var startDate = new Date(row.st);
+                      var endDate = new Date(row.ed);
+                      var id = '"' + row.taskid + '"';
+                      data.addRow([
+                          id,
+                          row.title,
+                          startDate,
+                          endDate,
+                          null,
+                          row.percent,
+                          null
+                      ]);
+
+                      var options = {
+                          height: 275
+                      };
+
+                      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+                      chart.draw(data, options);
+                  });
+              }).fail(function (jqXHR, textStatus, errorThrown){
+                  console.error("Error : " + textStatus, errorThrown);
+              });
+          }
+      });
+  </script>
+</head>
+<body>
+<a href="/index_emp">home</a>
+<div id="chart_div"></div>
+
+</body>
+</html>
