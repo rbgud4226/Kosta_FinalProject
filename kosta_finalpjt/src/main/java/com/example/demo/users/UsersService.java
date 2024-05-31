@@ -39,13 +39,13 @@ public class UsersService {
 		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov());
 	}
 
-//	public UsersDto getByUsernm(String usernm) {
-//		Users u = dao.findByName(usernm);
-//		if (u == null) {
-//			return null;
-//		}
-//		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov());
-//	}
+	public UsersDto getByUsernm(String usernm) {
+		Users u = dao.findByUsernm(usernm);
+		if (u == null) {
+			return null;
+		}
+		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov());
+	}
 
 	public ArrayList<UsersDto> getByAprov(int aprov) {
 		List<Users> l = dao.findByAprov(aprov);
