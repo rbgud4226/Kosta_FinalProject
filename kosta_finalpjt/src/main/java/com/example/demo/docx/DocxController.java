@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.members.Members;
 
 @Controller
-@RequestMapping("/docx")
+@RequestMapping("/auth/docx")
 public class DocxController {
 
 	@Autowired
@@ -23,7 +23,7 @@ public class DocxController {
 
 	@GetMapping("/add")
 	public String addForm() {
-		return "docx/list";
+		return "/auth/docx/list";
 	}
 	
 	@GetMapping("/addreport")
