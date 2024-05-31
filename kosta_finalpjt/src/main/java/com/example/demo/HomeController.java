@@ -41,10 +41,6 @@ public class HomeController {
 		return "user/login";
 	}
 
-	@GetMapping("/auth/login")
-	public void authlogin() {
-
-	}
 
 	@GetMapping("/auth/logout")
 	public String authlogout(HttpSession session) {
