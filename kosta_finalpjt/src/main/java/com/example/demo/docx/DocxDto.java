@@ -32,7 +32,7 @@ public class DocxDto {
 	private String taskprocsres; // 업무 진행 결과
 	private String deptandmeetloc; //회의 진행 장소
 	private String	dayoffclasf; //휴가 구분
-	ArrayList<String> participant;
+	ArrayList<String> participant; //회의 참석자
 	private String formtype; //문서 타입 구분
 	private int aprovdoc; // 결제서류 승인 여부 : 거절 보류 승인
 }

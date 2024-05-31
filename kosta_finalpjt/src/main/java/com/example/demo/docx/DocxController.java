@@ -23,7 +23,7 @@ public class DocxController {
 
 	@GetMapping("/add")
 	public String addForm() {
-		return "/auth/docx/list";
+		return "docx/list";
 	}
 	
 	@GetMapping("/addreport")
