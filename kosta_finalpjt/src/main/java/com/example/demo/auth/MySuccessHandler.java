@@ -35,7 +35,8 @@ public class MySuccessHandler implements AuthenticationSuccessHandler {
 
 		String path = "/index_" + type;
 
-		request.getRequestDispatcher(path).forward(request, response);
+		response.sendRedirect(path);
+		//request.getRequestDispatcher(path).forward(request, response);
 	}
 
 }
