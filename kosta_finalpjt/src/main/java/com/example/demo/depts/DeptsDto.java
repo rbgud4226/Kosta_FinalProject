@@ -1,6 +1,6 @@
 package com.example.demo.depts;
 
-import com.example.demo.member.Members;
+import com.example.demo.members.Members;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
