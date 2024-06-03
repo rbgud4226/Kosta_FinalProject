@@ -20,8 +20,8 @@
             <td th:text="${s.formnum}"></td><br>
             <td th:text="${s.title}"></td><br>
             <td th:text="${s.writer.id}"></td><br>
-            <td th:text="${s.startdt}"></td><br>
             <td th:text="${s.formtype}"></td><br>
+            <td th:text="${s.startdt}"></td><br>
             <td><a th:href="@{/auth/docx/deldocx(formnum=${s.formnum})}">삭제</a></td><br>
         </tr>
     </table>

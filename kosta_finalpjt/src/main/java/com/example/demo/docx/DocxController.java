@@ -1,6 +1,7 @@
 package com.example.demo.docx;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,7 +94,7 @@ public class DocxController {
 	}
 
 	@RequestMapping("/list")
-	public String list(ModelMap map) {
+	public String list(ModelMap map, Pageable page) {
 		map.addAttribute("list", service.getAll());
 		return "docx/list";
 	}
