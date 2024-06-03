@@ -1,5 +1,6 @@
 package com.example.demo.members;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,7 @@ public class MembersDto {
 	private Date leavedt;
 	private Depts deptid;
 	private int joblv;
-//	private ArrayList<EduWorkExperienceInfo> eweinfo;
+	private ArrayList<EduWorkExperienceInfo> eweinfo;
 	private MultipartFile imgf;
 	
 }

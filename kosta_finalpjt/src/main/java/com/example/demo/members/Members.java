@@ -31,7 +31,7 @@ public class Members {
 
 	@OneToOne
 	@JoinColumn(nullable = false)
-	private Users user;
+	private Users userid;
 
 	@Id
 	@SequenceGenerator(name = "seq_gen", sequenceName = "seq_memberid", allocationSize = 1)
