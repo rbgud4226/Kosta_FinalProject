@@ -46,8 +46,18 @@ public class MembersService {
 				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null, null);
 	}
 
-	public MembersDto getByuser(Users user) {
-		Members m = mdao.findByUserid(user);
+	public MembersDto getByuserId(String userid) {
+		Members m = mdao.findByUserid(new Users(userid, "", "", "", 0));
+		if (m == null) {
+			return null;
+		}
+		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
+				null);
+	}
+	
+	public MembersDto getByuserNm(Users userid) {
+		Members m = mdao.findByUserid(userid);
 		if (m == null) {
 			return null;
 		}
@@ -67,8 +77,8 @@ public class MembersService {
 		return list;
 	}
 
-	public ArrayList<MembersDto> getByDeptId(Depts deptid) {
-		List<Members> l = mdao.findByDeptid(deptid);
+	public ArrayList<MembersDto> getByDeptNm(String deptnm) {
+		List<Members> l = mdao.findByDeptid(new Depts(Integer.parseInt(deptnm), null, null));
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
