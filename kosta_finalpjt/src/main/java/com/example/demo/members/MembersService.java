@@ -6,8 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.departments.Departments;
-import com.example.demo.users.Users;
+import com.example.demo.depts.Depts;
 import com.example.demo.users.UsersDao;
 
 /*
@@ -57,7 +56,7 @@ public class MembersService {
 		return list;
 	}
 
-	public ArrayList<MembersDto> getByDeptId(Departments deptid) {
+	public ArrayList<MembersDto> getByDeptId(Depts deptid) {
 		List<Members> l = mdao.findByDeptid(deptid);
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {

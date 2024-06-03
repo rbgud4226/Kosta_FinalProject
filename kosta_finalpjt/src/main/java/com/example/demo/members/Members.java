@@ -5,7 +5,7 @@ import java.util.Date;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.example.demo.departments.Departments;
+import com.example.demo.depts.Depts;
 import com.example.demo.users.Users;
 
 import jakarta.persistence.Entity;
@@ -48,7 +48,7 @@ public class Members {
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Departments deptid;
+	private Depts deptid;
 	private int joblv;
 
 	@PrePersist

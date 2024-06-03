@@ -1,11 +1,10 @@
 package com.example.demo.members;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.departments.Departments;
+import com.example.demo.depts.Depts;
 import com.example.demo.users.Users;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ public class MembersDto {
 	private String memberimgnm;
 	private Date hiredt;
 	private Date leavedt;
-	private Departments deptid;
+	private Depts deptid;
 	private int joblv;
 //	private ArrayList<EduWorkExperienceInfo> eweinfo;
 	private MultipartFile imgf;
