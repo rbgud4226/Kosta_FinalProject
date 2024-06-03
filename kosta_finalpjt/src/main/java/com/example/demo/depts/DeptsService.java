@@ -27,7 +27,7 @@ public class DeptsService {
 	}
 
 	public ArrayList<DeptsDto> getByDeptNm(String deptnm) {
-		List<Depts> l = dao.findByDeptnmContains(deptnm);
+		List<Depts> l = dao.findByDeptnmLike("%" + deptnm + "%");
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
 			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
@@ -35,8 +35,8 @@ public class DeptsService {
 		return list;
 	}
 
-	public ArrayList<DeptsDto> getByMgrId(Members mgrid) {
-		List<Depts> l = dao.findByMgridContains(mgrid);
+	public ArrayList<DeptsDto> getByMgrId(int mgrid) {
+		List<Depts> l = dao.findByMgrid(new Members(null, mgrid, null, null, null, null, null, null, null, null, 0));
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
 			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
