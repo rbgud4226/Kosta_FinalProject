@@ -32,7 +32,7 @@
 </tr>
 <tr th:each="dl:${dlist }">
 <td th:text="${dl.deptid }"></td>
-<td><a href="/corp/deptdetail.html" th:href="@{/admin/corp/deptdetail(deptid=${dl.deptid})}" th:text="${dl.deptnm}">deptnm</a></td>
+<td><a href="corp/deptdetail.html" th:href="@{/admin/corp/deptinfo(deptid=${dl.deptid})}" th:text="${dl.deptnm}">deptnm</a></td>
 <td th:text="${dl.mgrid }"></td>
 </tr>
 <a th:href="@{/admin/corp/deptdetail}">test</a>
