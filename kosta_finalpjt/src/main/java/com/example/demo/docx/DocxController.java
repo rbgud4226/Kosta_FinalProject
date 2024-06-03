@@ -34,7 +34,7 @@ public class DocxController {
 	@PostMapping("/addreport")
 	public String addreport(DocxDto dto) {
 		service.save(dto);
-		return "redirect:/index";
+		return "redirect:/index_emp	";
 	}
 	
 	@GetMapping("/addmeet")
@@ -110,8 +110,9 @@ public class DocxController {
 		return "docx/list";
 	}
 
-	@PostMapping("/deldocx")
-	public void deldocx(int num) {
-		service.delDocx(num);
+	@RequestMapping("/deldocx")
+	public String deldocx(int formnum) {
+		service.delDocx(formnum);
+		return "redirect:/auth/docx/list";
 	}
 }

@@ -5,7 +5,7 @@
   <title>Insert title here</title>
 </head>
 <body>
-<div th:replace="~{/common/leftbar :: leftBar}"></div>
+<!-- <div th:replace="~{/common/leftbar :: leftBar}"></div> -->
 <div th:text="${session.loginId }"></div>
 <div th:text="${session.type }"></div>
 <div th:insert="~{header}"></div>
@@ -14,7 +14,7 @@
 <div th:text="${session.loginId }"></div>
 <div th:text="${session.type }"></div>
 <a href="/member/add">내이력정보입력</a>
-<a href="/auth/docx/add">문서테스트</a>
+<a href="/auth/docx/list">문서테스트</a>
 
 <section id="chart">
   <h3>일정 관리</h3>

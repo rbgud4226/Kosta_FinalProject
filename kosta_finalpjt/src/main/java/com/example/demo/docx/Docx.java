@@ -1,12 +1,13 @@
 package com.example.demo.docx;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.example.demo.members.Members;
 import com.example.demo.users.Users;
 
 import jakarta.persistence.Entity;
@@ -44,8 +45,8 @@ public class Docx {
 //	@JoinColumn(nullable = false)
 //	@OnDelete(action = OnDeleteAction.CASCADE)
 //	private Members senior;
-	private Date startdt;
-	private Date enddt;
+	private String startdt;
+	private String enddt;
 	private String title;
 	private String content;
 	private String note; // 비고 작성
@@ -61,8 +62,10 @@ public class Docx {
 	
 	@PrePersist
 	public void setDate() {
-		startdt = new Date();
-		enddt = new Date();
+		Date now = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy년MM월dd일 a HH시"); 
+		String strNowDate = simpleDateFormat.format(now); 
+		startdt = strNowDate;
 	}
 	
 	
