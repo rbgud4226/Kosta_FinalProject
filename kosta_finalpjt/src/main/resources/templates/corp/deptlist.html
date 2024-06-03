@@ -9,17 +9,17 @@
 </head>
 <body>
 <h3>부서 목록 페이지</h3>
-<form action="/admin/corp/getdeptby" method="post">
+<form th:action="@{/admin/corp/getdeptby}" method="post">
 <table border="1">
 <tr>
 <td>
 <select name="type">
-<option value="1">부서이름</option>
-<option value="2">부서장</option>
+<option th:value="1" th:selected="${type == 1 }">부서이름</option>
+<option th:value="2" th:selected="${type == 2 }">부서장</option>
 </select>
 </td>
 <td>
-<input type="text" name="val">
+<input type="text" name="val" th:value="${param.val }">
 </td>
 </tr>
 </table>
@@ -35,7 +35,6 @@
 <td><a href="corp/deptinfo.html" th:href="@{/admin/corp/deptinfo(deptid=${dl.deptid})}" th:text="${dl.deptnm}">deptnm</a></td>
 <td th:text="${dl.mgrid }"></td>
 </tr>
-<a th:href="@{/admin/corp/deptdetail}">test</a>
 </table>
 
 <input type="button" value="부서추가페이지이동버튼" onclick="location.href='/admin/corp/deptadd'"><br/>

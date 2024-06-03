@@ -9,6 +9,6 @@ import com.example.demo.members.Members;
 
 @Repository
 public interface DeptsDao extends JpaRepository<Depts, Integer> {
-	ArrayList<Depts> findByDeptnm(String deptnm);
-	ArrayList<Depts> findByMgrid(Members mgrid);
+	ArrayList<Depts> findByDeptnmContains(String deptnm);
+	ArrayList<Depts> findByMgridContains(Members mgrid);
 }

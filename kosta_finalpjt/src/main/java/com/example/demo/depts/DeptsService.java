@@ -27,7 +27,7 @@ public class DeptsService {
 	}
 
 	public ArrayList<DeptsDto> getByDeptNm(String deptnm) {
-		List<Depts> l = dao.findByDeptnm(deptnm);
+		List<Depts> l = dao.findByDeptnmContains(deptnm);
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
 			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
@@ -36,7 +36,7 @@ public class DeptsService {
 	}
 
 	public ArrayList<DeptsDto> getByMgrId(Members mgrid) {
-		List<Depts> l = dao.findByMgrid(mgrid);
+		List<Depts> l = dao.findByMgridContains(mgrid);
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
 			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
