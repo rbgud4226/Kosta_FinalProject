@@ -6,6 +6,8 @@
 </head>
 <body>
 <h3>admin 페이지</h3>
+<div th:text="${session.loginId }"></div>
+<div th:text="${session.type }"></div>
 <div th:insert="~{header}"></div>
 <a href="/admin/user/userlist">사용자목록</a><br/>
 <a href="/member/memberlist">직원목록</a><br/>
