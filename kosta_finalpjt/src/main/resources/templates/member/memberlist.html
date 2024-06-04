@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
+</script>
 </head>
 <body>
 <h3>직원 목록 페이지</h3>
@@ -29,7 +40,7 @@
 <tr><th>userid</th><th>usernm</th><th>type</th><th>aprov</th><th>email</th><th>deptid</th><th>joblv</th></tr>
 <tr th:if="${mlist != null }" th:each="m:${mlist }">
 	<td th:text="${m.userid.id }"></td>
-	<td th:text="${m.userid.usernm }"></td>
+	<td><a href="member/memberinfo.html" th:href="@{/member/memberinfo(id=${m.userid.id})}" th:text="${m.userid.usernm }">usernm</a></td>
 	<td th:text="${m.userid.type }"></td>
 	<td th:text="${m.userid.aprov }"></td>
 	<td th:text="${m.email }"></td>
@@ -38,6 +49,6 @@
 </tr>
 </table>
 <input type="button" value="뒤로가기버튼" th:onclick="history.back()"><br/>
-<input type="button" value="홈버튼" th:onclick="location.href='/'"><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>

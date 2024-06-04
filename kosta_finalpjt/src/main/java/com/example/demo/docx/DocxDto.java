@@ -1,9 +1,9 @@
 package com.example.demo.docx;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.example.demo.members.Members;
 import com.example.demo.users.Users;
 
 import lombok.AllArgsConstructor;
@@ -21,8 +21,8 @@ public class DocxDto {
 	private int formnum;
 	private Users writer;
 //	private Members senior;
-	private Date startdt;
-	private Date enddt;
+	private String startdt;
+	private String enddt;
 	private String title;
 	private String content;
 	private String note; // 비고 작성

@@ -13,6 +13,16 @@ window.onload = () => {
 	}
 console.log(document.getElementById('birthdtid').value);
 }
+
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
 </script>
 </head>
 <body>
@@ -26,17 +36,18 @@ console.log(document.getElementById('birthdtid').value);
 <tr><th>ADDRESS</th><td><input type="text" name="address" th:value="${member?.address }"></td></tr>
 <tr><th>MEMBERIMGNM</th><td><input type="file" name="memberimgnm" th:value="${member?.memberimgnm }"></td></tr>
 <tr th:if="${member?.hiredt != null }" id="hiredtid" style="display:none"><th>HIREDt</th><td th:text="${member?.hiredt }"></td></tr>
-<tr><th>DEPTID</th><td><input type="text" name="deptid"></td></tr>
+<tr><th>DEPTID</th><td><input type="text" name="deptid" th:value="${member?.deptid.deptid }"></td></tr>
 <tr><th>JOBLV</th><td><input type="number" name="joblv" th:value="${member?.joblv }"></td></tr>
 
 </table>
 <input type="hidden" name="userid" th:value="${session.loginId }"><br/>
 <input type="hidden" name="leavedt" th:value="${member?.leavedt }"><br/>
+<div th:if="${member?.userid.id != null } or ${session.type == 'admin' }">
 <input id="memberaddid" type="submit" value="내정보등록하기"><br/>
+</div>
 </form>
 <input id="resetid" type="reset" value="취소하기"><br/>
-<input type="button" value="로그인정보페이지이동버튼" onclick="location.href='/auth/info'"><br/>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
-<input type="button" value="홈버튼" onclick="location.href='/'"><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>
