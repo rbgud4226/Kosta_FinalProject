@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
 </head>
+
 <body>
-<h3>문서리스트</h3>
-<a href="/auth/docx/addreport">보고서작성</a>
+    <h3>문서리스트</h3>
+    <table border="1">
+        <tr>
+            <th>글번호</th>
+            <th>글제목</th>
+            <th>작성자</th>
+            <th>서류종류</th>
+            <th>작성일</th>
+        </tr>
+        <tr th:each="s:${list}">
+            <td th:text="${s.formnum}"></td><br>
+            <td th:text="${s.title}"></td><br>
+            <td th:text="${s.writer.id}"></td><br>
+            <td th:text="${s.formtype}"></td><br>
+            <td th:text="${s.startdt}"></td><br>
+            <td><a th:href="@{/auth/docx/deldocx(formnum=${s.formnum})}">삭제</a></td><br>
+        </tr>
+    </table>
+    <a href="/auth/docx/addreport">보고서작성</a>
 </body>
+
 </html>

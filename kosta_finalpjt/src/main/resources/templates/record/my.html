@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script type="text/javascript">
+console.log('[[${list}]]')
+const workin=()=>{
+	let mem = '[[${session.loginId}]]';
+	$.ajax({
+		url:"/auth/record/in",  //서버주소
+		type:"post",   				//전송방식
+		dataType:'json',			//응답데이터 형태
+		data:{Members:mem},
+		success:function(res){		//응답 정상일때
+			console.log(res);
+		},
+		error:function(){			//응답 에러일때
+			console.log('error');
+		}
+	});
+}
+
+const workout=()=>{
+	let mem = '[[${session.loginId}]]';
+	let memberid = '[[${num}]]'
+	$.ajax({
+		url:"/auth/record/out",  //서버주소
+		type:"post",   				//전송방식
+		dataType:'json',			//응답데이터 형태
+		data:{Members:mem,memberid:memberid},
+		success:function(res){		//응답 정상일때
+			console.log(res);
+		},
+		error:function(){			//응답 에러일때
+			console.log('error');
+		}
+	});
+}
+
+
+</script>
+</head>
+<body>
+<div th:text="${session.loginId + '출퇴근 페이지'}"></div>
+<div th:text="${flag + '출근여부'}"></div>
+<div th:text="${num + '번호확인'}"></div>
+<button onclick='workin()'> 출근 </button>
+<button onclick='workout()'> 퇴근 </button>
+<div th:each="s:${list}">
+<p th:text="${s}">
+</div>
+</body>
+</html>
