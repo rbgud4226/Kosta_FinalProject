@@ -30,7 +30,7 @@ const resetbtn = () => {
 </head>
 <body>
 <h3>내 로그인 정보 페이지</h3>
-<form th:action="@{/user/edit(id=${session.loginId })}" method="post" name='useref'>
+<form th:action="@{/auth/edit}" method="post" name='useref'>
 <table border="1">
 <tr><th>USERID</th><td th:text="${user.id }" name="id"></td></tr>
 <tr><th>USERNM</th><td th:text="${user.usernm }" name="usernm"></td></tr>
@@ -41,7 +41,6 @@ const resetbtn = () => {
 <input id="usereditid" type="button" value="로그인정보수정버튼" onclick="usereditbtn()"><br/>
 </form>
 <input id="hiddenid" type="hidden" value="취소하기"><br/>
-<input type="button" value="내정보페이지이동버튼" onclick="location.href='/auth/member/memberinfo'"><br/>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
 <input type="button" value="홈버튼" onclick="location.href='/'"><br/>
 </body>
