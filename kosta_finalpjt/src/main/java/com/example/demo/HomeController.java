@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,22 +23,23 @@ import com.example.demo.users.Users;
 import com.example.demo.users.UsersDto;
 import com.example.demo.users.UsersService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import reactor.netty.http.server.HttpServerRequest;
 
 @Controller
 public class HomeController {
 	@Autowired
 	private UsersService uservice;
-	
+
 	@Autowired
 	private MembersService mservice;
-	
+
 	@Autowired
 	private DeptsService dservice;
-	
+
 	@Autowired
 	private ChartsService chartsService;
-	
 
 	@RequestMapping("/")
 	public String home() {
@@ -55,14 +57,14 @@ public class HomeController {
 		uservice.save(dto);
 		return "redirect:/";
 	}
-	
-	@PostMapping("/auth/edit")
+
+	@PostMapping("/user/useredit")
 	public String useredit(HttpSession session, String pwd) {
 		String loginId = (String) session.getAttribute("loginId");
 		UsersDto udto = uservice.getById(loginId);
 		udto.setPwd(pwd);
 		uservice.save(udto);
-		return "redirect:/auth/userinfo";
+		return "redirect:/user/userinfo?id=" + loginId;
 	}
 
 	@GetMapping("/loginform")
@@ -70,21 +72,20 @@ public class HomeController {
 		return "user/userlogin";
 	}
 
-//	@GetMapping("/auth/login")
-//	public void authlogin() {
-//
-//	}
-	
+	@GetMapping("/auth/login")
+	public String authlogin() {
+		return "/loginform";
+	}
+
 	@GetMapping("/auth/logout")
 	public String authlogout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
-	@GetMapping("/auth/userinfo")
-	public String myinfo(HttpSession session, ModelMap map) {
-		String loginId = (String) session.getAttribute("loginId");
-		map.addAttribute("user", uservice.getById(loginId));
+
+	@GetMapping("/user/userinfo")
+	public String myinfo(String id, ModelMap map) {
+		map.addAttribute("user", uservice.getById(id));
 		return "user/userinfo";
 	}
 
@@ -92,7 +93,7 @@ public class HomeController {
 	public void adminHome() {
 
 	}
-	
+
 	@GetMapping("/admin/user/userlist")
 	public String userlist(ModelMap map) {
 		ArrayList<UsersDto> ulist = uservice.getAll();
@@ -101,7 +102,7 @@ public class HomeController {
 		System.out.println(ulist);
 		return "user/userlist";
 	}
-	
+
 	@PostMapping("/admin/user/getdeptby")
 	public ModelAndView getuserby(String val, int type) {
 		UsersDto udto = null;
@@ -116,17 +117,14 @@ public class HomeController {
 		mav.addObject("ulist", udto);
 		return mav;
 	}
-	
+
 	@GetMapping("/member/memberlist")
 	public String memberlist(ModelMap map) {
 		ArrayList<MembersDto> mlist = mservice.getAll();
-
 		map.addAttribute("mlist", mlist);
-		System.out.println(mlist);
-		System.out.println(mlist.get(0));
 		return "member/memberlist";
 	}
-	
+
 	@PostMapping("/member/getdeptby")
 	public ModelAndView getmemberby(String val, int type) {
 		ArrayList<MembersDto> mlist = new ArrayList<MembersDto>();
@@ -134,7 +132,7 @@ public class HomeController {
 			mlist = mservice.getByDeptNm(val);
 		} else if (type == 2) {
 			UsersDto udto = uservice.getByUsernm(val);
-			if(udto == null) {
+			if (udto == null) {
 				mlist.add(null);
 			} else {
 				mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0)));
@@ -149,14 +147,14 @@ public class HomeController {
 		mav.addObject("mlist", mlist);
 		return mav;
 	}
-	
+
 	@GetMapping("/member/memberinfo")
-	public String memberinfo(HttpSession session, ModelMap map) {		
-		String loginId = (String) session.getAttribute("loginId");
-		map.addAttribute("member", mservice.getByuserId(loginId));
+	public String memberinfo(String id, ModelMap map) {
+		map.addAttribute("member", mservice.getByuserId(id));
+		System.out.println(mservice.getByuserId(id));
 		return "member/memberinfo";
 	}
-	
+
 	@PostMapping("/member/memberadd")
 	public String memberadd(HttpSession session, MembersDto dto) {
 		System.out.println(dto.getJoblv());
@@ -183,15 +181,15 @@ public class HomeController {
 		map.put("flag", flag);
 		return map;
 	}
-	
-	@GetMapping("/admin/corp/deptlist")
+
+	@GetMapping("/corp/deptlist")
 	public String deptlist(ModelMap map) {
 		ArrayList<DeptsDto> dlist = dservice.getAll();
 		map.addAttribute("dlist", dlist);
 		System.out.println(dlist);
 		return "corp/deptlist";
 	}
-	
+
 	@GetMapping("/admin/corp/deptadd")
 	public String deptaddform() {
 		return "corp/deptadd";
@@ -200,22 +198,22 @@ public class HomeController {
 	@PostMapping("/admin/corp/deptadd")
 	public String deptadd(DeptsDto dto) {
 		dservice.save(dto);
-		return "redirect:/admin/corp/deptlist";
+		return "redirect:/corp/deptlist";
 	}
-	
-	@GetMapping("/admin/corp/deptinfo")
+
+	@GetMapping("/corp/deptinfo")
 	public String deptdinfo(int deptid, ModelMap map) {
 		map.addAttribute("d", dservice.getByDeptId(deptid));
 		return "corp/deptinfo";
 	}
-	
+
 	@PostMapping("/admin/corp/deptedit")
 	public String deptedit(DeptsDto dto) {
 		dservice.save(dto);
-		return "redirect:/admin/corp/deptinfo?deptid=" + dto.getDeptid();
+		return "redirect:/corp/deptinfo?deptid=" + dto.getDeptid();
 	}
-	
-	@PostMapping("/admin/corp/getdeptby")
+
+	@PostMapping("/corp/getdeptby")
 	public ModelAndView getdeptby(String val, int type) {
 		ArrayList<DeptsDto> dlist = null;
 		if (type == 1) {
