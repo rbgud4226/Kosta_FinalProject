@@ -1,11 +1,15 @@
 package com.example.demo.members;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import com.example.demo.departments.Departments;
+import com.example.demo.depts.Depts;
 import com.example.demo.users.Users;
 
 import jakarta.persistence.Entity;
@@ -31,28 +35,31 @@ public class Members {
 
 	@OneToOne
 	@JoinColumn(nullable = false)
-	private Users user;
+	private Users userid;
 
 	@Id
 	@SequenceGenerator(name = "seq_gen", sequenceName = "seq_memberid", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_memberid")
 	private int memberid;
-	private Date birthdt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate birthdt;
 	private String email;
 	private String cpnum;
 	private String address;
 	private String memberimgnm;
-	private Date hiredt;
-	private Date leavedt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate hiredt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate leavedt;
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Departments deptid;
+	private Depts deptid;
 	private int joblv;
 
 	@PrePersist
 	public void setDate() {
-		hiredt = new Date();
+		hiredt = LocalDate.from(LocalDateTime.now());
 	}
 }

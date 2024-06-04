@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+const usereditbtn = () => {
+	document.getElementById('pwdid').readOnly = false;
+	document.getElementById('hiddenid').type = 'button';
+	
+	document.getElementById('hiddenid').onclick = resetbtn;
+	let usereditvar = document.getElementById('usereditid');
+	usereditvar.value = '수정하기';
+	usereditvar.onclick = function() {
+		useref.submit();
+	};
+}
+
+const resetbtn = () => {
+	document.getElementById('pwdid').readOnly = true;
+	document.getElementById('pwdid').value = '${user.pwd }';
+	document.getElementById('hiddenid').type = 'hidden';
+	let usereditvar = document.getElementById('usereditid');
+	usereditvar.value = '로그인정보수정버튼';
+	usereditvar.onclick = usereditbtn;
+	document.getElementById('hiddenid').onclick = '';
+};
+
+</script>
+</head>
+<body>
+<h3>내 로그인 정보 페이지</h3>
+<form th:action="@{/auth/edit}" method="post" name='useref'>
+<table border="1">
+<tr><th>USERID</th><td th:text="${user.id }" name="id"></td></tr>
+<tr><th>USERNM</th><td th:text="${user.usernm }" name="usernm"></td></tr>
+<tr><th>PWD</th><td><input type="password" name="pwd" id="pwdid" th:value="${user.pwd }" readonly></td></tr>
+<tr><th>TYPE</th><td th:text="${user.type }" name="type"></td></tr>
+<tr><th>APROV</th><td th:text="${user.aprov }" name="aprov"></td></tr>
+</table>
+<input id="usereditid" type="button" value="로그인정보수정버튼" onclick="usereditbtn()"><br/>
+</form>
+<input id="hiddenid" type="hidden" value="취소하기"><br/>
+<input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
+<input type="button" value="홈버튼" onclick="location.href='/'"><br/>
+</body>
+</html>
