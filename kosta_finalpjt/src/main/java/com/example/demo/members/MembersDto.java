@@ -1,11 +1,12 @@
 package com.example.demo.members;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.departments.Departments;
+import com.example.demo.depts.Depts;
 import com.example.demo.users.Users;
 
 import lombok.AllArgsConstructor;
@@ -23,16 +24,16 @@ import lombok.ToString;
 public class MembersDto {
 	private Users userid;
 	private int memberid;
-	private Date birthdt;
+	private LocalDate birthdt;
 	private String email;
 	private String cpnum;
 	private String address;
 	private String memberimgnm;
-	private Date hiredt;
-	private Date leavedt;
-	private Departments deptid;
+	private LocalDate hiredt;
+	private LocalDate leavedt;
+	private Depts deptid;
 	private int joblv;
-//	private ArrayList<EduWorkExperienceInfo> eweinfo;
+	private ArrayList<EduWorkExperienceInfo> eweinfo;
 	private MultipartFile imgf;
 	
 }

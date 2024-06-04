@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h3>사용자 목록 페이지</h3>
+<form th:action="@{/admin/user/getdeptby}" method="post">
+<table border="1">
+<tr>
+<td>
+<select name="type">
+<option th:value="1" th:selected="${type == 1 }">사용자id</option>
+<option th:value="2" th:selected="${type == 2 }">사용자이름</option>
+</select>
+</td>
+<td>
+<input type="text" name="val" th:value="${param.val }">
+</td>
+</tr>
+</table>
+<input type="submit" value="검색">
+</form>
+
+
+<table border="1">
+<tr><th>userid</th><th>usernm</th><th>type</th><th>aprov</th></tr>
+<tr th:each="u:${ulist }">
+	<td th:text="${u.id }"></td>
+	<td><a href="user/userinfo.html" th:href="@{/user/userinfo(id=${u.id})}" th:text="${u.usernm}">usernm</a></td>
+	<td th:text="${u.type }"></td>
+	<td th:text="${u.aprov }"></td>
+</tr>
+</table>
+<input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
+<input type="button" value="홈버튼" th:onclick="location.href='/'"><br/>
+</body>
+</html>
