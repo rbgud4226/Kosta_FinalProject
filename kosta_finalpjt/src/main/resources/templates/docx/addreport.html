@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
 </head>
+
 <body>
-<h3>보고서 작성폼</h3>
-<form action="/auth/docx/addreport" method="post">
-    작성자:<input type="text" name="writer" th:value="${session.loginId }" readonly><br/>
-    업무계획:<textarea rows="10" cols="15" name="taskplan"></textarea><br/>
-    업무진행과정:<textarea rows="10" cols="15" name="taskprocs"></textarea><br/>
-    결제권한:<input type="text" name="senior">
-    <input type="submit" value="등록">
+    <h3>보고서 작성폼</h3>
+    <a href="/auth/docx/list">리스트 페이지</a>
+    <form action="/auth/docx/addreport" method="post">
+        작성글제목:<input type="text" name="title"><br />
+        작성자:<input type="text" name="writer" th:value="${session.loginId }" readonly><br />
+        기한: <input type="date" name="enddt"><br />
+        업무계획:<textarea cols="15" rows="4" name="taskplan"></textarea><br />
+        업무진행과정:<textarea cols="15" rows="4" name="taskprocs"></textarea><br />
+        <!-- 결제권한:<input type="text" name="senior"> -->
+        <input type="hidden" name="formtype" value="보고서">
+        <input type="submit" value="등록">
     </form>
 </body>
+
 </html>
