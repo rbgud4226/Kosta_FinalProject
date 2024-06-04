@@ -151,17 +151,19 @@ public class HomeController {
 	@GetMapping("/member/memberinfo")
 	public String memberinfo(String id, ModelMap map) {
 		map.addAttribute("member", mservice.getByuserId(id));
+		map.addAttribute("userid", id);
 		System.out.println(mservice.getByuserId(id));
 		return "member/memberinfo";
 	}
 
 	@PostMapping("/member/memberadd")
 	public String memberadd(HttpSession session, MembersDto dto) {
-		System.out.println(dto.getJoblv());
-		mservice.save(dto);
+//		System.out.println(dto.getJoblv());
+//		mservice.save(dto);
+		mservice.save(dto.getMemberid());
 		session.setAttribute("loginId", (String) session.getAttribute("loginId"));
 		session.setAttribute("type", (String) session.getAttribute("type"));
-		return "redirect:/member/memberinfo";
+		return "redirect:/member/memberinfo?id="+session.getAttribute("loginId");
 	}
 
 	@RequestMapping("/index_emp")
