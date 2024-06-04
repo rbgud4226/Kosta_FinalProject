@@ -35,4 +35,13 @@ public class WorkInOutRecordService {
 		return new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState());
 	}
 
+	//직원 월별 기록 조회
+	public ArrayList<WorkInOutRecordDto> selectUser(int month,int year,String user){
+		ArrayList<WorkInOutRecord> wo = dao.selectMonthByUser(month, year, user);
+		ArrayList<WorkInOutRecordDto> list = new ArrayList<>();
+		for(WorkInOutRecord w : wo) {
+			list.add(new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState()));
+		}
+		return list;
+	}
 }
