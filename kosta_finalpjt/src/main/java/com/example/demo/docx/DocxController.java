@@ -34,7 +34,7 @@ public class DocxController {
 	@PostMapping("/addreport")
 	public String addreport(DocxDto dto) {
 		service.save(dto);
-		return "redirect:/index";
+		return "redirect:/auth/docx/list";
 	}
 	
 	@GetMapping("/addmeet")

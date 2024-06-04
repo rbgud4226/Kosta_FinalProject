@@ -62,7 +62,7 @@ public class HomeController {
 		UsersDto udto = uservice.getById(loginId);
 		udto.setPwd(pwd);
 		uservice.save(udto);
-		return "redirect:/auth/info";
+		return "redirect:/auth/userinfo";
 	}
 
 	@GetMapping("/loginform")

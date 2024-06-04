@@ -6,7 +6,7 @@
 </head>
 <body>
 <h3>보고서 작성폼</h3>
-<form action="/docx/addreport" method="post">
+<form action="/auth/docx/addreport" method="post">
     작성자:<input type="text" name="writer" th:value="${session.loginId }" readonly><br/>
     업무계획:<textarea rows="10" cols="15" name="taskplan"></textarea><br/>
     업무진행과정:<textarea rows="10" cols="15" name="taskprocs"></textarea><br/>
