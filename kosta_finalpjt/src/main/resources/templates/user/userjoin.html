@@ -4,6 +4,24 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
+const idcheck = () => {
+	flag = false;
+	const req = new XMLHttpRequest();
+	req.onload = () => {
+		let obj = JSON.parse(req.responseText);//req.responseText => {flag:true}
+		let txt = '중복된 아이디';
+		if(obj.flag){
+			txt = '사용가능 아이디';
+			flag = true;
+		}
+		document.getElementById('res').innerHTML = txt;
+	}
+	let id = document.getElementById('id').value;
+	req.open('get', '/user/idcheck?id=' + id);
+	req.send();
+}
+
+
 const home = (type) => {
 	if (type == 'admin') {
 		location.href='/index_admin';
@@ -23,7 +41,7 @@ const home = (type) => {
 		<th>ID</th>
 		<td>
 			<input type="text" name="id" id="id">
-			<input type="button" value="중복체크" onclick="a()"><br/>
+			<input type="button" value="중복체크" onclick="idcheck()"><br/>
 			<span id="res"></span>
 		</td>
 	</tr>
