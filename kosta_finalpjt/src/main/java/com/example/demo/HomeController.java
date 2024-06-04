@@ -44,16 +44,25 @@ public class HomeController {
 		return "index";
 	}
 
-	@GetMapping("/join")
+	@GetMapping("/user/userjoin")
 	public String userjoinform() {
 		return "user/userjoin";
 	}
 
-	@PostMapping("/join")
+	@PostMapping("/user/userjoin")
 	public String userjoin(UsersDto dto) {
 		dto.setAprov(0);
 		uservice.save(dto);
 		return "redirect:/";
+	}
+	
+	@PostMapping("/auth/edit")
+	public String useredit(HttpSession session, String pwd) {
+		String loginId = (String) session.getAttribute("loginId");
+		UsersDto udto = uservice.getById(loginId);
+		udto.setPwd(pwd);
+		uservice.save(udto);
+		return "redirect:/auth/info";
 	}
 
 	@GetMapping("/loginform")
@@ -72,7 +81,7 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/auth/info")
+	@GetMapping("/auth/userinfo")
 	public String myinfo(HttpSession session, ModelMap map) {
 		String loginId = (String) session.getAttribute("loginId");
 		map.addAttribute("user", uservice.getById(loginId));
@@ -141,7 +150,7 @@ public class HomeController {
 		return mav;
 	}
 	
-	@GetMapping("/auth/member/memberinfo")
+	@GetMapping("/member/memberinfo")
 	public String memberinfo(HttpSession session, ModelMap map) {		
 		String loginId = (String) session.getAttribute("loginId");
 		map.addAttribute("member", mservice.getByuserId(loginId));
@@ -150,19 +159,11 @@ public class HomeController {
 	
 	@PostMapping("/member/memberadd")
 	public String memberadd(HttpSession session, MembersDto dto) {
-//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//		System.out.println(dto.getBirthdt());
-//		String birthdtStr = format.format(dto.getBirthdt());
-//		
-//		Date birthdt = Date.valueOf(birthdtStr);
-//		dto.setBirthdt(birthdt);
-//		System.out.println(dto.getBirthdt());
-		
 		System.out.println(dto.getJoblv());
 		mservice.save(dto);
 		session.setAttribute("loginId", (String) session.getAttribute("loginId"));
 		session.setAttribute("type", (String) session.getAttribute("type"));
-		return "redirect:/auth/member/memberinfo";
+		return "redirect:/member/memberinfo";
 	}
 
 	@RequestMapping("/index_emp")
