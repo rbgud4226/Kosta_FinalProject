@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
+</script>
 </head>
 <body>
 <h3>사용자 목록 페이지</h3>
@@ -34,6 +45,6 @@
 </tr>
 </table>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
-<input type="button" value="홈버튼" th:onclick="location.href='/'"><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>

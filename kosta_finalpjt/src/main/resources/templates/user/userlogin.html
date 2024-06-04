@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
+</script>
 </head>
 <body>
 <h3>로그인 페이지</h3>
@@ -20,6 +31,6 @@
 </table>
 <input type="submit" value="로그인">
 </form>
-<a href="/">홈</a><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>
