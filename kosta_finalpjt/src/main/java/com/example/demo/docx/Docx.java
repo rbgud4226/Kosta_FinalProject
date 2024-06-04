@@ -8,6 +8,7 @@ import java.util.Date;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.example.demo.members.Members;
 import com.example.demo.users.Users;
 
 import jakarta.persistence.Entity;
@@ -41,10 +42,8 @@ public class Docx {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Users writer;
 	
-//	@ManyToOne
-//	@JoinColumn(nullable = false)
-//	@OnDelete(action = OnDeleteAction.CASCADE)
-//	private Members senior;
+	
+	private ArrayList<String> senior;
 	private String startdt;
 	private String enddt;
 	private String title;

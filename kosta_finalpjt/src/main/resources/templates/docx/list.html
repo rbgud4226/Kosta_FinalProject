@@ -10,19 +10,18 @@
     <h3>문서리스트</h3>
     <table border="1">
         <tr>
-            <th>글번호</th>
             <th>글제목</th>
             <th>작성자</th>
             <th>서류종류</th>
             <th>작성일</th>
         </tr>
         <tr th:each="s:${list}">
-            <td th:text="${s.formnum}"></td><br>
-            <td><a th:href="@{/auth/docx/getdocx(formnum=${s.formnum})}" th:text="${s.title}"></a></td><br>
-            <td th:text="${s.writer.id}"></td><br>
-            <td th:text="${s.formtype}"></td><br>
-            <td th:text="${s.startdt}"></td><br>
-            <td><a th:href="@{/auth/docx/deldocx(formnum=${s.formnum})}">삭제</a></td><br>
+            <input type="hidden" value="${s.formnum}">
+            <td><a th:href="@{/auth/docx/getdocx(formnum=${s.formnum})}" th:text="${s.title}"></a></td>
+            <td th:text="${s.writer.id}"></td>
+            <td th:text="${s.formtype}"></td>
+            <td th:text="${s.startdt}"></td>
+            <td><a th:href="@{/auth/docx/deldocx(formnum=${s.formnum})}">삭제</a></td>
         </tr>
     </table>
     <a href="/auth/docx/addreport">보고서작성</a>

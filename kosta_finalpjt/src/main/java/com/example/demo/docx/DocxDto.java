@@ -2,7 +2,6 @@ package com.example.demo.docx;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.example.demo.users.Users;
 
@@ -20,7 +19,7 @@ import lombok.ToString;
 public class DocxDto {
 	private int formnum;
 	private Users writer;
-//	private Members senior;
+	private ArrayList<String> senior;
 	private String startdt;
 	private String enddt;
 	private String title;

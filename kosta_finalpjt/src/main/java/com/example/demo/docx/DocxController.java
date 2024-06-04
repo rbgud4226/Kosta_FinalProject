@@ -1,7 +1,8 @@
 package com.example.demo.docx;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,23 +18,28 @@ public class DocxController {
 
 	@Autowired
 	private DocxService service;
-//	@Autowired
-//	private TokenProvider provider;
-//	@Autowired
-//	private AuthenticationManagerBuilder abuilder;
+
 
 	@GetMapping("/add")
 	public String addForm() {
 		return "docx/list";
 	}
 	
+	//작성폼 불러올때 멤버 리스트 데이터 가져오기
 	@GetMapping("/addreport")
-	public String reportForm() {
+	public String reportForm(ModelMap map) {
+		map.addAttribute("mlist",service.getMemAll());
+		
 		return "docx/addreport";
 	}
 
 	@PostMapping("/addreport")
-	public String addreport(DocxDto dto) {
+	public String addreport(DocxDto d) {
+		System.out.println(d.getSenior());
+		DocxDto dto = d;
+		ArrayList<String> list = new ArrayList<>();
+		list.addAll(d.getSenior());
+		dto.setSenior(list);
 		service.save(dto);
 		return "redirect:/auth/docx/list";
 	}
@@ -55,8 +61,9 @@ public class DocxController {
 	}
 
 	@PostMapping("/addvacation")
-	public String addvacation(DocxDto dto) {
+	public String addvacation(DocxDto dto,ModelMap map) {
 		service.save(dto);
+	
 		return "redirect:/index";
 	}
 
@@ -94,7 +101,7 @@ public class DocxController {
 	}
 
 	@GetMapping("/list")
-	public String list(ModelMap map, Pageable page) {
+	public String list(ModelMap map) {
 		map.addAttribute("list", service.getAll());
 		return "docx/list";
 	}
