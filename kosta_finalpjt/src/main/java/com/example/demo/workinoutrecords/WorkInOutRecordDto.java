@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 public class WorkInOutRecordDto {
 	private int memberid;
-	private Users user;
+	private Members user;
 	private Date workindt;
 	private Date workoutdt;
 	private String state;

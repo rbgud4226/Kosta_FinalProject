@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.members.Members;
 import com.example.demo.users.Users;
 
 
@@ -34,17 +35,25 @@ public class WorkInOutRecordController {
 		//출근기록O
 		if(!list.isEmpty()) {
 			flag = true; 
-			map.addAttribute("num",list.get(0).getMemberid());
+			map.put("num",list.get(0).getMemberid());
 		}
-		map.addAttribute("flag", flag);
+		//내 근무기록
+        // 현재 달/년도 가져오기
+        LocalDate currentDate = LocalDate.now();
+        int currentMonth = currentDate.getMonthValue();
+        int currentYear = currentDate.getYear();
+		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, Members);
+		map.put("list", mylist);
+		map.put("flag", flag);
 		return "record/my";
 	}
-//	G
+
 	//출근하기
 	@ResponseBody
 	@PostMapping("/in")
 	public Map workin(String Members) {
-		Users s = new Users(Members,"","","",0);
+		Users u = new Users(Members,"","","",0);
+		Members m = new Members(u,0,null,"","","","",null,null,null,0);
 		String type = "출근";
 		
 	    //지각 체크
@@ -55,7 +64,7 @@ public class WorkInOutRecordController {
         if (currentTime.isAfter(targetTime)) {
         	type="지각";
         }			
-		service.save(new WorkInOutRecordDto(0, s, null, null, type));
+		service.save(new WorkInOutRecordDto(0, m, null, null, type));
 		Map map = new HashMap<>();
 		map.put("state", type);
 		return map;
@@ -87,18 +96,27 @@ public class WorkInOutRecordController {
         
 	}
 	//내 근태기록 확인하기
+	@ResponseBody
 	@GetMapping("/getmonth")
 	public Map myrecord(String Members,int cnt) {
         // 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
-        // 원하는 달 가져오기
-        int currentMonth = currentDate.getMonthValue()+cnt;
+        // 현재 달/년도 가져오기
+        int currentMonth = currentDate.getMonthValue();
         int currentYear = currentDate.getYear();
-        
-        
+       
+        // 이전 달로 이동
+        int previousMonth = currentMonth + cnt;
+        int previousYear = currentYear;
+        if (previousMonth == 0) { 
+            previousMonth = 12; 
+            previousYear--;
+        }
+        ArrayList<WorkInOutRecordDto> list = service.selectUser(previousMonth, previousYear, Members);
+        Map map = new HashMap<>();
+		map.put("list", list);
+		return map;
 	}
-	
-	
-	
+		
 	//관리자
 }

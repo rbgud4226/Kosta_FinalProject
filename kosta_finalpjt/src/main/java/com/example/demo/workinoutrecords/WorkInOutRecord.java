@@ -2,17 +2,14 @@ package com.example.demo.workinoutrecords;
 
 import java.util.Date;
 
-import com.example.demo.users.Users;
+import com.example.demo.members.Members;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
@@ -47,7 +44,7 @@ public class WorkInOutRecord {
 	
 	@ManyToOne
 	@JoinColumn(name = "User_id")
-	private Users user;
+	private Members user;
 	private Date workindt;
 	private Date workoutdt;
 	private String state;

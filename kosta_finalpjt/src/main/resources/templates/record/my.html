@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script type="text/javascript">
-
+console.log('[[${list}]]')
 const workin=()=>{
 	let mem = '[[${session.loginId}]]';
 	$.ajax({
@@ -48,5 +48,8 @@ const workout=()=>{
 <div th:text="${num + '번호확인'}"></div>
 <button onclick='workin()'> 출근 </button>
 <button onclick='workout()'> 퇴근 </button>
+<div th:each="s:${list}">
+<p th:text="${s}">
+</div>
 </body>
 </html>
