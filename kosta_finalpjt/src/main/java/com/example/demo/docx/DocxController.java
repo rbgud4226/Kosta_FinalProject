@@ -93,7 +93,7 @@ public class DocxController {
 		return "redirect:/docxlist";
 	}
 
-	@RequestMapping("/list")
+	@GetMapping("/list")
 	public String list(ModelMap map, Pageable page) {
 		map.addAttribute("list", service.getAll());
 		return "docx/list";
@@ -109,6 +109,12 @@ public class DocxController {
 	public String titleList(String title, ModelMap map) {
 		map.addAttribute("wlist", service.getByTitle(title));
 		return "docx/list";
+	}
+	
+	@GetMapping("/getdocx")
+	public String get(int formnum, ModelMap map) {
+		map.addAttribute("d", service.getDocx(formnum));
+		return "docx/detail";
 	}
 
 	@RequestMapping("/deldocx")

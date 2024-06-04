@@ -18,7 +18,7 @@
         </tr>
         <tr th:each="s:${list}">
             <td th:text="${s.formnum}"></td><br>
-            <td th:text="${s.title}"></td><br>
+            <td><a th:href="@{/auth/docx/getdocx(formnum=${s.formnum})}" th:text="${s.title}"></a></td><br>
             <td th:text="${s.writer.id}"></td><br>
             <td th:text="${s.formtype}"></td><br>
             <td th:text="${s.startdt}"></td><br>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+
+<body>
+    <a href="/auth/docx/list">문서리스트</a>
+    <h3>문서 상세 페이지</h3>
+    <form action="">
+        문서제목:<span th:text="${d.title}" aria-readonly="true"></span><br/>
+        작성자:<span th:text="${d.writer.id}" aria-readonly="true"></span><br/>
+        기한:<span th:text="${d.enddt}" aria-readonly="true"></span><br/>
+        업무계획:<span th:text="${d.taskplan}" aria-readonly="true"></span><br/>
+        업무진행과정:<span th:text="${d.taskprocs}" aria-readonly="true"></span><br/>
+        <input type="hidden" name="formtype" value="보고서">
+    </form>
+</body>
+
+</html>
