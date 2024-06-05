@@ -21,6 +21,7 @@ public class MembersController {
 	@PostMapping("/add")
 	public String add(MembersDto dto) {
 		service.save(dto);
+		System.out.println("====등록 컨트롤러====");
 		return "redirect:/index_emp";
 	}
 	

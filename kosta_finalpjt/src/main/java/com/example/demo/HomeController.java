@@ -191,10 +191,9 @@ public class HomeController {
 
 	@PostMapping("/member/memberadd")
 	public String memberadd(HttpSession session, MembersDto dto) {
-		System.out.println(dto.getJoblv());
-    //		mservice.save(dto);
-		mservice.save(dto.getMemberid());
-		
+//		System.out.println(dto.getJoblv());
+		mservice.save(dto);
+		//mservice.update(dto.getMemberid());
 		String oname = dto.getMemberimgf().getOriginalFilename(); // >>파일 원본 이름
 		System.out.println("oname:" + oname);
 		String f1 = oname.substring(oname.lastIndexOf(".")); // >>뒤에서부터 특정 문자를 처음 만나는 위치를 찾아서 그 문자부터 문자열을 잘라냄

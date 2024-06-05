@@ -1,6 +1,10 @@
 package com.example.demo.workinoutrecords;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.members.Members;
 
@@ -45,8 +49,10 @@ public class WorkInOutRecord {
 	@ManyToOne
 	@JoinColumn(name = "User_id")
 	private Members user;
-	private Date workindt;
-	private Date workoutdt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	private LocalDate workindt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	private LocalDate workoutdt;
 	private String state;
 //	출근
 //	정상근무
@@ -56,6 +62,6 @@ public class WorkInOutRecord {
 	
 	@PrePersist
 	public void setDate() {
-		workindt = new Date();
+		workindt = LocalDate.from(LocalDateTime.now());
 	}
 }
