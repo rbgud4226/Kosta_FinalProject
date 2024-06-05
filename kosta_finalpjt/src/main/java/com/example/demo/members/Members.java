@@ -40,7 +40,7 @@ public class Members {
 	@SequenceGenerator(name = "seq_gen", sequenceName = "seq_memberid", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_memberid")
 	private int memberid;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdt;
 	private String email;
 	private String cpnum;

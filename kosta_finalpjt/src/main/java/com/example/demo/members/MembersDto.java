@@ -35,5 +35,5 @@ public class MembersDto {
 	private int joblv;
 	private ArrayList<EduWorkExperienceInfo> eweinfo;
 	private MultipartFile memberimgf;
-	
+
 }
