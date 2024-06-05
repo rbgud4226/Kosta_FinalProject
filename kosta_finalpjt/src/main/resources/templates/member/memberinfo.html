@@ -35,10 +35,10 @@ const home = (type) => {
 <tr><th>CPNUM</th><td><input type="text" name="cpnum" th:value="${member?.cpnum }"></td></tr>
 <tr><th>ADDRESS</th><td><input type="text" name="address" th:value="${member?.address }"></td></tr>
 <tr><th>MEMBERIMGNM</th><td><input type="file" name="memberimgnm" th:value="${member?.memberimgnm }"></td></tr>
-<tr th:if="${member?.hiredt != null }" id="hiredtid" style="display:none"><th>HIREDt</th><td th:text="${member?.hiredt }"></td></tr>
+<tr th:if="${member?.hiredt != null }" id="hiredtid" style="display:none"><th>HIREDT</th><td th:text="${member?.hiredt }"></td></tr>
 <tr><th>DEPTID</th><td><input type="text" name="deptid" th:value="${member?.deptid?.deptid }"></td></tr>
 <tr><th>JOBLV</th><td><input type="number" name="joblv" th:value="${member?.joblv }"></td></tr>
-
+<tr th:if="${member?.userid?.aprov != null }" id="aprovid" style="display:none"><th>APROV</th><td th:text="${member?.userid?.aprov }"></td></tr>
 </table>
 <input type="hidden" name="userid" th:value="${session.loginId }"><br/>
 <input type="hidden" name="leavedt" th:value="${member?.leavedt }"><br/>
