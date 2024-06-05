@@ -1,6 +1,6 @@
 package com.example.demo.workinoutrecords;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.example.demo.members.Members;
 
@@ -18,7 +18,7 @@ import lombok.ToString;
 public class WorkInOutRecordDto {
 	private int memberid;
 	private Members user;
-	private Date workindt;
-	private Date workoutdt;
+	private LocalDate workindt;
+	private LocalDate workoutdt;
 	private String state;
 }

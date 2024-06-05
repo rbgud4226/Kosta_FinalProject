@@ -159,8 +159,8 @@ public class HomeController {
 	@PostMapping("/member/memberadd")
 	public String memberadd(HttpSession session, MembersDto dto) {
 //		System.out.println(dto.getJoblv());
-//		mservice.save(dto);
-		mservice.save(dto.getMemberid());
+		mservice.save(dto);
+		//mservice.update(dto.getMemberid());
 		session.setAttribute("loginId", (String) session.getAttribute("loginId"));
 		session.setAttribute("type", (String) session.getAttribute("type"));
 		return "redirect:/member/memberinfo?id="+session.getAttribute("loginId");
