@@ -24,6 +24,7 @@ const home = (type) => {
 <tr><th>EMAIL</th><td><input type="text" name="email"></td></tr>
 <tr><th>CPNUM</th><td><input type="text" name="cpnum"></td></tr>
 <tr><th>ADDRESS</th><td><input type="text" name="address"></td></tr>
+<tr><th>MEMBERIMGNM</th><td><img th:src="@{/memberimg/read-img(memberimgnm=${member.memberimgnm })}" style="width:150px;height:150px"></td></tr>
 <tr><th>MEMBERIMGNM</th><td><input type="file" name="memberimgnm"></td></tr>
 <tr><th>DEPTID</th><td><input type="text" name="deptid"></td></tr>
 <tr><th>JOBLV</th><td><input type="text" name="joblv"></td></tr>

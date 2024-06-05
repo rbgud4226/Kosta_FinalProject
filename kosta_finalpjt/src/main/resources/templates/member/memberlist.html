@@ -13,6 +13,10 @@ const home = (type) => {
 		location.href='/';
 	}
 }
+
+const calaprov = (userid) => {
+	location.href = '/auth/member/memberaprov?userid=' + userid;	
+}
 </script>
 </head>
 <body>
@@ -46,6 +50,11 @@ const home = (type) => {
 	<td th:text="${m.email }"></td>
 	<td th:text="${m.deptid.deptid }"></td>
 	<td th:text="${m.joblv }"></td>
+	<td>
+		<input type="button" th:if="${m.userid.aprov}" value="승인" th:onclick="aprov([[${m.userid.id}]])">
+		<input type="button" th:if="${!m.userid.aprov}" value="승인취소" th:onclick="calaprov([[${m.userid.id}]])">
+	</td>
+	
 </tr>
 </table>
 <input type="button" value="뒤로가기버튼" th:onclick="history.back()"><br/>

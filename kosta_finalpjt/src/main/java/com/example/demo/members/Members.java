@@ -2,8 +2,6 @@ package com.example.demo.members;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -12,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.demo.depts.Depts;
 import com.example.demo.users.Users;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
