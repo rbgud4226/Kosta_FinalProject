@@ -22,5 +22,5 @@ public interface MembersDao extends JpaRepository<Members, Integer> {
 	@Transactional
 	@Modifying
 	@Query(value="update members set address=null where memberid=:memberid",nativeQuery = true)
-	void save(@Param("memberid") int memberid);
+	void update(@Param("memberid") int memberid);
 }

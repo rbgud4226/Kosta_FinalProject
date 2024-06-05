@@ -1,6 +1,7 @@
 package com.example.demo.workinoutrecords;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,7 +92,7 @@ public class WorkInOutRecordController {
 	public void workout(String Members, int memberid) {
 		WorkInOutRecordDto w = service.select(memberid);
 		//퇴근시간 기록
-        w.setWorkoutdt(new Date());
+        w.setWorkoutdt(LocalDate.from(LocalDateTime.now()));
         
 		String type = "정상근무";
 	    //근무 시간
@@ -135,4 +136,8 @@ public class WorkInOutRecordController {
 	}
 		
 	//관리자
+	public void deptRecord(int dept) {
+		
+	}
+	
 }

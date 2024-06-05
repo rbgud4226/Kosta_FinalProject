@@ -45,4 +45,9 @@ public class WorkInOutRecordService {
 		}
 		return list;
 	}
+	
+	//부서별 직원 월별 기록 조회하기
+//	public ArrayList<WorkInOutRecordDto> selectDept(){
+//		
+//	}
 }
