@@ -34,6 +34,6 @@ public class MembersDto {
 	private Depts deptid;
 	private int joblv;
 	private ArrayList<EduWorkExperienceInfo> eweinfo;
-	private MultipartFile imgf;
+	private MultipartFile memberimgf;
 	
 }
