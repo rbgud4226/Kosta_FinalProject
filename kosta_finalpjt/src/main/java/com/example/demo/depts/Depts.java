@@ -29,7 +29,7 @@ public class Depts {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_deptid")
 	private int deptid;
 	private String deptnm;
-	
+
 	@ManyToOne
 	@JoinColumn
 	@OnDelete(action = OnDeleteAction.CASCADE)
