@@ -27,14 +27,20 @@ const home = (type) => {
 </head>
 <body>
 <h3>내 정보 페이지</h3>
-<form th:action="@{/member/memberadd}" method="post" name="memberf">
+<form th:action="@{/member/memberadd}" method="post" name="memberf" enctype="multipart/form-data">
 <table border="1">
 <tr th:if="${member?.memberid != null }" id="memberidid" style="display:none"><th>MEMBERID</th><td th:text="${member?.memberid }"></td></tr>
 <tr><th>BIRTHDT</th><td><input type="date" name="birthdt" id="birthdtid" th:value="${member?.birthdt }"></td></tr>
 <tr><th>EMAIL</th><td><input type="text" name="email" th:value="${member?.email }"></td></tr>
 <tr><th>CPNUM</th><td><input type="text" name="cpnum" th:value="${member?.cpnum }"></td></tr>
 <tr><th>ADDRESS</th><td><input type="text" name="address" th:value="${member?.address }"></td></tr>
-<tr><th>MEMBERIMGNM</th><td><input type="file" name="memberimgnm" th:value="${member?.memberimgnm }"></td></tr>
+<tr>
+<th>MEMBERIMGNM</th>
+<td>
+<img th:src="@{/memberimg/read-img(memberimgnm=${member?.memberimgnm })}" style="width:150px;height:150px"><br/>
+<input type="file" name="memberimgf">
+</td>
+</tr>
 <tr th:if="${member?.hiredt != null }" id="hiredtid" style="display:none"><th>HIREDT</th><td th:text="${member?.hiredt }"></td></tr>
 <tr><th>DEPTID</th><td><input type="text" name="deptid" th:value="${member?.deptid?.deptid }"></td></tr>
 <tr><th>JOBLV</th><td><input type="number" name="joblv" th:value="${member?.joblv }"></td></tr>
@@ -43,6 +49,8 @@ const home = (type) => {
 <input type="hidden" name="userid" th:value="${session.loginId }"><br/>
 <input type="hidden" name="leavedt" th:value="${member?.leavedt }"><br/>
 <div th:if="${session.loginId == userid } or ${session.type == 'admin' }">
+<input type="hidden" name="memberid" th:value="${member?.memberid }"><br/>
+<input type="hidden" name="userid" th:value="${member?.userid?.id }"><br/>
 <input id="memberaddid" type="submit" value="내정보등록하기"><br/>
 </div>
 </form>

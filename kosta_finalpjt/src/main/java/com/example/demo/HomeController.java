@@ -45,11 +45,11 @@ public class HomeController {
 
 	@Autowired
 	private ChartsService chartsService;
-	
-	@Value("${spring.servlet.multipart.location}")
-	private String path; // >> 기본 경로
 
-	private String dirName = "memberimg/";
+	@Value("${spring.servlet.multipart.location}")
+	private String path;
+
+	private String dirName = "Pictures/kosta/kostafinalpjt_data/";
 
 	@RequestMapping("/")
 	public String home() {
@@ -127,7 +127,7 @@ public class HomeController {
 		mav.addObject("ulist", udto);
 		return mav;
 	}
-	
+
 	@GetMapping("/member/memberaprov")
 	public String memberaprov(String userid) {
 		UsersDto udto = uservice.getById(userid);
@@ -135,7 +135,7 @@ public class HomeController {
 		uservice.save(udto);
 		return "redirect:/member/memberlist";
 	}
-	
+
 	@GetMapping("/member/memberlist")
 	public String memberlist(ModelMap map) {
 		ArrayList<MembersDto> mlist = mservice.getAll();
@@ -168,13 +168,13 @@ public class HomeController {
 
 	@GetMapping("/member/memberinfo")
 	public String memberinfo(String id, ModelMap map) {
-		
+
 		map.addAttribute("member", mservice.getByuserId(id));
 		map.addAttribute("userid", id);
 		System.out.println(mservice.getByuserId(id));
 		return "member/memberinfo";
 	}
-	
+
 	@GetMapping("/read-img")
 	public ResponseEntity<byte[]> read_img(String fname) {
 		ResponseEntity<byte[]> result = null;
@@ -191,27 +191,17 @@ public class HomeController {
 
 	@PostMapping("/member/memberadd")
 	public String memberadd(HttpSession session, MembersDto dto) {
-//		System.out.println(dto.getJoblv());
-		mservice.save(dto);
-		//mservice.update(dto.getMemberid());
-		String oname = dto.getMemberimgf().getOriginalFilename(); // >>파일 원본 이름
-		System.out.println("oname:" + oname);
-		String f1 = oname.substring(oname.lastIndexOf(".")); // >>뒤에서부터 특정 문자를 처음 만나는 위치를 찾아서 그 문자부터 문자열을 잘라냄
-		System.out.println("f1:" + f1);
+		MembersDto mdto = mservice.save(dto);
+		String oname = dto.getMemberimgf().getOriginalFilename();
+		String f1 = oname.substring(oname.lastIndexOf("."));
 		String f2 = oname.substring(oname.lastIndexOf(".") + 1, oname.length());
-		System.out.println("f2:" + f2);
 		String f3 = oname.substring(0, oname.lastIndexOf("."));
-		System.out.println("f3:" + f3);
-		// 업로드 파일명을 글번호.확장자
-//		String fname = idto.getNum() + f1;  // >>업로드된 파일 이름을 글 번호로 바꿈, 파일이 중복되어 기존 파일이 지워지는 것을 방지하기 위해
-		String fname = f3 + " (" + dto.getUserid().getUsernm() + ")." + f2;
-		System.out.println(fname);
-		// >>업로드 위치
+		String fname = f3 + " (" + mdto.getUserid().getUsernm() + ")." + f2;
 		File newFile = new File(path + dirName + fname);
 		try {
-			dto.getMemberimgf().transferTo(newFile); // >>멀티파트로 올라온 파일을 복사
-			dto.setMemberimgnm(newFile.getName()); // >>생성한 파일의 이름을 객체 ibto의 fname에 저장
-			mservice.save(dto); // update 동작. fname값 수정
+			dto.getMemberimgf().transferTo(newFile);
+			mdto.setMemberimgnm(newFile.getName());
+			mservice.save(mdto);
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -221,7 +211,7 @@ public class HomeController {
 		}
 		session.setAttribute("loginId", (String) session.getAttribute("loginId"));
 		session.setAttribute("type", (String) session.getAttribute("type"));
-		return "redirect:/member/memberinfo?id="+session.getAttribute("loginId");
+		return "redirect:/member/memberinfo?id=" + session.getAttribute("loginId");
 	}
 
 	@RequestMapping("/index_emp")
