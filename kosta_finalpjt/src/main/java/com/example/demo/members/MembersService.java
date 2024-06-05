@@ -48,7 +48,7 @@ public class MembersService {
 			return null;
 		}
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null, null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getMgrofmember(), m.getMgrids(),m.getJoblv(), null, null);
 	}
 
 	public MembersDto getByuserId(String userid) {
@@ -57,8 +57,7 @@ public class MembersService {
 			return null;
 		}
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
-				null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getMgrofmember(), m.getMgrids(),m.getJoblv(), null, null);
 	}
 	
 	public MembersDto getByuserNm(Users userid) {
@@ -67,8 +66,7 @@ public class MembersService {
 			return null;
 		}
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
-				null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getMgrofmember(), m.getMgrids(),m.getJoblv(), null, null);
 	}
 
 	public ArrayList<MembersDto> getAll() {
@@ -76,19 +74,17 @@ public class MembersService {
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(),
-					null, null));
+					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getMgrofmember(), m.getMgrids(),m.getJoblv(), null, null));
 		}
 		return list;
 	}
 
 	public ArrayList<MembersDto> getByDeptNm(String deptnm) {
-		List<Members> l = mdao.findByDeptid(new Depts(Integer.parseInt(deptnm), null, null));
+		List<Members> l = mdao.findByDeptid(new Depts(Integer.parseInt(deptnm), null, null, null));
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(),
-					null, null));
+					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getMgrofmember(), m.getMgrids(),m.getJoblv(), null, null));
 		}
 		return list;
 	}
@@ -98,8 +94,7 @@ public class MembersService {
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(),
-					null, null));
+					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getMgrofmember(), m.getMgrids(),m.getJoblv(), null, null));
 		}
 		return list;
 	}

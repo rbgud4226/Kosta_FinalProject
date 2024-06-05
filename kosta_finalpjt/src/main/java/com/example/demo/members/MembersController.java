@@ -20,7 +20,8 @@ public class MembersController {
 
 	@PostMapping("/add")
 	public String add(MembersDto dto) {
-		service.save(dto);
+//		service.save(dto);
+		service.save(dto.getMemberid());
 		return "redirect:/index_emp";
 	}
 	

@@ -1,5 +1,7 @@
 package com.example.demo.depts;
 
+import java.util.List;
+
 import com.example.demo.members.Members;
 
 import lombok.AllArgsConstructor;
@@ -17,5 +19,6 @@ import lombok.ToString;
 public class DeptsDto {
 	private int deptid;
 	private String deptnm;
-	private Members mgrid;
+	private List<Members> members;
+	private List<Members> mgrid;
 }

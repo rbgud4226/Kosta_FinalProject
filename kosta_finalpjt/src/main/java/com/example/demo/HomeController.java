@@ -212,7 +212,7 @@ public class HomeController {
 		try {
 			dto.getMemberimgf().transferTo(newFile); // >>멀티파트로 올라온 파일을 복사
 			dto.setMemberimgnm(newFile.getName()); // >>생성한 파일의 이름을 객체 ibto의 fname에 저장
-			mservice.save(dto); // update 동작. fname값 수정
+//			mservice.save(dto); // update 동작. fname값 수정
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

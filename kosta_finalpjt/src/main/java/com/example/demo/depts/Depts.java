@@ -1,16 +1,16 @@
 package com.example.demo.depts;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import java.util.List;
 
 import com.example.demo.members.Members;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +30,10 @@ public class Depts {
 	private int deptid;
 	private String deptnm;
 	
-	@ManyToOne
-	@JoinColumn
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Members mgrid;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Members_deptid", cascade = CascadeType.ALL)
+	private List<Members> members;
+	
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Members_mgrids", cascade = CascadeType.ALL)
+	private List<Members> mgrids;
 }
