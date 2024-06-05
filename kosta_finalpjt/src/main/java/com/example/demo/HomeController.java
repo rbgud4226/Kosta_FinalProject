@@ -192,7 +192,8 @@ public class HomeController {
 	@PostMapping("/member/memberadd")
 	public String memberadd(HttpSession session, MembersDto dto) {
 		System.out.println(dto.getJoblv());
-		mservice.save(dto);
+    //		mservice.save(dto);
+		mservice.save(dto.getMemberid());
 		
 		String oname = dto.getMemberimgf().getOriginalFilename(); // >>파일 원본 이름
 		System.out.println("oname:" + oname);
@@ -219,10 +220,9 @@ public class HomeController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		session.setAttribute("loginId", (String) session.getAttribute("loginId"));
 		session.setAttribute("type", (String) session.getAttribute("type"));
-		return "redirect:/member/memberinfo";
+		return "redirect:/member/memberinfo?id="+session.getAttribute("loginId");
 	}
 
 	@RequestMapping("/index_emp")

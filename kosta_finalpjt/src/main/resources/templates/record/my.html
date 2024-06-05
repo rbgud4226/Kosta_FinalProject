@@ -46,6 +46,7 @@ const workout=()=>{
 <div th:text="${session.loginId + '출퇴근 페이지'}"></div>
 <div th:text="${flag + '출근여부'}"></div>
 <div th:text="${num + '번호확인'}"></div>
+<div th:text="${mynum + '사원번호'}"></div>
 <button onclick='workin()'> 출근 </button>
 <button onclick='workout()'> 퇴근 </button>
 <div th:each="s:${list}">

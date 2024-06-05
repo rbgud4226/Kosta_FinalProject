@@ -12,8 +12,6 @@ import com.example.demo.depts.Depts;
 import com.example.demo.users.Users;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
-
 
 @Repository
 public interface MembersDao extends JpaRepository<Members, Integer> {
@@ -23,6 +21,6 @@ public interface MembersDao extends JpaRepository<Members, Integer> {
 	
 	@Transactional
 	@Modifying
-	@Query(value="update dataroom set cnt=cnt+1 where num=:num",nativeQuery = true)
-	void updateCnt(@Param("num") int num);
+	@Query(value="update members set address=null where memberid=:memberid",nativeQuery = true)
+	void save(@Param("memberid") int memberid);
 }

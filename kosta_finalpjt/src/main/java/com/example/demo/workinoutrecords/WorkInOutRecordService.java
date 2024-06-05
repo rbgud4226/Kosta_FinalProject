@@ -11,10 +11,11 @@ public class WorkInOutRecordService {
 	private WorkInOutRecordDao dao;
 	
 	//당일 출퇴근 기록 여부 조회
-	public ArrayList<WorkInOutRecordDto> selectByDate(String user) {
+	public ArrayList<WorkInOutRecordDto> selectByDate(int user) {
 		ArrayList<WorkInOutRecord> wo = dao.selectDay(user);
 		ArrayList<WorkInOutRecordDto> list = new ArrayList<>();
 		for(WorkInOutRecord w : wo) {
+			System.out.println(w);
 			list.add(new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState()));
 		}
 		return list;
@@ -36,7 +37,7 @@ public class WorkInOutRecordService {
 	}
 
 	//직원 월별 기록 조회
-	public ArrayList<WorkInOutRecordDto> selectUser(int month,int year,String user){
+	public ArrayList<WorkInOutRecordDto> selectUser(int month,int year,int user){
 		ArrayList<WorkInOutRecord> wo = dao.selectMonthByUser(month, year, user);
 		ArrayList<WorkInOutRecordDto> list = new ArrayList<>();
 		for(WorkInOutRecord w : wo) {
