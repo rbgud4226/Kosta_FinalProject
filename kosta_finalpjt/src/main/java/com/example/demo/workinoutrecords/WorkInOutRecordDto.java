@@ -3,7 +3,6 @@ package com.example.demo.workinoutrecords;
 import java.util.Date;
 
 import com.example.demo.members.Members;
-import com.example.demo.users.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.members.Members;
-import com.example.demo.users.Users;
+import com.example.demo.members.MembersDto;
+import com.example.demo.members.MembersService;
 
 
 @Controller
@@ -25,16 +26,22 @@ public class WorkInOutRecordController {
 	@Autowired
 	private WorkInOutRecordService service;
 	
+	@Autowired
+	private MembersService mservice;
+	
 	//개인
 	//출퇴근 기록 페이지로 이동하기
 	@GetMapping("/my")
 	public String myrecord(String Members,ModelMap map) {
+		MembersDto md = mservice.getByuserId(Members);
+		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblv());
 		//출근기록x
 		boolean flag = false;
-		ArrayList<WorkInOutRecordDto> list = service.selectByDate(Members);
+		ArrayList<WorkInOutRecordDto> list = service.selectByDate(m.getMemberid());
 		//출근기록O
 		if(!list.isEmpty()) {
 			flag = true; 
+			//오늘날짜 출근 등록번호(퇴근시 필요)
 			map.put("num",list.get(0).getMemberid());
 		}
 		//내 근무기록
@@ -42,20 +49,25 @@ public class WorkInOutRecordController {
         LocalDate currentDate = LocalDate.now();
         int currentMonth = currentDate.getMonthValue();
         int currentYear = currentDate.getYear();
-		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, Members);
+		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
+		
+		//이번달 출근 기록
 		map.put("list", mylist);
+		//오늘 날짜 출근 여부
 		map.put("flag", flag);
+		//사원번호 반환
+		map.put("mynum", m.getMemberid());
 		return "record/my";
 	}
 
 	//출근하기
 	@ResponseBody
 	@PostMapping("/in")
-	public Map workin(String Members) {
-		Users u = new Users(Members,"","","",0);
-		Members m = new Members(u,0,null,"","","","",null,null,null,0);
+	public Map workin(String Members) {	
+		MembersDto md = mservice.getByuserId(Members);
+		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblv());
 		String type = "출근";
-		
+
 	    //지각 체크
         LocalTime currentTime = LocalTime.now();
         LocalTime targetTime = LocalTime.of(9, 0);
@@ -64,7 +76,7 @@ public class WorkInOutRecordController {
         if (currentTime.isAfter(targetTime)) {
         	type="지각";
         }			
-		service.save(new WorkInOutRecordDto(0, m, null, null, type));
+		service.save(new WorkInOutRecordDto(0,m, null, null, type));
 		Map map = new HashMap<>();
 		map.put("state", type);
 		return map;
@@ -98,7 +110,7 @@ public class WorkInOutRecordController {
 	//내 근태기록 확인하기
 	@ResponseBody
 	@GetMapping("/getmonth")
-	public Map myrecord(String Members,int cnt) {
+	public Map myrecord(int Members,int cnt) {
         // 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
         // 현재 달/년도 가져오기
