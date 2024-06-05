@@ -14,8 +14,8 @@ public class DeptsService {
 	private DeptsDao dao;
 
 	public DeptsDto save(DeptsDto dto) {
-		Depts d = dao.save(new Depts(dto.getDeptid(), dto.getDeptnm(), dto.getMembers(), dto.getMgrid()));
-		return new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMembers(), d.getMgrids());
+		Depts d = dao.save(new Depts(dto.getDeptid(), dto.getDeptnm(), dto.getMgrid()));
+		return new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid());
 	}
 
 	public DeptsDto getByDeptId(int deptid) {
@@ -23,23 +23,23 @@ public class DeptsService {
 		if (d == null) {
 			return null;
 		}
-		return new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMembers(), d.getMgrids());
+		return new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid());
 	}
 
 	public ArrayList<DeptsDto> getByDeptNm(String deptnm) {
 		List<Depts> l = dao.findByDeptnmLike("%" + deptnm + "%");
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
-			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMembers(), d.getMgrids()));
+			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
 		}
 		return list;
 	}
 
 	public ArrayList<DeptsDto> getByMgrId(int mgrid) {
-		List<Depts> l = dao.findByMgrid(new Members(null, mgrid, null, null, null, null, null, null, null, null, null, null, 0));
+		List<Depts> l = dao.findByMgrid(new Members(null, mgrid, null, null, null, null, null, null, null, null, 0));
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
-			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMembers(), d.getMgrids()));
+			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
 		}
 		return list;
 	}
@@ -48,7 +48,7 @@ public class DeptsService {
 		List<Depts> l = dao.findAll();
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
-			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMembers(), d.getMgrids()));
+			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
 		}
 		return list;
 	}

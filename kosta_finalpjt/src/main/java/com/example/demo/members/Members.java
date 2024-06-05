@@ -2,7 +2,6 @@ package com.example.demo.members;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,13 +12,11 @@ import com.example.demo.users.Users;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
@@ -55,16 +52,9 @@ public class Members {
 	private LocalDate leavedt;
 
 	@ManyToOne
-	@JoinColumn(nullable = false, name = "deptsId")
+	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Depts deptid;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "Members_Id")
-	private Members mgrofmember;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "mgrofmember", cascade = CascadeType.ALL)
-	private List<Members> mgrids;
 	private int joblv;
 
 	@PrePersist

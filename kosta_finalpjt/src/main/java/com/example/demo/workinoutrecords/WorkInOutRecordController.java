@@ -35,9 +35,7 @@ public class WorkInOutRecordController {
 	@GetMapping("/my")
 	public String myrecord(String Members,ModelMap map) {
 		MembersDto md = mservice.getByuserId(Members);
-		Members m = new Members(md.getUserid(), md.getMemberid(), md.getBirthdt(), md.getEmail(), md.getCpnum(),
-				md.getAddress(), md.getMemberimgnm(), md.getHiredt(), md.getLeavedt(), md.getDeptid(),
-				md.getMgrofmember(), md.getMgrid(), md.getJoblv());
+		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblv());
 		//출근기록x
 		boolean flag = false;
 		ArrayList<WorkInOutRecordDto> list = service.selectByDate(m.getMemberid());
@@ -68,9 +66,7 @@ public class WorkInOutRecordController {
 	@PostMapping("/in")
 	public Map workin(String Members) {	
 		MembersDto md = mservice.getByuserId(Members);
-		Members m = new Members(md.getUserid(), md.getMemberid(), md.getBirthdt(), md.getEmail(), md.getCpnum(),
-				md.getAddress(), md.getMemberimgnm(), md.getHiredt(), md.getLeavedt(), md.getDeptid(),
-				md.getMgrofmember(), md.getMgrid(), md.getJoblv());
+		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblv());
 		String type = "출근";
 
 	    //지각 체크

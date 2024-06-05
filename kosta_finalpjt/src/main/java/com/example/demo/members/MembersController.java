@@ -20,13 +20,8 @@ public class MembersController {
 
 	@PostMapping("/add")
 	public String add(MembersDto dto) {
-<<<<<<< HEAD
-//		service.save(dto);
-		service.save(dto.getMemberid());
-=======
 		service.save(dto);
 		System.out.println("====등록 컨트롤러====");
->>>>>>> branch 'develop' of https://github.com/choiwanmin/kosta_final_pjt.git
 		return "redirect:/index_emp";
 	}
 	

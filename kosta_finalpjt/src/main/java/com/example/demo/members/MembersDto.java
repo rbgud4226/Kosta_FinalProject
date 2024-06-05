@@ -3,7 +3,6 @@ package com.example.demo.members;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,8 +32,6 @@ public class MembersDto {
 	private LocalDate hiredt;
 	private LocalDate leavedt;
 	private Depts deptid;
-	private Members mgrofmember;
-	private List<Members> mgrid;
 	private int joblv;
 	private ArrayList<EduWorkExperienceInfo> eweinfo;
 	private MultipartFile memberimgf;
