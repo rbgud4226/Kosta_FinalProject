@@ -16,35 +16,35 @@ public class WorkInOutRecordService {
 		ArrayList<WorkInOutRecordDto> list = new ArrayList<>();
 		for(WorkInOutRecord w : wo) {
 			System.out.println(w);
-			list.add(new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState()));
+			list.add(new WorkInOutRecordDto(w.getDaynum(),w.getUser(),w.getDayOfWeek(),w.getDay(),w.getWorkinTime(),w.getWorkOutTime(),w.getState()));
 		}
 		return list;
 	}
 
 	//출근,퇴근(save로 처음 등록, 퇴근 등록시 save로 수정)
 	public WorkInOutRecordDto save(WorkInOutRecordDto dto) {
-		WorkInOutRecord w = dao.save(new WorkInOutRecord(dto.getMemberid(),dto.getUser(),dto.getWorkindt(),dto.getWorkoutdt(),dto.getState()));
-		return new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState());
+		WorkInOutRecord w = dao.save(new WorkInOutRecord(dto.getDaynum(),dto.getUser(),dto.getDayOfWeek(),dto.getDay(),dto.getWorkinTime(),dto.getWorkOutTime(),dto.getState()));
+		return new WorkInOutRecordDto(w.getDaynum(),w.getUser(),w.getDayOfWeek(),w.getDay(),w.getWorkinTime(),w.getWorkOutTime(),w.getState());
 	}
-	
-	//한개 기록 조회용
-	public WorkInOutRecordDto select(int memberid) {
-		WorkInOutRecord w = dao.findById(memberid).orElse(null);
-		if(w == null) {
-			return null;
-		}
-		return new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState());
-	}
-
-	//직원 월별 기록 조회
-	public ArrayList<WorkInOutRecordDto> selectUser(int month,int year,int user){
-		ArrayList<WorkInOutRecord> wo = dao.selectMonthByUser(month, year, user);
-		ArrayList<WorkInOutRecordDto> list = new ArrayList<>();
-		for(WorkInOutRecord w : wo) {
-			list.add(new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState()));
-		}
-		return list;
-	}
+//	
+//	//한개 기록 조회용
+//	public WorkInOutRecordDto select(int memberid) {
+//		WorkInOutRecord w = dao.findById(memberid).orElse(null);
+//		if(w == null) {
+//			return null;
+//		}
+//		return new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState());
+//	}
+//
+//	//직원 월별 기록 조회
+//	public ArrayList<WorkInOutRecordDto> selectUser(int month,int year,int user){
+//		ArrayList<WorkInOutRecord> wo = dao.selectMonthByUser(month, year, user);
+//		ArrayList<WorkInOutRecordDto> list = new ArrayList<>();
+//		for(WorkInOutRecord w : wo) {
+//			list.add(new WorkInOutRecordDto(w.getMemberid(),w.getUser(),w.getWorkindt(),w.getWorkoutdt(),w.getState()));
+//		}
+//		return list;
+//	}
 	
 	//부서별 직원 월별 기록 조회하기
 //	public ArrayList<WorkInOutRecordDto> selectDept(){

@@ -57,7 +57,7 @@ public class MembersController {
 				if (udto == null) {
 					mlist.add(null);
 				} else {
-					mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0)));
+					mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0, null)));
 				}
 //				System.out.println(mlist);
 			} else if (type == 3) {
@@ -87,7 +87,7 @@ public class MembersController {
 		} else if (mdto.getUserid().getAprov() == 3) {
 			aprovStr = "퇴직상태";
 		}
-		
+
 		map.addAttribute("member", mdto);
 		map.addAttribute("aprovStr", aprovStr);
 		return "member/memberinfo";

@@ -230,4 +230,11 @@ public class UsersController {
 		return mav;
 	}
 
+	// 채팅 유저 목록
+	@GetMapping("/auth/users/list")
+	public String del(ModelMap map) {
+		map.addAttribute("list", uservice.getAll());
+		return "member/list";
+	}
+
 }

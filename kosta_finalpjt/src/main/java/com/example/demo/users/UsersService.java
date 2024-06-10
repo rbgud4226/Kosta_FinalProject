@@ -30,9 +30,9 @@ public class UsersService {
 
 	public UsersDto save(UsersDto dto) {
 		Users u = dao.save(new Users(dto.getId(), dto.getUsernm(), passwordEncoder.encode(dto.getPwd()), dto.getType(),
-				dto.getAprov()));
+				dto.getAprov() ,null));
 		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null));
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null);
 	}
 
 	public UsersDto getById(String id) {
@@ -41,7 +41,7 @@ public class UsersService {
 			return null;
 		}
 		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null));
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null);
 	}
 
 	public UsersDto getByUsernm(String usernm) {
@@ -50,7 +50,7 @@ public class UsersService {
 			return null;
 		}
 		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null));
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null);
 	}
 
 	public ArrayList<UsersDto> getByAprov(int aprov) {
@@ -58,7 +58,7 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
 		}
 		return list;
 	}
@@ -68,7 +68,7 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
 		}
 		return list;
 	}
@@ -78,7 +78,7 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
 		}
 		return list;
 	}
@@ -88,7 +88,7 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
 		}
 		return list;
 	}
@@ -98,7 +98,7 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(), new MembersDto(u, 0,
-					null, null, null, null, null, null, null, new Depts(deptid, null, null), 0, null, null)));
+					null, null, null, null, null, null, null, new Depts(deptid, null, null), 0, null, null),null));
 		}
 		return list;
 	}
@@ -108,13 +108,19 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, joblv, null, null)));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, joblv, null, null),null));
 		}
 		return list;
 	}
 
 	public void delMember(String id) {
 		dao.deleteById(id);
+	}
+	
+	//채팅용 임시
+	public Users getById2(String id) {
+		Users u = dao.findById(id).orElse(null);
+		return u;
 	}
 
 }
