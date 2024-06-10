@@ -4,6 +4,37 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
+const checkjoin = () => {
+	if (userjoinf.id.value.length <= 0) {
+		alert("ID는 필수 입력 사항");
+		userjoinf.id.focus();
+		return;
+	}
+	if (userjoinf.pwd.value.length <= 0) {
+		alert("PWD는 필수 입력 사항");
+		userjoinf.pwd.focus();
+		return;
+	}
+	if (userjoinf.usernm.value.length <= 0) {
+		alert("NAME은 필수 입력 사항");
+		userjoinf.usernm.focus();
+		return;
+	}
+	if (userjoinf.type.value.length <= 0) {
+		alert("TYPE은 필수 입력 사항");
+		userjoinf.type.focus();
+		return;
+	}
+	if (!flag) {
+		alert("ID 중복체크 해야함");
+		userjoinf.idcheckname.focus();
+		return;
+	}
+	userjoinf.submit();
+}
+
+let flag = false;
+
 const idcheck = () => {
 	flag = false;
 	const req = new XMLHttpRequest();
@@ -21,7 +52,6 @@ const idcheck = () => {
 	req.send();
 }
 
-
 const home = (type) => {
 	if (type == 'admin') {
 		location.href='/index_admin';
@@ -35,13 +65,13 @@ const home = (type) => {
 </head>
 <body>
 <h3>회원가입 페이지</h3>
-<form action="/user/userjoin" method="post">
+<form action="/user/userjoin" method="post" name="userjoinf">
 <table border="1">
 	<tr>
 		<th>ID</th>
 		<td>
 			<input type="text" name="id" id="id">
-			<input type="button" value="중복체크" onclick="idcheck()"><br/>
+			<input type="button" name="idcheckname" value="중복체크" onclick="idcheck()"><br/>
 			<span id="res"></span>
 		</td>
 	</tr>
@@ -54,12 +84,12 @@ const home = (type) => {
 	<tr>
 		<th>TYPE</th>
 		<td> 
-			<input type="radio" name="type" value="emp">직원  
+			<input type="radio" name="type" value="emp" checked>직원  
 			<input type="radio" name="type" value="admin">관리자 
 		</td>
 	</tr>
 </table>
-<input type="submit" value="가입">
+<input type="button" value="가입" th:onclick="checkjoin()">
 </form>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
