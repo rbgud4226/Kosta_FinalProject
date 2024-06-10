@@ -54,7 +54,7 @@ public class MembersService {
 	}
 
 	public MembersDto getByuserId(String userid) {
-		Members m = mdao.findByUserid(new Users(userid, "", "", "", 0));
+		Members m = mdao.findByUserid(new Users(userid, "", "", "", 0, null));
 		if (m == null) {
 			return null;
 		}
