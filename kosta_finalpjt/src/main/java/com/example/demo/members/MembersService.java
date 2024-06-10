@@ -29,17 +29,18 @@ public class MembersService {
 	@Autowired
 	private UsersDao udao;
 
-//	public MembersDto save(MembersDto dto) {
-//		Members m = mdao.save(new Members(dto.getUserid(), dto.getMemberid(), dto.getBirthdt(), dto.getEmail(),
-//				dto.getCpnum(), dto.getAddress(), dto.getMemberimgnm(), dto.getHiredt(), dto.getLeavedt(),
-//				dto.getDeptid(), dto.getJoblv()));
-//		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-//				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null, null);
-//	}
-	
-	public void save(int memberid) {
-		mdao.save(memberid);
-		System.out.println("수정 테스트 성공");
+	public MembersDto save(MembersDto dto) {
+		Members m = mdao.save(new Members(dto.getUserid(), dto.getMemberid(), dto.getBirthdt(), dto.getEmail(),
+				dto.getCpnum(), dto.getAddress(), dto.getMemberimgnm(), dto.getHiredt(), dto.getLeavedt(),
+				dto.getDeptid(), dto.getJoblv()));
+		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
+				null);
+	}
+
+	public void update(int memberid) {
+		mdao.update(memberid);
+//		System.out.println("수정 테스트 성공");
 	}
 
 	public MembersDto getByMemberId(int memberid) {
@@ -48,7 +49,8 @@ public class MembersService {
 			return null;
 		}
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null, null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
+				null);
 	}
 
 	public MembersDto getByuserId(String userid) {
@@ -60,7 +62,7 @@ public class MembersService {
 				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
 				null);
 	}
-	
+
 	public MembersDto getByuserNm(Users userid) {
 		Members m = mdao.findByUserid(userid);
 		if (m == null) {

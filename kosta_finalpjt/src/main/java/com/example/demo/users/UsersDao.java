@@ -16,4 +16,6 @@ import org.springframework.stereotype.Repository;
 public interface UsersDao extends JpaRepository<Users, String> {
 	Users findByUsernm(String usernm);
 	ArrayList<Users> findByAprov(int aprov);
+	ArrayList<Users> findByIdLike(String id);
+	ArrayList<Users> findByUsernmLike(String usernm);
 }

@@ -13,10 +13,6 @@ const home = (type) => {
 		location.href='/';
 	}
 }
-
-const calaprov = (userid) => {
-	location.href = '/auth/member/memberaprov?userid=' + userid;	
-}
 </script>
 </head>
 <body>
@@ -34,27 +30,21 @@ const calaprov = (userid) => {
 </td>
 <td>
 <input type="text" name="val" th:value="${param.val }">
+<input type="submit" value="검색">
 </td>
 </tr>
 </table>
-<input type="submit" value="검색">
 </form>
 
 <table border="1">
-<tr><th>userid</th><th>usernm</th><th>type</th><th>aprov</th><th>email</th><th>deptid</th><th>joblv</th></tr>
+<tr><th>직원계정</th><th>직원이름</th><th>직원 승인 상태</th><th>이메일</th><th>부서</th><th>직급</th></tr>
 <tr th:if="${mlist != null }" th:each="m:${mlist }">
-	<td th:text="${m.userid.id }"></td>
-	<td><a href="member/memberinfo.html" th:href="@{/member/memberinfo(id=${m.userid.id})}" th:text="${m.userid.usernm }">usernm</a></td>
-	<td th:text="${m.userid.type }"></td>
-	<td th:text="${m.userid.aprov }"></td>
-	<td th:text="${m.email }"></td>
-	<td th:text="${m.deptid.deptid }"></td>
-	<td th:text="${m.joblv }"></td>
-	<td>
-		<input type="button" th:if="${m.userid.aprov}" value="승인" th:onclick="aprov([[${m.userid.id}]])">
-		<input type="button" th:if="${!m.userid.aprov}" value="승인취소" th:onclick="calaprov([[${m.userid.id}]])">
-	</td>
-	
+	<td th:text="${m?.userid?.id }"></td>
+	<td><a href="member/memberinfo.html" th:href="@{/member/memberinfo(id=${m?.userid?.id})}" th:text="${m?.userid?.usernm }">usernm</a></td>
+	<td th:text="${m?.userid?.aprov }"></td>
+	<td th:text="${m?.email }"></td>
+	<td th:text="${m?.deptid?.deptid }"></td>
+	<td th:text="${m?.joblv }"></td>	
 </tr>
 </table>
 <input type="button" value="뒤로가기버튼" th:onclick="history.back()"><br/>

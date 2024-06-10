@@ -1,6 +1,8 @@
 package com.example.demo.workinoutrecords;
 
-import java.util.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.example.demo.members.Members;
 
@@ -16,9 +18,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class WorkInOutRecordDto {
-	private int memberid;
+	private int daynum;
 	private Members user;
-	private Date workindt;
-	private Date workoutdt;
+	private DayOfWeek dayOfWeek;
+	private LocalDate day;
+	private LocalTime workinTime;
+	private LocalTime workOutTime;
 	private String state;
 }

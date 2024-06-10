@@ -4,16 +4,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
-window.onload = () => {
-	if('[[${member?.memberid }]]' != '[[null]]'){
-		let memberaddvar = document.getElementById('memberaddid');
-		memberaddvar.value = '내정보수정하기';
-		document.getElementById('memberidid').style.display = '';
-		document.getElementById('hiredtid').style.display = '';
-	}
-console.log(document.getElementById('birthdtid').value);
-}
-
 const home = (type) => {
 	if (type == 'admin') {
 		location.href='/index_admin';
@@ -23,30 +13,36 @@ const home = (type) => {
 		location.href='/';
 	}
 }
+
 </script>
 </head>
 <body>
-<h3>내 정보 페이지</h3>
-<form th:action="@{/member/memberadd}" method="post" name="memberf">
+<h3>직원 로그인 정보 페이지</h3>
 <table border="1">
-<tr th:if="${member?.memberid != null }" id="memberidid" style="display:none"><th>MEMBERID</th><td th:text="${member?.memberid }"></td></tr>
-<tr><th>BIRTHDT</th><td><input type="date" name="birthdt" id="birthdtid" th:value="${member?.birthdt }"></td></tr>
-<tr><th>EMAIL</th><td><input type="text" name="email" th:value="${member?.email }"></td></tr>
-<tr><th>CPNUM</th><td><input type="text" name="cpnum" th:value="${member?.cpnum }"></td></tr>
-<tr><th>ADDRESS</th><td><input type="text" name="address" th:value="${member?.address }"></td></tr>
-<tr><th>MEMBERIMGNM</th><td><input type="file" name="memberimgnm" th:value="${member?.memberimgnm }"></td></tr>
-<tr th:if="${member?.hiredt != null }" id="hiredtid" style="display:none"><th>HIREDT</th><td th:text="${member?.hiredt }"></td></tr>
-<tr><th>DEPTID</th><td><input type="text" name="deptid" th:value="${member?.deptid?.deptid }"></td></tr>
-<tr><th>JOBLV</th><td><input type="number" name="joblv" th:value="${member?.joblv }"></td></tr>
-<tr th:if="${member?.userid?.aprov != null }" id="aprovid" style="display:none"><th>APROV</th><td th:text="${member?.userid?.aprov }"></td></tr>
+<tr><th>직원 계정</th><td th:text="${member?.userid?.id }"></td></tr>
+<tr><th>직원 이름</th><td th:text="${member?.userid?.usernm }"></td></tr>
+<tr><th>직원 승인 상태</th><td th:text="${aprovStr }"></td></tr>
+
 </table>
-<input type="hidden" name="userid" th:value="${session.loginId }"><br/>
-<input type="hidden" name="leavedt" th:value="${member?.leavedt }"><br/>
-<div th:if="${session.loginId == userid } or ${session.type == 'admin' }">
-<input id="memberaddid" type="submit" value="내정보등록하기"><br/>
-</div>
-</form>
-<input id="resetid" type="reset" value="취소하기"><br/>
+<h3>직원 정보 페이지</h3>
+<table border="1">
+<tr><th>사원번호</th><td th:text="${member?.memberid }"></td></tr>
+<tr><th>생년월일</th><td th:text="${member?.birthdt }"></td></tr>
+<tr><th>이메일</th><td th:text="${member?.email }"></td></tr>
+<tr><th>개인전화번호</th><td th:text="${member?.cpnum }"></td></tr>
+<tr><th>주소</th><td th:text="${member?.address }"></td></tr>
+<tr>
+<th>사원이미지</th>
+<td>
+<img th:src="@{/member/memberimg(memberimgnm=${member?.memberimgnm })}" style="width:150px;height:150px"><br/>
+</td>
+</tr>
+<tr><th>입사일</th><td th:text="${member?.hiredt }"></td></tr>
+<tr th:if="${member?.userid?.aprov == 3 }"><th>퇴사일</th><td th:text="${member?.leavedt }"></td></tr>
+<tr><th>부서</th><td th:text="${member?.deptid?.deptid }"></td></tr>
+<tr><th>직급</th><td th:text="${member?.joblv }"></td></tr>
+</table>
+
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>

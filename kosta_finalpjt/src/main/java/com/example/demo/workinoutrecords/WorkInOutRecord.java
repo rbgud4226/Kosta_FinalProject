@@ -1,6 +1,11 @@
 package com.example.demo.workinoutrecords;
 
-import java.util.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.members.Members;
 
@@ -40,13 +45,18 @@ public class WorkInOutRecord {
 	@Id
 	@SequenceGenerator(name = "seq_gen", sequenceName = "seq_time", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_time")
-	private int memberid;
+	private int daynum;
 	
 	@ManyToOne
 	@JoinColumn(name = "User_id")
 	private Members user;
-	private Date workindt;
-	private Date workoutdt;
+	private DayOfWeek dayOfWeek;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate day;
+	@DateTimeFormat(pattern = "hh:mm:ss")
+	private LocalTime workinTime;
+	@DateTimeFormat(pattern = "hh:mm:ss")
+	private LocalTime workOutTime;
 	private String state;
 //	출근
 //	정상근무
@@ -56,6 +66,8 @@ public class WorkInOutRecord {
 	
 	@PrePersist
 	public void setDate() {
-		workindt = new Date();
+		day = LocalDate.now();
+        dayOfWeek = day.getDayOfWeek();
+        workinTime = LocalTime.now();
 	}
 }

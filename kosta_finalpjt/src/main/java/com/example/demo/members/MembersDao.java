@@ -16,11 +16,13 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface MembersDao extends JpaRepository<Members, Integer> {
 	Members findByUserid(Users userid);
-	ArrayList<Members> findByDeptid(Depts deptid);
-	ArrayList<Members> findByJoblv(int joblv);
 	
+	ArrayList<Members> findByDeptid(Depts deptid);
+
+	ArrayList<Members> findByJoblv(int joblv);
+
 	@Transactional
 	@Modifying
-	@Query(value="update members set address=null where memberid=:memberid",nativeQuery = true)
-	void save(@Param("memberid") int memberid);
+	@Query(value = "update members set address=null where memberid=:memberid", nativeQuery = true)
+	void update(@Param("memberid") int memberid);
 }

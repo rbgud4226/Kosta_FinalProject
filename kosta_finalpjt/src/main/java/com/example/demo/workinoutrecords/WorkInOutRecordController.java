@@ -1,6 +1,7 @@
 package com.example.demo.workinoutrecords;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,17 +43,17 @@ public class WorkInOutRecordController {
 		if(!list.isEmpty()) {
 			flag = true; 
 			//오늘날짜 출근 등록번호(퇴근시 필요)
-			map.put("num",list.get(0).getMemberid());
+			map.put("num",list.get(0).getDaynum());
 		}
 		//내 근무기록
         // 현재 달/년도 가져오기
         LocalDate currentDate = LocalDate.now();
         int currentMonth = currentDate.getMonthValue();
         int currentYear = currentDate.getYear();
-		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
+		//ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
 		
 		//이번달 출근 기록
-		map.put("list", mylist);
+		//map.put("list", mylist);
 		//오늘 날짜 출근 여부
 		map.put("flag", flag);
 		//사원번호 반환
@@ -76,59 +77,65 @@ public class WorkInOutRecordController {
         if (currentTime.isAfter(targetTime)) {
         	type="지각";
         }			
-		service.save(new WorkInOutRecordDto(0,m, null, null, type));
+		service.save(new WorkInOutRecordDto(0,m, null, null, null, null, type));
 		Map map = new HashMap<>();
 		map.put("state", type);
 		return map;
 	}
-	//퇴근하기
-	@ResponseBody
-	@PostMapping("/out")
-	public void workout(String Members, int memberid) {
-		WorkInOutRecordDto w = service.select(memberid);
-		//퇴근시간 기록
-        w.setWorkoutdt(new Date());
-        
-		String type = "정상근무";
-	    //근무 시간
-        LocalTime currentTime = LocalTime.now();
-        LocalTime targetTime = LocalTime.of(18, 30);
-        LocalTime targetTime2 = LocalTime.of(17, 50);
-        if (currentTime.isAfter(targetTime)) {
-        	type="추가근무";
-        }else if(currentTime.isBefore(targetTime2)) {
-        	type="조기퇴근";
-        }
-
-        if(w.getState().equals("지각")) {
-        	type="지각";
-        }
-        w.setState(type);
-        service.save(w);
-        
-	}
-	//내 근태기록 확인하기
-	@ResponseBody
-	@GetMapping("/getmonth")
-	public Map myrecord(int Members,int cnt) {
-        // 현재 날짜 가져오기
-        LocalDate currentDate = LocalDate.now();
-        // 현재 달/년도 가져오기
-        int currentMonth = currentDate.getMonthValue();
-        int currentYear = currentDate.getYear();
-       
-        // 이전 달로 이동
-        int previousMonth = currentMonth + cnt;
-        int previousYear = currentYear;
-        if (previousMonth == 0) { 
-            previousMonth = 12; 
-            previousYear--;
-        }
-        ArrayList<WorkInOutRecordDto> list = service.selectUser(previousMonth, previousYear, Members);
-        Map map = new HashMap<>();
-		map.put("list", list);
-		return map;
-	}
-		
-	//관리자
+	
+	
+//	//퇴근하기
+//	@ResponseBody
+//	@PostMapping("/out")
+//	public void workout(String Members, int memberid) {
+//		WorkInOutRecordDto w = service.select(memberid);
+//		//퇴근시간 기록
+//        w.setWorkoutdt(LocalDate.from(LocalDateTime.now()));
+//        
+//		String type = "정상근무";
+//	    //근무 시간
+//        LocalTime currentTime = LocalTime.now();
+//        LocalTime targetTime = LocalTime.of(18, 30);
+//        LocalTime targetTime2 = LocalTime.of(17, 50);
+//        if (currentTime.isAfter(targetTime)) {
+//        	type="추가근무";
+//        }else if(currentTime.isBefore(targetTime2)) {
+//        	type="조기퇴근";
+//        }
+//
+//        if(w.getState().equals("지각")) {
+//        	type="지각";
+//        }
+//        w.setState(type);
+//        service.save(w);
+//        
+//	}
+//	//내 근태기록 확인하기
+//	@ResponseBody
+//	@GetMapping("/getmonth")
+//	public Map myrecord(int Members,int cnt) {
+//        // 현재 날짜 가져오기
+//        LocalDate currentDate = LocalDate.now();
+//        // 현재 달/년도 가져오기
+//        int currentMonth = currentDate.getMonthValue();
+//        int currentYear = currentDate.getYear();
+//       
+//        // 이전 달로 이동
+//        int previousMonth = currentMonth + cnt;
+//        int previousYear = currentYear;
+//        if (previousMonth == 0) { 
+//            previousMonth = 12; 
+//            previousYear--;
+//        }
+//        ArrayList<WorkInOutRecordDto> list = service.selectUser(previousMonth, previousYear, Members);
+//        Map map = new HashMap<>();
+//		map.put("list", list);
+//		return map;
+//	}
+//		
+//	//관리자
+//	public void deptRecord(int dept) {
+//		
+//	}
+	
 }
