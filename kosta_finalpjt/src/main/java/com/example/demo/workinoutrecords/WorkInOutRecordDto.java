@@ -22,7 +22,7 @@ public class WorkInOutRecordDto {
 	private Members user;
 	private DayOfWeek dayOfWeek;
 	private LocalDate day;
-	private LocalTime workinTime;
-	private LocalTime workOutTime;
+	private String workinTime;
+	private String workOutTime;
 	private String state;
 }

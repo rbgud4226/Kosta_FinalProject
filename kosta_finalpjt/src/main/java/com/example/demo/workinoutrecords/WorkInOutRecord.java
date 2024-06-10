@@ -53,10 +53,10 @@ public class WorkInOutRecord {
 	private DayOfWeek dayOfWeek;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate day;
-	@DateTimeFormat(pattern = "hh:mm:ss")
-	private LocalTime workinTime;
-	@DateTimeFormat(pattern = "hh:mm:ss")
-	private LocalTime workOutTime;
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String workinTime;
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String workOutTime;
 	private String state;
 //	출근
 //	정상근무
@@ -66,8 +66,9 @@ public class WorkInOutRecord {
 	
 	@PrePersist
 	public void setDate() {
+		LocalTime currentTime = LocalTime.now();
 		day = LocalDate.now();
         dayOfWeek = day.getDayOfWeek();
-        workinTime = LocalTime.now();
+        workinTime = String.format("%02d:%02d",currentTime.getHour(), currentTime.getMinute());
 	}
 }
