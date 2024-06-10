@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
+
+const resetbtn = () => {
+	document.getElementById('pwdid').value = '[[${user.pwd }]]';
+}
+
+</script>
+</head>
+<body>
+<h3>내 로그인 정보 수정 페이지</h3>
+<form th:action="@{/user/useredit }" method="post" name='useref'>
+<table border="1">
+<tr><th>사용자 계정</th><td><input type="text" name="id" id="idid" th:value="${user.id }"></td></tr>
+<tr><th>사용자 이름</th><td><input type="text" name="usernm" id="usernmid" th:value="${user.usernm }"></td></tr>
+<tr><th>사용자 비밀번호</th><td><input type="password" name="pwd" id="pwdid" th:value="${user.pwd }"></td></tr>
+<tr><th>사용자 유형</th><td><input type="text" name="type" id="typeid" th:value="${user.type }"></td></tr>
+<tr><th>사용자 승인 상태</th><td th:text="${user.aprov }" name="aprov"></td></tr>
+</table>
+<div th:if="${session.loginId == user.id } or ${session.type == 'admin' }">
+<input id="usereditid" type="submit" value="내로그인정보수정버튼"><br/>
+</div>
+</form>
+<input type="reset" value="취소하기" th:onclick="resetbtn()"><br/>
+<input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
+</body>
+</html>

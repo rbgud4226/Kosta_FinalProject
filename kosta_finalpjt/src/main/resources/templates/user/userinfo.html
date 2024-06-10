@@ -4,27 +4,25 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
-const usereditbtn = () => {
-	document.getElementById('pwdid').readOnly = false;
-	document.getElementById('hiddenid').type = 'button';
-	
-	document.getElementById('hiddenid').onclick = resetbtn;
-	let usereditvar = document.getElementById('usereditid');
-	usereditvar.value = '수정하기';
-	usereditvar.onclick = function() {
-		useref.submit();
-	};
+const usereditbtn = (userid) => {
+	location.href='/user/useredit?id=' + userid;
 }
 
-const resetbtn = () => {
-	document.getElementById('pwdid').readOnly = true;
-	document.getElementById('pwdid').value = '${user.pwd }';
-	document.getElementById('hiddenid').type = 'hidden';
-	let usereditvar = document.getElementById('usereditid');
-	usereditvar.value = '로그인정보수정버튼';
-	usereditvar.onclick = usereditbtn;
-	document.getElementById('hiddenid').onclick = '';
-};
+const membereditbtn = (userid) => {
+	location.href='/member/memberedit?id=' + userid;
+}
+
+const aprovbtn = (userid) => {
+	location.href = '/admin/user/useraprov?id=' + userid + '&aprov=1';	
+}
+
+const levaprovbtn = (userid) => {
+	location.href = '/admin/user/useraprov?id=' + userid + '&aprov=2';
+}
+
+const caclaprovbtn = (userid) => {
+	location.href = '/admin/user/useraprov?id=' + userid + '&aprov=3';
+}
 
 const home = (type) => {
 	if (type == 'admin') {
@@ -39,20 +37,45 @@ const home = (type) => {
 </script>
 </head>
 <body>
-<h3>내 로그인 정보 페이지</h3>
-<form th:action="@{/user/useredit}" method="post" name='useref'>
+<h3>내 정보 페이지</h3>
 <table border="1">
-<tr><th>USERID</th><td th:text="${user.id }" name="id"></td></tr>
-<tr><th>USERNM</th><td th:text="${user.usernm }" name="usernm"></td></tr>
-<tr><th>PWD</th><td><input type="password" name="pwd" id="pwdid" th:value="${user.pwd }" readonly></td></tr>
-<tr><th>TYPE</th><td th:text="${user.type }" name="type"></td></tr>
-<tr><th>APROV</th><td th:text="${user.aprov }" name="aprov"></td></tr>
+<tr><th>사용자 계정</th><td th:text="${user.id }"></td></tr>
+<tr><th>사용자 이름</th><td th:text="${user.usernm }"></td></tr>
+<tr><th>사용자 비밀번호</th><td><input type="password" name="pwd" id="pwdid" th:value="${user.pwd }" readonly></td></tr>
+<tr><th>사용자 유형</th><td th:text="${user.type }"></td></tr>
+<tr><th>사용자 승인 상태</th>
+<td th:text="${user.aprov }"></td>
+<td th:if="${session.type == 'admin' }">
+	<input type="button" th:if="${user.aprov } == 0 or ${user.aprov } == 2 or ${user.aprov } == 3" value="승인처리" th:onclick="aprovbtn([[${user.id}]])">
+	<input type="button" th:if="${user.aprov } == 1" value="휴직처리" th:onclick="levaprovbtn([[${user.id}]])">
+	<input type="button" value="퇴사처리" th:onclick="caclaprovbtn([[${user.id}]])">
+</td>
+</tr>
+
 </table>
 <div th:if="${session.loginId == user.id } or ${session.type == 'admin' }">
-<input id="usereditid" type="button" value="로그인정보수정버튼" onclick="usereditbtn()"><br/>
+<input id="usereditid" type="button" value="내로그인정보수정페이지이동버튼" th:onclick="usereditbtn([[${user.id }]])"><br/>
+<table border="1">
+<tr><th>사원번호</th><td th:text="${user?.memberdto?.memberid }"></td></tr>
+<tr><th>생년월일</th><td th:text="${user?.memberdto?.birthdt }"></td></tr>
+<tr><th>이메일</th><td th:text="${user?.memberdto?.email }"></td></tr>
+<tr><th>개인전화번호</th><td th:text="${user?.memberdto?.cpnum }"></td></tr>
+<tr><th>주소</th><td th:text="${user?.memberdto?.address }"></td></tr>
+<tr>
+<th>사원이미지</th>
+<td>
+<img th:src="@{/member/memberimg(memberimgnm=${user?.memberdto?.memberimgnm })}" style="width:150px;height:150px"><br/>
+</td>
+</tr>
+<tr><th>입사일</th><td th:text="${user?.memberdto?.hiredt }"></td></tr>
+<tr th:if="${user.aprov == 3 }"><th>퇴사일</th><td th:text="${user?.memberdto?.leavedt }"></td></tr>
+<tr><th>부서</th><td th:text="${user?.memberdto?.deptid?.deptid }"></td></tr>
+<tr><th>직급</th><td th:text="${user?.memberdto?.joblv }"></td></tr>
+</table>
+<div th:if="${session.loginId == user.id } or ${session.type == 'admin' }">
+<input id="membereditid" type="button" value="내정보수정페이지이동버튼" th:onclick="membereditbtn([[${user.id }]])"><br/>
 </div>
-</form>
-<input id="hiddenid" type="hidden" value="취소하기"><br/>
+<input type="hidden" name="id" th:value="${user.id }"><br/>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>

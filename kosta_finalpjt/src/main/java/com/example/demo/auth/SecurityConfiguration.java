@@ -40,12 +40,17 @@ public class SecurityConfiguration {
 						.requestMatchers("/", "/error", "/login", "/idcheck", "/user/**", "/member/**", "/corp/**").permitAll())
 				.formLogin((login) -> login.loginPage("/loginform")
 						.loginProcessingUrl("/login")
+						.failureForwardUrl("/loginerror")
 						.usernameParameter("id")
 						.passwordParameter("pwd")
 						.defaultSuccessUrl("/", true).permitAll()
 						.successHandler(new MySuccessHandler())
 						.failureHandler(new MyFailureHandler())
 						);
+//				.and()
+//						.logout()
+//						.logoutUrl("/logout")
+//						.logoutSuccessUrl("/")
 		return http.build();
 	}
 }
