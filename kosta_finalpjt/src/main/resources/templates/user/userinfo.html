@@ -12,18 +12,6 @@ const membereditbtn = (userid) => {
 	location.href='/member/memberedit?id=' + userid;
 }
 
-const aprovbtn = (userid) => {
-	location.href = '/admin/user/useraprov?id=' + userid + '&aprov=1';	
-}
-
-const levaprovbtn = (userid) => {
-	location.href = '/admin/user/useraprov?id=' + userid + '&aprov=2';
-}
-
-const caclaprovbtn = (userid) => {
-	location.href = '/admin/user/useraprov?id=' + userid + '&aprov=3';
-}
-
 const home = (type) => {
 	if (type == 'admin') {
 		location.href='/index_admin';
@@ -37,24 +25,18 @@ const home = (type) => {
 </script>
 </head>
 <body>
-<h3>내 정보 페이지</h3>
+<h3>내 로그인 정보 페이지</h3>
 <table border="1">
 <tr><th>사용자 계정</th><td th:text="${user.id }"></td></tr>
 <tr><th>사용자 이름</th><td th:text="${user.usernm }"></td></tr>
 <tr><th>사용자 비밀번호</th><td><input type="password" name="pwd" id="pwdid" th:value="${user.pwd }" readonly></td></tr>
 <tr><th>사용자 유형</th><td th:text="${user.type }"></td></tr>
-<tr><th>사용자 승인 상태</th>
-<td th:text="${user.aprov }"></td>
-<td th:if="${session.type == 'admin' }">
-	<input type="button" th:if="${user.aprov } == 0 or ${user.aprov } == 2 or ${user.aprov } == 3" value="승인처리" th:onclick="aprovbtn([[${user.id}]])">
-	<input type="button" th:if="${user.aprov } == 1" value="휴직처리" th:onclick="levaprovbtn([[${user.id}]])">
-	<input type="button" value="퇴사처리" th:onclick="caclaprovbtn([[${user.id}]])">
-</td>
-</tr>
+<tr><th>사용자 승인 상태</th><td th:text="${aprovStr }"></td></tr>
 
 </table>
 <div th:if="${session.loginId == user.id } or ${session.type == 'admin' }">
 <input id="usereditid" type="button" value="내로그인정보수정페이지이동버튼" th:onclick="usereditbtn([[${user.id }]])"><br/>
+<h3>내 정보 페이지</h3>
 <table border="1">
 <tr><th>사원번호</th><td th:text="${user?.memberdto?.memberid }"></td></tr>
 <tr><th>생년월일</th><td th:text="${user?.memberdto?.birthdt }"></td></tr>

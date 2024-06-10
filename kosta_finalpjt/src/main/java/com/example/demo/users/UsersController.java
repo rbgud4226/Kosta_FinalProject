@@ -53,23 +53,85 @@ public class UsersController {
 	@GetMapping("/user/useredit")
 	public String usereditform(String id, ModelMap map) {
 		UsersDto udto = uservice.getById(id);
+		String aprovStr = "";
+		if (udto.getAprov() == 0) {
+			aprovStr = "승인대기상태";
+		} else if (udto.getAprov() == 1) {
+			aprovStr = "재직상태";
+		} else if (udto.getAprov() == 2) {
+			aprovStr = "휴직상태";
+		} else if (udto.getAprov() == 3) {
+			aprovStr = "퇴직상태";
+		}
 		udto.setMemberdto(mservice.getByuserId(udto.getId()));
 		map.addAttribute("user", udto);
+		map.addAttribute("aprovStr", aprovStr);
 		return "user/useredit";
 	}
 
 	@PostMapping("/user/useredit")
-	public String useredit(UsersDto udto) {
+	public String useredit(UsersDto udto, String aprovStr) {
+		if (aprovStr == "승인대기상태") {
+			udto.setAprov(0);
+		} else if (aprovStr == "재직상태") {
+			udto.setAprov(1);
+		} else if (aprovStr == "휴직상태") {
+			udto.setAprov(2);
+		} else if (aprovStr == "퇴직상태") {
+			udto.setAprov(3);
+		}
 		uservice.save(udto);
 		return "redirect:/user/userinfo?id=" + udto.getId();
+	}
+
+	@ResponseBody
+	@GetMapping("/admin/user/useraprov")
+	public Map useraprov(String id, int aprov) {
+		Map map = new HashMap();
+		UsersDto udto = uservice.getById(id);
+		MembersDto mdto = mservice.getByuserId(id);
+		udto.setAprov(aprov);
+		uservice.save(udto);
+		if (aprov == 3) {
+			mdto.setLeavedt(LocalDate.from(LocalDateTime.now()));
+			mservice.save(mdto);
+		} else {
+			mdto.setLeavedt(null);
+			mservice.save(mdto);
+		}
+
+//		String aprovStr = "";
+//		if (udto.getAprov() == 0) {
+//			aprovStr = "승인대기상태";
+//		} else if (udto.getAprov() == 1) {
+//			aprovStr = "재직상태";
+//		} else if (udto.getAprov() == 2) {
+//			aprovStr = "휴직상태";
+//		} else if (udto.getAprov() == 3) {
+//			aprovStr = "퇴직상태";
+//		}
+//		map.put("aprovStr", aprovStr);
+		map.put("aprov", udto.getAprov());
+		return map;
 	}
 
 	@GetMapping("/user/userinfo")
 	public String myinfo(String id, ModelMap map) {
 //		System.out.println("user:" + uservice.getById(id));
 		UsersDto udto = uservice.getById(id);
+		String aprovStr = "";
+		if (udto.getAprov() == 0) {
+			aprovStr = "승인대기상태";
+		} else if (udto.getAprov() == 1) {
+			aprovStr = "재직상태";
+		} else if (udto.getAprov() == 2) {
+			aprovStr = "휴직상태";
+		} else if (udto.getAprov() == 3) {
+			aprovStr = "퇴직상태";
+		}
 		udto.setMemberdto(mservice.getByuserId(udto.getId()));
 		map.addAttribute("user", udto);
+		map.addAttribute("aprovStr", aprovStr);
 		return "user/userinfo";
 	}
 
@@ -108,12 +170,16 @@ public class UsersController {
 		} else if (type == 2) {
 			ulist = new ArrayList<UsersDto>();
 			for (UsersDto udto : uservice.getAll()) {
-				ArrayList<MembersDto> mlist = mservice.getByDeptNm(val);
-				for (MembersDto mdto : mlist) {
-					if (udto.getMemberdto() != null && udto.getId() == mdto.getUserid().getId()) {
-						udto.setMemberdto(mdto);
-						ulist.add(udto);
+				if (val != "") {
+					ArrayList<MembersDto> mlist = mservice.getByDeptNm(val);
+					for (MembersDto mdto : mlist) {
+						if (udto.getMemberdto() != null && udto.getId() == mdto.getUserid().getId()) {
+							udto.setMemberdto(mdto);
+							ulist.add(udto);
+						}
 					}
+				} else {
+					ulist = null;
 				}
 			}
 		} else if (type == 3) {
@@ -121,30 +187,38 @@ public class UsersController {
 		} else if (type == 4) {
 			ulist = new ArrayList<UsersDto>();
 			for (UsersDto udto : uservice.getAll()) {
-				ArrayList<MembersDto> mlist = mservice.getByJobLv(Integer.parseInt(val));
-				for (MembersDto mdto : mlist) {
-					if (udto.getMemberdto() != null && udto.getId() == mdto.getUserid().getId()) {
-						udto.setMemberdto(mdto);
-						ulist.add(udto);
+				if (val != "") {
+					ArrayList<MembersDto> mlist = mservice.getByJobLv(Integer.parseInt(val));
+					for (MembersDto mdto : mlist) {
+						if (udto.getMemberdto() != null && udto.getId() == mdto.getUserid().getId()) {
+							udto.setMemberdto(mdto);
+							ulist.add(udto);
+						}
 					}
+				} else {
+					ulist = null;
 				}
 			}
 		} else if (type == 5) {
-			ulist = uservice.getByAprov(Integer.parseInt(val));
-			for (UsersDto udto : ulist) {
-				MembersDto mdto = mservice.getByuserId(udto.getId());
-				try {
-					if (mdto.getUserid() == null) {
-						udto.setMemberdto(
-								new MembersDto(null, 0, null, null, null, null, null, null, null, null, 0, null, null));
-					} else if (mdto.getUserid() != null && udto.getId() == mdto.getUserid().getId()) {
-						udto.setMemberdto(mdto);
+			if (val != "") {
+				ulist = uservice.getByAprov(Integer.parseInt(val));
+				for (UsersDto udto : ulist) {
+					MembersDto mdto = mservice.getByuserId(udto.getId());
+					try {
+						if (mdto.getUserid() == null) {
+							udto.setMemberdto(new MembersDto(null, 0, null, null, null, null, null, null, null, null, 0,
+									null, null));
+						} else if (mdto.getUserid() != null && udto.getId() == mdto.getUserid().getId()) {
+							udto.setMemberdto(mdto);
+						}
+					} catch (NullPointerException e) {
+//					e.printStackTrace();
+					} catch (Exception e) {
+//					e.printStackTrace();
 					}
-				} catch (NullPointerException e) {
-//					e.printStackTrace();
-				} catch (Exception e) {
-//					e.printStackTrace();
 				}
+			} else {
+				ulist = null;
 			}
 //			System.out.println("valint:" + uservice.getByAprov(Integer.parseInt(val)));
 		}
@@ -155,20 +229,5 @@ public class UsersController {
 		mav.addObject("ulist", ulist);
 		return mav;
 	}
-	
-	@GetMapping("/admin/user/useraprov")
-	public String useraprov(String id, int aprov) {
-		UsersDto udto = uservice.getById(id);
-		MembersDto mdto = mservice.getByuserId(id);
-		udto.setAprov(aprov);
-		uservice.save(udto);
-		if (aprov == 3) {
-			mdto.setLeavedt(LocalDate.from(LocalDateTime.now()));
-			mservice.save(mdto);
-		} else {
-			mdto.setLeavedt(null);
-			mservice.save(mdto);
-		}
-		return "redirect:/admin/user/userlist";
-	}
+
 }
