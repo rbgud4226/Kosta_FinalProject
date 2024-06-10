@@ -1,5 +1,8 @@
 package com.example.demo.users;
 
+import java.util.List;
+
+import com.example.demo.chat.RoomUser.RoomUser;
 import com.example.demo.members.MembersDto;
 
 import lombok.AllArgsConstructor;
@@ -21,4 +24,5 @@ public class UsersDto {
 	private String type;
 	private int aprov;
 	private MembersDto memberdto;
+	private List<RoomUser> roomUsers;
 }
