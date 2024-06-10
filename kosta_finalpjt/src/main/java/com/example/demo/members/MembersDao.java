@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface MembersDao extends JpaRepository<Members, Integer> {
 	Members findByUserid(Users userid);
-
+	
 	ArrayList<Members> findByDeptid(Depts deptid);
 
 	ArrayList<Members> findByJoblv(int joblv);
