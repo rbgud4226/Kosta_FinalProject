@@ -35,15 +35,15 @@ const calaprov = (userid) => {
 </td>
 <td>
 <input type="text" name="val" th:value="${param.val }">
+<input type="submit" value="검색">
 </td>
 </tr>
 </table>
-<input type="submit" value="검색">
 </form>
 
 
 <table border="1">
-<tr><th>userid</th><th>usernm</th><th>type</th><th>aprov</th><th>email</th><th>deptid</th><th>joblv</th></tr>
+<tr><th>사용자 계정</th><th>사용자 이름</th><th>사용자 유형</th><th>사용자 승인 상태</th><th>사용자 이메일</th><th>부서</th><th>직급</th></tr>
 <tr th:each="u:${ulist }">
 	<td th:text="${u.id }"></td>
 	<td><a href="user/userinfo.html" th:href="@{/user/userinfo(id=${u.id})}" th:text="${u.usernm}">usernm</a></td>
@@ -54,19 +54,6 @@ const calaprov = (userid) => {
 	<td th:text="${u?.memberdto?.joblv }"></td>
 </tr>
 </table>
-<table border="1">
-<tr><th>userid</th><th>usernm</th><th>type</th><th>aprov</th><th>email</th><th>deptid</th><th>joblv</th></tr>
-<tr th:each="m:${mlist }">
-	<td th:text="${m?.userid?.id }"></td>
-	<td><a href="user/userinfo.html" th:href="@{/user/userinfo(id=${m?.userid?.id })}" th:text="${m?.userid?.usernm}">usernm</a></td>
-	<td th:text="${m?.userid?.type }"></td>
-	<td th:text="${m?.userid?.aprov }"></td>
-	<td th:text="${m?.email }"></td>
-	<td th:text="${m?.deptid?.deptid }"></td>
-	<td th:text="${m?.joblv }"></td>
-</tr>
-</table>
-
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
