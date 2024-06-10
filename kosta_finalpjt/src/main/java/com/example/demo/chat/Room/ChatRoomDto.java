@@ -1,28 +1,24 @@
-package com.example.demo.users;
+package com.example.demo.chat.Room;
 
 import java.util.List;
 
+import com.example.demo.chat.Message.Message;
 import com.example.demo.chat.RoomUser.RoomUser;
-import com.example.demo.members.MembersDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-
-public class UsersDto {
-	private String id;
-	private String usernm;
-	private String pwd;
-	private String type;
-	private int aprov;
-	private MembersDto memberdto;
+public class ChatRoomDto {
+	private String chatroomid;
+	private String name;
+	private String roomName; 
+	private String roomType; 
+	private List<Message> chats;
 	private List<RoomUser> roomUsers;
+	private boolean status; 
 }

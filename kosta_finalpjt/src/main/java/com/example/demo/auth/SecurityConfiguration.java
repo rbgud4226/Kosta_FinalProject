@@ -37,7 +37,7 @@ public class SecurityConfiguration {
 						.requestMatchers("/index_emp").hasRole("EMP")
 						.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
 						.requestMatchers("/auth/**", "/index_**", "/admin/**").authenticated()
-						.requestMatchers("/", "/error", "/login", "/idcheck", "/user/**", "/member/**", "/corp/**").permitAll())
+						.requestMatchers("/", "/error", "/login", "/idcheck", "/user/**", "/member/**", "/corp/**", "/files/**").permitAll())
 				.formLogin((login) -> login.loginPage("/loginform")
 						.loginProcessingUrl("/login")
 						.failureForwardUrl("/loginerror")
