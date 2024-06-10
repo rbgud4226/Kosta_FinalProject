@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.depts.Depts;
+import com.example.demo.members.MembersDto;
+
 /*
  * ==================================================================
  * 추가 및 전체수정
@@ -28,7 +31,8 @@ public class UsersService {
 	public UsersDto save(UsersDto dto) {
 		Users u = dao.save(new Users(dto.getId(), dto.getUsernm(), passwordEncoder.encode(dto.getPwd()), dto.getType(),
 				dto.getAprov()));
-		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov());
+		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null));
 	}
 
 	public UsersDto getById(String id) {
@@ -36,7 +40,8 @@ public class UsersService {
 		if (u == null) {
 			return null;
 		}
-		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov());
+		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null));
 	}
 
 	public UsersDto getByUsernm(String usernm) {
@@ -44,14 +49,36 @@ public class UsersService {
 		if (u == null) {
 			return null;
 		}
-		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov());
+		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null));
 	}
 
 	public ArrayList<UsersDto> getByAprov(int aprov) {
 		List<Users> l = dao.findByAprov(aprov);
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
-			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov()));
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
+		}
+		return list;
+	}
+
+	public ArrayList<UsersDto> getByIdLike(String id) {
+		List<Users> l = dao.findByIdLike("%" + id + "%");
+		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
+		for (Users u : l) {
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
+		}
+		return list;
+	}
+
+	public ArrayList<UsersDto> getByUsernmLike(String usernm) {
+		List<Users> l = dao.findByUsernmLike("%" + usernm + "%");
+		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
+		for (Users u : l) {
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
 		}
 		return list;
 	}
@@ -60,7 +87,28 @@ public class UsersService {
 		List<Users> l = dao.findAll();
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
-			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov()));
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null)));
+		}
+		return list;
+	}
+
+	public ArrayList<UsersDto> getbyDepid(int deptid) {
+		List<Users> l = dao.findAll();
+		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
+		for (Users u : l) {
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(), new MembersDto(u, 0,
+					null, null, null, null, null, null, null, new Depts(deptid, null, null), 0, null, null)));
+		}
+		return list;
+	}
+
+	public ArrayList<UsersDto> getbyJoblv(int joblv) {
+		List<Users> l = dao.findAll();
+		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
+		for (Users u : l) {
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, joblv, null, null)));
 		}
 		return list;
 	}
