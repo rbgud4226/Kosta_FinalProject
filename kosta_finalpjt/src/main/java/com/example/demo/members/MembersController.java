@@ -45,18 +45,26 @@ public class MembersController {
 	@PostMapping("/member/getdeptby")
 	public ModelAndView getmemberby(String val, int type) {
 		ArrayList<MembersDto> mlist = new ArrayList<MembersDto>();
-		if (type == 1) {
-			mlist = mservice.getByDeptNm(val);
-		} else if (type == 2) {
-			UsersDto udto = uservice.getByUsernm(val);
-			if (udto == null) {
-				mlist.add(null);
-			} else {
-				mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0)));
+		if (!val.equals("")) {
+			if (type == 1) {
+				if (val.equals("0")) {
+					mlist = null;
+				} else {
+					mlist = mservice.getByDeptNm(val);
+				}
+			} else if (type == 2) {
+				UsersDto udto = uservice.getByUsernm(val);
+				if (udto == null) {
+					mlist.add(null);
+				} else {
+					mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0)));
+				}
+//				System.out.println(mlist);
+			} else if (type == 3) {
+				mlist = mservice.getByJobLv(Integer.parseInt(val));
 			}
-			System.out.println(mlist);
-		} else if (type == 3) {
-			mlist = mservice.getByJobLv(Integer.parseInt(val));
+		} else {
+			mlist = null;
 		}
 		ModelAndView mav = new ModelAndView("member/memberlist");
 		mav.addObject("type", type);
@@ -68,11 +76,20 @@ public class MembersController {
 	@GetMapping("/member/memberinfo")
 	public String memberinfo(String id, ModelMap map) {
 		MembersDto mdto = mservice.getByuserId(id);
-		String deptnm = mdto.getDeptid().getDeptnm();
-		map.addAttribute("member", mdto );
-		map.addAttribute("userid", id);
-		map.addAttribute("deptnm", deptnm);
-//		System.out.println("userinfo:" + mservice.getByuserId(id));
+		System.out.println(mdto.getUserid().getAprov());
+		String aprovStr = "";
+		if (mdto.getUserid().getAprov() == 0) {
+			aprovStr = "승인대기상태";
+		} else if (mdto.getUserid().getAprov() == 1) {
+			aprovStr = "재직상태";
+		} else if (mdto.getUserid().getAprov() == 2) {
+			aprovStr = "휴직상태";
+		} else if (mdto.getUserid().getAprov() == 3) {
+			aprovStr = "퇴직상태";
+		}
+		
+		map.addAttribute("member", mdto);
+		map.addAttribute("aprovStr", aprovStr);
 		return "member/memberinfo";
 	}
 

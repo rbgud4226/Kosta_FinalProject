@@ -10,12 +10,8 @@ window.onload = () => {
 		memberaddvar.value = '내정보수정하기';
 		document.getElementById('memberidid2').style.display = '';
 		document.getElementById('hiredtid').style.display = '';
-	}
-	console.log(document.getElementById('birthdtid').value);
-	
+	}	
 }
-// console.log(document.getElementById('leavedtid').value);
-console.log('[[${member?.leavedt }]]');
 
 const resetbtn = () => {
 	document.getElementById('birthdtid').value = '[[${member?.birthdt }]]';
