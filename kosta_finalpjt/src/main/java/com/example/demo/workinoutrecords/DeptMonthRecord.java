@@ -1,9 +1,8 @@
 package com.example.demo.workinoutrecords;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 
-import com.example.demo.members.Members;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,11 +15,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class WorkInOutRecordDto {
-	private int daynum;
-	private Members user;
-	private String dayOfWeek;
+public class DeptMonthRecord {
+	private String usernm;
 	private LocalDate day;
+	private String day_of_week;
 	private String workinTime;
 	private String workOutTime;
 	private String workHours;
