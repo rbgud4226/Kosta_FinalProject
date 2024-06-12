@@ -19,7 +19,7 @@ import lombok.ToString;
 public class DocxDto {
 	private int formnum;
 	private Users writer;
-	private ArrayList<String> senior;
+	private String senior;
 	private String startdt;
 	private String enddt;
 	private String title;
@@ -34,4 +34,7 @@ public class DocxDto {
 	ArrayList<String> participant; //회의 참석자
 	private String formtype; //문서 타입 구분
 	private int aprovdoc; // 결제서류 승인 여부 : 거절 보류 승인
+	private int docxorder; //결재 순서
+	private int status; // 결재 현황
+	private int docxkey;
 }

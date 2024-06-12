@@ -15,6 +15,15 @@
         기한:<span th:text="${d.enddt}" aria-readonly="true"></span><br/>
         업무계획:<span th:text="${d.taskplan}" aria-readonly="true"></span><br/>
         업무진행과정:<span th:text="${d.taskprocs}" aria-readonly="true"></span><br/>
+        결재현황:<span th:text="${d.status}" aria-readonly="true" id="status"></span><br/>
+        결재권한:
+        <ul>
+            <li th:each="docx : ${docx}">
+                <ul>
+                    <li th:each="senior : ${docx.senior}" th:text="${senior}"></li>
+                </ul>
+            </li>
+        </ul>
         <input type="hidden" name="formtype" value="보고서">
     </form>
 </body>
