@@ -30,6 +30,9 @@ public class MembersController {
 	@Autowired
 	private UsersService uservice;
 
+	@Autowired
+	private EduWorkExperienceInfoService eservice;
+
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 
@@ -123,7 +126,15 @@ public class MembersController {
 	@PostMapping("/member/memberadd")
 	public String memberadd(MembersDto dto) {
 //		System.out.println("memberimgnm:" + dto.getMemberimgnm());
+		System.out.println(dto);
 		MembersDto mdto = mservice.save(dto);
+//		MembersDto mdto = null;
+//		if (dto.getMemberid() == 0) {
+//			mdto = mservice.save(dto);
+//		} else {
+//			mdto = mservice.update(dto);
+//		}
+		
 		if (!dto.getMemberimgf().isEmpty()) {
 			String oname = dto.getMemberimgf().getOriginalFilename();
 			String f1 = oname.substring(oname.lastIndexOf("."));
@@ -146,6 +157,15 @@ public class MembersController {
 
 		}
 		return "redirect:/user/userinfo?id=" + dto.getUserid().getId();
+	}
+
+	@PostMapping("/member/eweiadd")
+	public String eweiadd(EduWorkExperienceInfoDto edto) {
+		System.out.println("eweidto:" + edto);
+		EduWorkExperienceInfoDto eweidto = eservice.save(edto);
+		eweidto.setMemberid(edto.getMemberid());
+		eservice.save(eweidto);
+		return "redirect:/user/userinfo?id=" + edto.getMemberid().getUserid().getId();
 	}
 
 }

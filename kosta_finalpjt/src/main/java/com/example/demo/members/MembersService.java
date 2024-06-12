@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.depts.Depts;
+import com.example.demo.depts.Joblvs;
 import com.example.demo.users.Users;
 import com.example.demo.users.UsersDao;
 
@@ -32,16 +33,16 @@ public class MembersService {
 	public MembersDto save(MembersDto dto) {
 		Members m = mdao.save(new Members(dto.getUserid(), dto.getMemberid(), dto.getBirthdt(), dto.getEmail(),
 				dto.getCpnum(), dto.getAddress(), dto.getMemberimgnm(), dto.getHiredt(), dto.getLeavedt(),
-				dto.getDeptid(), dto.getJoblv()));
+				dto.getDeptid(), dto.getJoblvid(), dto.getMgrid(), null));
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
-				null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+				m.getMgrid(), null, null);
 	}
 
-	public void update(int memberid) {
-		mdao.update(memberid);
-//		System.out.println("수정 테스트 성공");
-	}
+//	public MembersDto update(MembersDto dto) {
+//		mdao.update(dto.getMemberid(), dto.getBirthdt(), dto.getEmail(), dto.getCpnum(), dto.getAddress(), dto.getMemberimgnm(), dto.getHiredt(), dto.getLeavedt(), dto.getDeptid(), dto.getJoblvid(), dto.getMgrid());
+//		return getByMemberId(dto.getMemberid());
+//	}
 
 	public MembersDto getByMemberId(int memberid) {
 		Members m = mdao.findById(memberid).orElse(null);
@@ -49,8 +50,8 @@ public class MembersService {
 			return null;
 		}
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
-				null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+				m.getMgrid(), null, null);
 	}
 
 	public MembersDto getByuserId(String userid) {
@@ -59,8 +60,8 @@ public class MembersService {
 			return null;
 		}
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
-				null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+				m.getMgrid(), null, null);
 	}
 
 	public MembersDto getByuserNm(Users userid) {
@@ -69,8 +70,8 @@ public class MembersService {
 			return null;
 		}
 		return new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(), null,
-				null);
+				m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+				m.getMgrid(), null, null);
 	}
 
 	public ArrayList<MembersDto> getAll() {
@@ -78,8 +79,8 @@ public class MembersService {
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(),
-					null, null));
+					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+					m.getMgrid(), null, null));
 		}
 		return list;
 	}
@@ -89,19 +90,19 @@ public class MembersService {
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(),
-					null, null));
+					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+					m.getMgrid(), null, null));
 		}
 		return list;
 	}
 
-	public ArrayList<MembersDto> getByJobLv(int joblv) {
-		List<Members> l = mdao.findByJoblv(joblv);
+	public ArrayList<MembersDto> getByJobLv(int joblvid) {
+		List<Members> l = mdao.findByJoblvid(new Joblvs(0, joblvid, ""));
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblv(),
-					null, null));
+					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+					m.getMgrid(), null, null));
 		}
 		return list;
 	}
