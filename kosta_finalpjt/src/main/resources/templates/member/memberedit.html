@@ -10,7 +10,13 @@ window.onload = () => {
 		memberaddvar.value = '내정보수정하기';
 		document.getElementById('memberidid2').style.display = '';
 		document.getElementById('hiredtid').style.display = '';
-	}	
+	}
+	
+	if('[[${member?.joblvid }]]' == '[[null]]'){
+		document.getElementById('joblvid').value = 0;
+	} else {
+		document.getElementById('joblvid').value = '[[${member?.joblvid }]]';
+	}
 }
 
 const resetbtn = () => {
@@ -20,7 +26,8 @@ const resetbtn = () => {
 	document.getElementById('addressid').value = '[[${member?.address }]]';
 	document.getElementById('memberimgfid').value = '[[${member?.memberimgnm }]]';
 	document.getElementById('deptidid').value = '[[${member?.deptid?.deptid }]]';
-	document.getElementById('joblvid').value = '[[${member?.joblv }]]';
+	document.getElementById('mgridid').value = '[[${member?.mgrid }]]';
+	document.getElementById('joblvid').value = '[[${member?.joblvid }]]';
 }
 
 const home = (type) => {
@@ -54,7 +61,8 @@ const home = (type) => {
 <tr id="hiredtid" style="display:none"><th>입사일</th><td th:text="${member?.hiredt }"></td></tr>
 <tr th:if="${member?.userid?.aprov == 3 }" id="leavedtid"><th>퇴사일</th><td th:text="${member?.leavedt }"></td></tr>
 <tr><th>부서</th><td><input type="text" name="deptid" id="deptidid" th:value="${member?.deptid?.deptid }"></td></tr>
-<tr><th>직급</th><td><input type="number" name="joblv" id="joblvid" th:value="${member?.joblv }"></td></tr>
+<tr><th>부서장</th><td><input type="text" name="mgrid" id="mgridid" th:value="${member?.mgrid }"></td></tr>
+<tr><th>직급</th><td><input type="number" name="joblv" id="joblvid"></td></tr>
 </table>
 <div th:if="${session.loginId == userid } or ${session.type == 'admin' }">
 <div th:if="${member?.memberid != null }">
@@ -64,6 +72,22 @@ const home = (type) => {
 <input type="hidden" name="userid" th:value="${userid }"><br/>
 <input id="memberaddid" type="submit" value="내정보등록하기"><br/>
 </div>
+</form>
+
+<form th:action="@{/member/eweiadd }" method="post">
+<table border="1">
+<tr><th>MEMBERID</th><th>STATE</th><th>TYPE</th><th>ENDDT</th><th>STARTDT</th><th>EWENM1</th><th>EWENM2</th></tr>
+<tr>
+<td><input type="number" name="memberid" id="memberidid" th:value="${member?.memberid }"></td>
+<td><input type="number" name="state" id="stateid"></td>
+<td><input type="number" name="type" id="typeid"></td>
+<td><input type="date" name="startdt" id="startdtid"></td>
+<td><input type="date" name="enddt" id="enddtid"></td>
+<td><input type="text" name="ewenm1" id="ewenm1id"></td>
+<td><input type="text" name="ewenm2" id="ewenm2id"></td>
+</tr>
+</table>
+<input type="submit" value="내학력경력정보 등록하기"><br/>
 </form>
 <input type="reset" value="취소하기" th:onclick="resetbtn()"><br/>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
