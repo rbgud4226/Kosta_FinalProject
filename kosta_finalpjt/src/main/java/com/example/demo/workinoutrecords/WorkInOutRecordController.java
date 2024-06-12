@@ -135,19 +135,16 @@ public class WorkInOutRecordController {
 	      // 날짜 범위 동안 반복하여 주말을 제외하고 데이터베이스에 저장
 	       LocalDate currentDate = startDate;
 	       while (!currentDate.isAfter(endDate)) {
-	           if (isWeekend(currentDate)) {
-	               System.out.println(currentDate + " 은 주말이므로 저장하지 않습니다.");
-	               // 주말은 저장하지 않음
+	           if (!isWeekend(currentDate)) {
+	               System.out.println(currentDate + "일");
 	           } else {
-	               // 데이터베이스에 저장
-	               System.out.println(currentDate + " 을(를) 저장합니다.");
-	               // saveToDatabase(currentDate);
+	               System.out.println(currentDate + "----");
 	           }
 	           // 다음 날짜로 이동
 	           currentDate = currentDate.plusDays(1);
 	       }
 	}
-	// 주말확인
+	// 주말여부
     private static boolean isWeekend(LocalDate date) {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY;
