@@ -36,7 +36,7 @@ public class MembersController {
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 
-	private String dirName = "Pictures/kosta/kostafinalpjt_data/kostafinalpjt_img/";
+	private String dirName = "";
 
 	@GetMapping("/member/memberlist")
 	public String memberlist(ModelMap map) {
