@@ -65,6 +65,9 @@ public class WorkInOutRecord {
 //	휴무
 	@PrePersist
 	public void setDate() {
+		if (day != null && dayOfWeek != null) {
+	        return;
+	    }
 		LocalTime currentTime = LocalTime.now();
 		day = LocalDate.now();
         dayOfWeek = day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
