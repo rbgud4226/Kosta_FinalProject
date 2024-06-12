@@ -15,17 +15,17 @@ public class EduWorkExperienceInfoService {
 	private MembersDao mdao;
 
 	public EduWorkExperienceInfoDto save(EduWorkExperienceInfoDto dto) {
-		EduWorkExperienceInfo ewe = edao.save(new EduWorkExperienceInfo(dto.getEweid(), dto.getMembers(),
+		EduWorkExperienceInfo ewe = edao.save(new EduWorkExperienceInfo(dto.getEweid(), dto.getMemberid(),
 				dto.getStartdt(), dto.getEnddt(), dto.getEwenm1(), dto.getEwenm2(), dto.getType(), dto.getState()));
-		return new EduWorkExperienceInfoDto(ewe.getEweid(), ewe.getMembers(), ewe.getStartdt(), ewe.getEnddt(),
+		return new EduWorkExperienceInfoDto(ewe.getEweid(), ewe.getMemberid(), ewe.getStartdt(), ewe.getEnddt(),
 				ewe.getEwenm1(), ewe.getEwenm2(), ewe.getType(), ewe.getState());
 	}
 
-	public ArrayList<EduWorkExperienceInfoDto> getByMembers(Members members) {
-		List<EduWorkExperienceInfo> l = edao.findByMembers(members);
+	public ArrayList<EduWorkExperienceInfoDto> getByMembers(int memberid) {
+		List<EduWorkExperienceInfo> l = edao.findByMemberid(new Members(null, memberid, null, null, null, null, null, null, null, null, null, null, null));
 		ArrayList<EduWorkExperienceInfoDto> list = new ArrayList<EduWorkExperienceInfoDto>();
 		for (EduWorkExperienceInfo ewe : l) {
-			list.add(new EduWorkExperienceInfoDto(ewe.getEweid(), ewe.getMembers(), ewe.getStartdt(), ewe.getEnddt(),
+			list.add(new EduWorkExperienceInfoDto(ewe.getEweid(), ewe.getMemberid(), ewe.getStartdt(), ewe.getEnddt(),
 					ewe.getEwenm1(), ewe.getEwenm2(), ewe.getType(), ewe.getState()));
 		}
 		return list;
@@ -35,7 +35,7 @@ public class EduWorkExperienceInfoService {
 		List<EduWorkExperienceInfo> l = edao.findAll();
 		ArrayList<EduWorkExperienceInfoDto> list = new ArrayList<>();
 		for (EduWorkExperienceInfo ewe : l) {
-			list.add(new EduWorkExperienceInfoDto(ewe.getEweid(), ewe.getMembers(), ewe.getStartdt(), ewe.getEnddt(),
+			list.add(new EduWorkExperienceInfoDto(ewe.getEweid(), ewe.getMemberid(), ewe.getStartdt(), ewe.getEnddt(),
 					ewe.getEwenm1(), ewe.getEwenm2(), ewe.getType(), ewe.getState()));
 		}
 		return list;
