@@ -20,6 +20,9 @@ public class DeptsController {
 	
 	@Autowired
 	private MembersService mservice;
+	
+	@Autowired
+	private JoblvsService jservice;
 
 	@GetMapping("/corp/deptlist")
 	public String deptlist(ModelMap map) {
@@ -41,7 +44,7 @@ public class DeptsController {
 	}
 
 	@GetMapping("/corp/deptinfo")
-	public String deptdinfo(int deptid, ModelMap map) {
+	public String deptinfo(int deptid, ModelMap map) {
 		map.addAttribute("d", dservice.getByDeptId(deptid));
 		return "corp/deptinfo";
 	}
@@ -66,6 +69,37 @@ public class DeptsController {
 		mav.addObject("val", val);
 		mav.addObject("dlist", dlist);
 		return mav;
+	}
+	
+	@GetMapping("/corp/joblvlist")
+	public String joblvlist(ModelMap map) {
+		ArrayList<JoblvsDto> jlist = jservice.getAll();
+		map.addAttribute("jlist", jlist);
+//		System.out.println(dlist);
+		return "corp/joblvlist";
+	}
+
+	@GetMapping("/admin/corp/joblvadd")
+	public String joblvaddform() {
+		return "corp/joblvadd";
+	}
+
+	@PostMapping("/admin/corp/joblvadd")
+	public String joblvadd(JoblvsDto dto) {
+		jservice.save(dto);
+		return "redirect:/corp/joblvlist";
+	}
+
+	@GetMapping("/corp/joblvinfo")
+	public String joblvinfo(int Joblvid, ModelMap map) {
+		map.addAttribute("j", jservice.getByjoblvId(Joblvid));
+		return "corp/joblvinfo";
+	}
+
+	@PostMapping("/admin/corp/joblvedit")
+	public String joblvedit(JoblvsDto dto) {
+		jservice.save(dto);
+		return "redirect:/corp/joblvinfo?joblvid=" + dto.getJoblvid();
 	}
 
 }
