@@ -67,15 +67,26 @@ public class Members {
 	private Joblvs joblvid;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "mgrinmembers")
+	@JoinColumn(name = "mgrid")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Members mgrid;
 
-	@OneToMany(mappedBy = "mgrid", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "mgrid", cascade = CascadeType.PERSIST, orphanRemoval = false, fetch = FetchType.LAZY)
+	@ToString.Exclude
 	private List<Members> mgrinmembers = new ArrayList<Members>();
 
 	@PrePersist
 	public void setDate() {
 		hiredt = LocalDate.from(LocalDateTime.now());
 	}
+	
+	public void addmgrinmembers(List<Members> mgrinmembers) {
+        this.mgrinmembers.addAll(mgrinmembers);
+    }
+
+    public void putmgrinmembers(List<Members> mgrinmembers) {
+    	this.mgrinmembers.clear();
+        addmgrinmembers(mgrinmembers);
+    }
+	
 }
