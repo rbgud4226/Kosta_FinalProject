@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script type="text/javascript">
-console.log('[[${list}]]')
+console.log('[[${flag}]]')
 const workin=()=>{
 	let mem = '[[${session.loginId}]]';
 	$.ajax({
@@ -47,10 +47,19 @@ const workout=()=>{
 <div th:text="${flag + '출근여부'}"></div>
  <div th:text="${num + '번호확인'}"></div>
 <div th:text="${mynum + '사원번호'}"></div>
-<button onclick='workin()'> 출근 </button>
+
+<button onclick='workin()' > 출근 </button>
 <button onclick='workout()'> 퇴근 </button>
-<!--<div th:each="s:${list}">
-<p th:text="${s}"> -->
+<div th:each="s:${list}">
+<p th:text="${s}"> 
 </div>
+
+<form th:action="@{/auth/record/offday(Members=${session.loginId})}" method="post">
+<input type="text" name="test">
+<input type="date" name="date1">
+<input type="date" name="date2">
+<input type="submit">
+</form>
+
 </body>
 </html>
