@@ -10,14 +10,12 @@
 	  <a th:href="@{/board/list}">MAIN</a>
 	  <a th:href="@{/board/list}">인사카드 관리</a>
 	  <a th:href="@{/board/list}">부서관리</a>
-	  <a th:href="@{/board/list}">출퇴근기록</a>
+	  <a th:href="@{/auth/record/dept}">관리자용 출퇴근 기록 테스트</a>
 	</div>
 	<div id="left" th:if="${session.type != 'admin'}">
 	  <a th:href="@{/board/list}">MAIN</a>
 	  <a th:href="@{/board/list}">인사카드 관리</a>
 	  <a th:href="@{/auth/record/my(Members=${session.loginId})}">출퇴근</a>
-	  <a th:href="@{/auth/record/dept}">관리자용 출퇴근 기록 테스트</a>
-	  <a th:href="@{/board/list}">휴가신청</a>
 	  <hr>
 	  <a th:href="@{/board/list}">메일함</a>
 	  <a th:href="@{/board/list}">채팅</a>
