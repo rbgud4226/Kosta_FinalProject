@@ -40,7 +40,7 @@ const home = (type) => {
 <tr><th>입사일</th><td th:text="${member?.hiredt }"></td></tr>
 <tr th:if="${member?.userid?.aprov == 3 }"><th>퇴사일</th><td th:text="${member?.leavedt }"></td></tr>
 <tr><th>부서</th><td th:text="${member?.deptid?.deptid }"></td></tr>
-<tr><th>부서장</th><td th:text="${member?.mgrid }"></td></tr>
+<tr><th>부서장</th><td th:text="${member?.mgrid?.memberid }"></td></tr>
 <tr><th>직급</th><td th:text="${member?.joblvid?.joblvid}"></td></tr>
 </table>
 

@@ -14,9 +14,13 @@ import com.example.demo.depts.Joblvs;
 import com.example.demo.users.Users;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import com.example.demo.members.Members;
+
 
 @Repository
 public interface MembersDao extends JpaRepository<Members, Integer> {
+	
 	Members findByUserid(Users userid);
 	
 	ArrayList<Members> findByDeptid(Depts deptid);
