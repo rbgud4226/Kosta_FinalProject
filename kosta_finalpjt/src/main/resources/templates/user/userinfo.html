@@ -52,7 +52,51 @@ const home = (type) => {
 <tr><th>입사일</th><td th:text="${user?.memberdto?.hiredt }"></td></tr>
 <tr th:if="${user.aprov == 3 }"><th>퇴사일</th><td th:text="${user?.memberdto?.leavedt }"></td></tr>
 <tr><th>부서</th><td th:text="${user?.memberdto?.deptid?.deptid }"></td></tr>
-<tr><th>직급</th><td th:text="${user?.memberdto?.joblv }"></td></tr>
+<tr><th>부서장</th><td th:text="${user?.memberdto?.mgrid }"></td></tr>
+<tr><th>직급</th><td th:text="${user?.memberdto?.joblvid?.joblvid }"></td></tr>
+</table>
+
+<table border="1">
+<tr>
+<th>학력경력pk</th>
+<th>사원번호</th>
+<th>학력경력종류</th>
+<th>입학일</th>
+<th>졸업일</th>
+<th>학력</th>
+<th>세부정보</th>
+<th>현재상태</th>
+</tr>
+<tr th:if="${edulist != null }" th:each="e:${edulist }">
+	<td th:text="${e?.eweid }"></td>
+	<td th:text="${e?.memberid?.memberid }"></td>
+	<td th:text="${e?.type }"></td>
+	<td th:text="${e?.startdt }"></td>
+	<td th:text="${e?.enddt }"></td>
+	<td th:text="${e?.ewenm1 }"></td>
+	<td th:text="${e?.ewenm2 }"></td>
+	<td th:text="${e?.state }"></td>
+</tr>
+<tr>
+<th>학력경력pk</th>
+<th>사원번호</th>
+<th>학력경력종류</th>
+<th>입사일</th>
+<th>퇴사일</th>
+<th>학력</th>
+<th>세부정보</th>
+<th>현재상태</th>
+</tr>
+<tr th:if="${expwoklist != null }" th:each="e:${expwoklist }">
+	<td th:text="${e?.eweid }"></td>
+	<td th:text="${e?.memberid?.memberid }"></td>
+	<td th:text="${e?.type }"></td>
+	<td th:text="${e?.startdt }"></td>
+	<td th:text="${e?.enddt }"></td>
+	<td th:text="${e?.ewenm1 }"></td>
+	<td th:text="${e?.ewenm2 }"></td>
+	<td th:text="${e?.state }"></td>
+</tr>
 </table>
 <div th:if="${session.loginId == user.id } or ${session.type == 'admin' }">
 <input id="membereditid" type="button" value="내정보수정페이지이동버튼" th:onclick="membereditbtn([[${user.id }]])"><br/>

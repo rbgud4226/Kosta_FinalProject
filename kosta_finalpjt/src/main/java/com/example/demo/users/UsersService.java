@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.depts.Depts;
+import com.example.demo.depts.Joblvs;
 import com.example.demo.members.MembersDto;
 
 /*
@@ -30,9 +31,13 @@ public class UsersService {
 
 	public UsersDto save(UsersDto dto) {
 		Users u = dao.save(new Users(dto.getId(), dto.getUsernm(), passwordEncoder.encode(dto.getPwd()), dto.getType(),
-				dto.getAprov() ,null));
+				dto.getAprov(), dto.getRoomUsers()));
 		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null);
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null), u.getRoomUsers());
+	}
+
+	public void update(UsersDto dto) {
+		dao.update(dto.getId(), dto.getUsernm(), dto.getType(), dto.getAprov());
 	}
 
 	public UsersDto getById(String id) {
@@ -41,7 +46,7 @@ public class UsersService {
 			return null;
 		}
 		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null);
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null), u.getRoomUsers());
 	}
 
 	public UsersDto getByUsernm(String usernm) {
@@ -50,7 +55,7 @@ public class UsersService {
 			return null;
 		}
 		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-				new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null);
+				new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null), u.getRoomUsers());
 	}
 
 	public ArrayList<UsersDto> getByAprov(int aprov) {
@@ -58,7 +63,8 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
+					u.getRoomUsers()));
 		}
 		return list;
 	}
@@ -68,7 +74,8 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
+					u.getRoomUsers()));
 		}
 		return list;
 	}
@@ -78,7 +85,8 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
+					u.getRoomUsers()));
 		}
 		return list;
 	}
@@ -88,7 +96,8 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, 0, null, null),null));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
+					u.getRoomUsers()));
 		}
 		return list;
 	}
@@ -97,8 +106,10 @@ public class UsersService {
 		List<Users> l = dao.findAll();
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
-			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(), new MembersDto(u, 0,
-					null, null, null, null, null, null, null, new Depts(deptid, null, null), 0, null, null),null));
+			list.add(new UsersDto(
+					u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(), new MembersDto(u, 0, null, null,
+							null, null, null, null, null, new Depts(deptid, null, null), null, null, null, null),
+					u.getRoomUsers()));
 		}
 		return list;
 	}
@@ -108,7 +119,8 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), u.getType(), u.getAprov(),
-					new MembersDto(u, 0, null, null, null, null, null, null, null, null, joblv, null, null),null));
+					new MembersDto(u, 0, null, null, null, null, null, null, null, null, new Joblvs(0, joblv, ""), null, null, null),
+					u.getRoomUsers()));
 		}
 		return list;
 	}
@@ -116,8 +128,8 @@ public class UsersService {
 	public void delMember(String id) {
 		dao.deleteById(id);
 	}
-	
-	//채팅용 임시
+
+	// 채팅용 임시
 	public Users getById2(String id) {
 		Users u = dao.findById(id).orElse(null);
 		return u;

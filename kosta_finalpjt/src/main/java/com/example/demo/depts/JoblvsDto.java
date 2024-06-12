@@ -1,9 +1,5 @@
 package com.example.demo.depts;
 
-import java.util.ArrayList;
-
-import com.example.demo.members.Members;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +12,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-public class DeptsDto {
-	private int deptid;
-	private String deptnm;
-	private Members mgrid;
+public class JoblvsDto {
+	private int joblvidx;
+	private int joblvid;
+	private String joblvnm;
 }

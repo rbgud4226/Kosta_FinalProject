@@ -16,17 +16,17 @@ const home = (type) => {
 </script>
 </head>
 <body>
-<h3>부서 정보 상세 페이지</h3>
-<form action="/admin/corp/deptedit" method="post">
+<h3>직급 정보 상세 페이지</h3>
+<form action="/admin/corp/joblvedit" method="post">
 <table border="1">
 <tr>
-<th>deptid</th><td><input type="text" name="deptid" th:value="${d.deptid }" readonly></td>
+<th>joblvidx</th><td><input type="text" name="joblvidx" th:value="${j.joblvidx }" readonly></td>
 </tr>
 <tr>
-<th>deptnm</th><td><input type="text" name="deptnm" th:value="${d.deptnm }"></td>
+<th>joblvid</th><td><input type="text" name="joblvid" th:value="${j.joblvid }" ></td>
 </tr>
 <tr>
-<th>mgrid</th><td><input type="text" name="mgrid" th:value="${d.mgrid.memberid }"></td>
+<th>joblvnm</th><td><input type="text" name="joblvnm" th:value="${j.joblvnm }" ></td>
 </tr>
 </tr>
 </table>
@@ -35,7 +35,7 @@ const home = (type) => {
 </div>
 </form>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
-<input type="button" value="부서목록페이지이동버튼" onclick="location.href='/corp/deptlist'"><br/>
+<input type="button" value="직급목록페이지이동버튼" onclick="location.href='/corp/joblvlist'"><br/>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>

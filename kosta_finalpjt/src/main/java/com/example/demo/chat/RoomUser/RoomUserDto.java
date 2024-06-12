@@ -15,5 +15,5 @@ import lombok.Setter;
 public class RoomUserDto {
 	private Long id;
 	private ChatRoom chatRoom;
-	private Users user;
+	private Users roomuser;
 }

@@ -1,5 +1,8 @@
 package com.example.demo.chat.RoomUser;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.example.demo.chat.Room.ChatRoom;
 import com.example.demo.users.Users;
 
@@ -21,17 +24,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomUser {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roomuser_seq")
 	@SequenceGenerator(name = "roomuser_seq", sequenceName = "roomuser_sequence", allocationSize = 1)
 	private Long id;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "chatroomid", referencedColumnName = "chatroomid" ,nullable = false)
+	@JoinColumn(name = "chatroomid", referencedColumnName = "chatroomid", nullable = false)
 	private ChatRoom chatRoom;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "userid", referencedColumnName = "id", nullable = false)
-	private Users user;
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Users roomuser;
+
 }

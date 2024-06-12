@@ -14,9 +14,9 @@ public class RoomUserService {
 	@Autowired
 	private RoomUserDao roomuserdao;
 
-	public void save(Users user, ChatRoom chatroom) {
-		if (!roomuserdao.findByChatRoomAndUser(chatroom, user).isPresent()) {
-			roomuserdao.save(new RoomUser(null, chatroom, user));
+	public void save(Users roomuser, ChatRoom chatroom) {
+		if (!roomuserdao.findByChatRoomAndRoomuser(chatroom, roomuser).isPresent()) {
+			roomuserdao.save(new RoomUser(null, chatroom, roomuser));
 		}
 
 	}
@@ -25,7 +25,7 @@ public class RoomUserService {
 		List<RoomUser> l = roomuserdao.findByChatRoom_Chatroomid(chatroomid);
 		ArrayList<RoomUserDto> list = new ArrayList<>();
 		for (RoomUser ru : l) {
-			list.add(new RoomUserDto(ru.getId(), ru.getChatRoom(), ru.getUser()));
+			list.add(new RoomUserDto(ru.getId(), ru.getChatRoom(), ru.getRoomuser()));
 		}
 		return list;
 	}

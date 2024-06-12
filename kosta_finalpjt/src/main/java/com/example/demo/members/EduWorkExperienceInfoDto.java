@@ -1,5 +1,6 @@
 package com.example.demo.members;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -16,9 +17,9 @@ import lombok.ToString;
 
 public class EduWorkExperienceInfoDto {
 	private int eweid;
-	private Members members;
-	private Date startdt;
-	private Date enddt;
+	private Members memberid;
+	private LocalDate startdt;
+	private LocalDate enddt;
 	private String ewenm1;
 	private String ewenm2;
 	private int state;
