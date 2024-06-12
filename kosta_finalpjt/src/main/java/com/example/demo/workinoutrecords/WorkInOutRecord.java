@@ -1,9 +1,9 @@
 package com.example.demo.workinoutrecords;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -50,24 +50,24 @@ public class WorkInOutRecord {
 	@ManyToOne
 	@JoinColumn(name = "User_id")
 	private Members user;
-	private DayOfWeek dayOfWeek;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	//요일
+	private String dayOfWeek;
+	@DateTimeFormat(pattern = "YYYY-MM-dd")
 	private LocalDate day;
-	@DateTimeFormat(pattern = "hh:mm:ss")
-	private LocalTime workinTime;
-	@DateTimeFormat(pattern = "hh:mm:ss")
-	private LocalTime workOutTime;
+	private String workinTime;
+	private String workOutTime;
+	private String workHours;
 	private String state;
 //	출근
 //	정상근무
 //	지각
 //	야근
 //	휴무
-	
 	@PrePersist
 	public void setDate() {
+		LocalTime currentTime = LocalTime.now();
 		day = LocalDate.now();
-        dayOfWeek = day.getDayOfWeek();
-        workinTime = LocalTime.now();
+        dayOfWeek = day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+        workinTime = String.format("%02d:%02d",currentTime.getHour(), currentTime.getMinute());
 	}
 }

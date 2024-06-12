@@ -36,12 +36,12 @@ const home = (type) => {
 
 <table border="1">
 <tr>
-<th>deptid</th><th>deptnm</th><th>mgrid</th>
+<th>부서ID</th><th>부서이름</th><th>부서장</th>
 </tr>
 <tr th:each="dl:${dlist }">
 <td th:text="${dl.deptid }"></td>
 <td><a href="corp/deptinfo.html" th:href="@{/corp/deptinfo(deptid=${dl.deptid})}" th:text="${dl.deptnm}">deptnm</a></td>
-<td th:text="${dl.mgrid.memberid }"></td>
+<td th:text="${dl.mgrid?.memberid }"></td>
 </tr>
 </table>
 
