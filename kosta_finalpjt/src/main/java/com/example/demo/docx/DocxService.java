@@ -75,14 +75,14 @@ public class DocxService {
 		List<Members> l = mdao.findAll();
 		ArrayList<MembersDto> mlist = new ArrayList<MembersDto>();
 		for (Members m : l) {
-			mlist.add(new MembersDto(m.getUserid(),m.getMemberid(),m.getBirthdt(),m.getEmail(),m.getCpnum(),m.getAddress(),m.getMemberimgnm(),m.getHiredt(),m.getLeavedt(),m.getDeptid(),m.getJoblv(),null,null));
+			mlist.add(new MembersDto(m.getUserid(),m.getMemberid(),m.getBirthdt(),m.getEmail(),m.getCpnum(),m.getAddress(),m.getMemberimgnm(),m.getHiredt(),m.getLeavedt(),m.getDeptid(),m.getJoblvid(),m.getMgrid(),null,null));
 		}
 		return mlist;
 	}
 
 	// 문서 작성자 검색
 	public ArrayList<DocxDto> getByWriter(String searchType, String searchValue) {
-		List<Docx> l = dao.findByWriter(new Users(searchValue,null,null,null,0));
+		List<Docx> l = dao.findByWriter(new Users(searchValue,null,null,null,0,null));
 		if (l == null) {
 			return null;
 		}
