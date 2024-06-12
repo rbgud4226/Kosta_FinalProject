@@ -36,7 +36,7 @@ public class DeptsService {
 	}
 
 	public ArrayList<DeptsDto> getByMgrId(int mgrid) {
-		List<Depts> l = dao.findByMgrid(new Members(null, mgrid, null, null, null, null, null, null, null, null, 0));
+		List<Depts> l = dao.findByMgrid(new Members(null, mgrid, null, null, null, null, null, null, null, null, null, null, null));
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
 			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
@@ -53,7 +53,7 @@ public class DeptsService {
 		return list;
 	}
 
-	public void delDepartments(int deptid) {
+	public void delDepts(int deptid) {
 		dao.deleteById(deptid);
 	}
 }

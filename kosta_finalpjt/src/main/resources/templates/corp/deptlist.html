@@ -4,12 +4,20 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
-
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
 </script>
 </head>
 <body>
 <h3>부서 목록 페이지</h3>
-<form th:action="@{/admin/corp/getdeptby}" method="post">
+<form th:action="@{/corp/getdeptby}" method="post">
 <table border="1">
 <tr>
 <td>
@@ -32,13 +40,13 @@
 </tr>
 <tr th:each="dl:${dlist }">
 <td th:text="${dl.deptid }"></td>
-<td><a href="corp/deptinfo.html" th:href="@{/admin/corp/deptinfo(deptid=${dl.deptid})}" th:text="${dl.deptnm}">deptnm</a></td>
-<td th:text="${dl.mgrid }"></td>
+<td><a href="corp/deptinfo.html" th:href="@{/corp/deptinfo(deptid=${dl.deptid})}" th:text="${dl.deptnm}">deptnm</a></td>
+<td th:text="${dl.mgrid.memberid }"></td>
 </tr>
 </table>
 
 <input type="button" value="부서추가페이지이동버튼" onclick="location.href='/admin/corp/deptadd'"><br/>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
-<input type="button" value="홈버튼" th:onclick="location.href='/'"><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>

@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
+
+const calaprov = (userid) => {
+	location.href = '/admin/user/useraprov?id=' + userid;	
+}
+</script>
 </head>
 <body>
 <h3>사용자 목록 페이지</h3>
@@ -12,28 +27,34 @@
 <td>
 <select name="type">
 <option th:value="1" th:selected="${type == 1 }">사용자id</option>
-<option th:value="2" th:selected="${type == 2 }">사용자이름</option>
+<option th:value="2" th:selected="${type == 2 }">부서이름</option>
+<option th:value="3" th:selected="${type == 3 }">직원이름</option>
+<option th:value="4" th:selected="${type == 4 }">직급</option>
+<option th:value="5" th:selected="${type == 5 }">승인상태</option>
 </select>
 </td>
 <td>
 <input type="text" name="val" th:value="${param.val }">
+<input type="submit" value="검색">
 </td>
 </tr>
 </table>
-<input type="submit" value="검색">
 </form>
 
 
 <table border="1">
-<tr><th>userid</th><th>usernm</th><th>type</th><th>aprov</th></tr>
+<tr><th>사용자 계정</th><th>사용자 이름</th><th>사용자 유형</th><th>사용자 승인 상태</th><th>사용자 이메일</th><th>부서</th><th>직급</th></tr>
 <tr th:each="u:${ulist }">
 	<td th:text="${u.id }"></td>
 	<td><a href="user/userinfo.html" th:href="@{/user/userinfo(id=${u.id})}" th:text="${u.usernm}">usernm</a></td>
 	<td th:text="${u.type }"></td>
 	<td th:text="${u.aprov }"></td>
+	<td th:text="${u?.memberdto?.email }"></td>
+	<td th:text="${u?.memberdto?.deptid?.deptid }"></td>
+	<td th:text="${u?.memberdto?.joblv }"></td>
 </tr>
 </table>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
-<input type="button" value="홈버튼" th:onclick="location.href='/'"><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>

@@ -20,6 +20,7 @@ public class MySuccessHandler implements AuthenticationSuccessHandler {
 		HttpSession session = request.getSession();
 		String loginId = (String) session.getAttribute("loginId");
 		String type = "";
+
 		if (loginId == null) {
 			session.setAttribute("loginId", authentication.getName());
 
@@ -29,14 +30,14 @@ public class MySuccessHandler implements AuthenticationSuccessHandler {
 				type = "emp";
 			}
 			session.setAttribute("type", type);
+			response.sendRedirect("/index_" + type);
+//			request.getRequestDispatcher("/index_" + type).forward(request, response);
+		} else {
+			String path = "/";
+			response.sendRedirect(path);
 		}
-
+//			request.getRequestDispatcher(path).forward(request, response);
 		System.out.println("MySuccessHandler: " + authentication.getName());
-
-		String path = "/index_" + type;
-
-		response.sendRedirect(path);
-		//request.getRequestDispatcher(path).forward(request, response);
 	}
 
 }

@@ -3,10 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+const checklogin = () => {
+	if (userloginf.id.value.length <= 0) {
+		alert("ID는 필수 입력 사항");
+		userjoinf.id.focus();
+		return;
+	}
+	if (userloginf.pwd.value.length <= 0) {
+		alert("PWD는 필수 입력 사항");
+		userjoinf.pwd.focus();
+		return;
+	}
+	userloginf.submit();
+}
+
+const home = (type) => {
+	if (type == 'admin') {
+		location.href='/index_admin';
+	} else if (type == 'emp') {
+		location.href='/index_emp';
+	} else {
+		location.href='/';
+	}
+}
+</script>
 </head>
 <body>
 <h3>로그인 페이지</h3>
-<form action="/login" method="post" name="f">  <!-- SecurityConfiguration의 loginProcessingUrl에 지정한 값과 action이 같아야함 -->
+<form action="/login" method="post" name="userloginf">
 <table border="1">
 	<tr>
 		<th>ID</th>
@@ -18,8 +43,9 @@
 		<th>PWD</th><td><input type="password" name="pwd"></td>
 	</tr>
 </table>
-<input type="submit" value="로그인">
+<div th:text="${loginFailMsg }"></div>
+<input type="button" value="로그인" th:onclick="checklogin()">
 </form>
-<a href="/">홈</a><br/>
+<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>

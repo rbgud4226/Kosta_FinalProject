@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EduWorkExperienceInfoDao extends JpaRepository<EduWorkExperienceInfo, Integer> {
-	ArrayList<EduWorkExperienceInfo> findByMembers(Members members);
+	ArrayList<EduWorkExperienceInfo> findByMemberid(Members memberid);
 }

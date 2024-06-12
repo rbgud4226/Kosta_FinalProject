@@ -3,10 +3,12 @@ package com.example.demo.members;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.depts.Depts;
+import com.example.demo.depts.Joblvs;
 import com.example.demo.users.Users;
 
 import lombok.AllArgsConstructor;
@@ -32,8 +34,9 @@ public class MembersDto {
 	private LocalDate hiredt;
 	private LocalDate leavedt;
 	private Depts deptid;
-	private int joblv;
+	private Joblvs joblvid;
+	private Members mgrid;
 	private ArrayList<EduWorkExperienceInfo> eweinfo;
-	private MultipartFile imgf;
-	
+	private MultipartFile memberimgf;
+
 }
