@@ -17,7 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Setter
 @Getter
@@ -27,7 +26,7 @@ public class ChatRoom {
 	@Id
 	private String chatroomid; // 채팅방 번호
 	private String name; // 채팅방 이름, 변경 불가능(유저목록 확인용)
-	private String roomName; //수정 가능한 채팅방 이름
+	private String roomName; // 수정 가능한 채팅방 이름
 	private String roomType; // 개인, 단체
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -36,6 +35,6 @@ public class ChatRoom {
 
 	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<RoomUser> roomUsers = new ArrayList<>();
-	
-	private boolean status; //채팅방 상태
+
+	private boolean status; // 채팅방 상태
 }
