@@ -19,7 +19,7 @@
                             </a>
                         </li>
                         <li class="li_link">
-                            <a href="#" class="nav_link">
+                            <a th:href="@{/user/userinfo(id=${session.loginId })}" class="nav_link">
                                 <div class="icon_wrapper">
                                     <img th:src="@{/img/common/home.png}" class="nav_link_icon">
                                 </div>
@@ -27,7 +27,7 @@
                             </a>
                         </li>
                         <li class="li_link">
-                            <a href="#" class="nav_link">
+                            <a th:href="@{/auth/record/my(Members=${session.loginId})}" class="nav_link">
                                 <div class="icon_wrapper">
                                     <img th:src="@{/img/common/home.png}" class="nav_link_icon">
                                 </div>
@@ -37,7 +37,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav_li">
+            <li class="nav_li" th:if="${session.type != 'admin'}">
                 <div>
                     <p class="nav_main_title">connect system</p>
                     <ul>
@@ -79,7 +79,13 @@
         </ul>
     </div>
 	<div class="left_footer">
-	        <a href="#" class="out_link">
+			<a th:href="@{/user/userinfo(id=${session.loginId })}" class="out_link">
+	            <div class="icon_wrapper">
+	                <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+	            </div>
+	            <span class="nav_link_text">설정</span>
+	        </a>
+	        <a href="/auth/logout" class="out_link">
 	            <div class="icon_wrapper">
 	                <img th:src="@{/img/common/home.png}" class="nav_link_icon">
 	            </div>
