@@ -1,0 +1,27 @@
+@charset "UTF-8";
+/* common */
+.flex_center{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav_top{
+    border-bottom: 1px solid #cbd0dd;
+}
+.fix_top{
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 500;
+}
+
+.header_wrapper{
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+}
+.logo_right{
+    display: flex;
+}

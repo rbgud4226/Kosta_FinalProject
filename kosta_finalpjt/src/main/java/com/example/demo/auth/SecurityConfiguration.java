@@ -35,6 +35,7 @@ public class SecurityConfiguration {
 		.authorizeHttpRequests((authz) -> authz
 						.requestMatchers("/index_admin").hasRole("ADMIN")
 						.requestMatchers("/index_emp").hasRole("EMP")
+						.requestMatchers("/css/**","/img/**","/js/**").permitAll()
 						.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
 						.requestMatchers("/auth/**", "/index_**", "/admin/**").authenticated()
 						.requestMatchers("/", "/error", "/login", "/idcheck", "/user/**", "/member/**", "/corp/**", "/files/**").permitAll())
@@ -53,4 +54,5 @@ public class SecurityConfiguration {
 //						.logoutSuccessUrl("/")
 		return http.build();
 	}
+	
 }
