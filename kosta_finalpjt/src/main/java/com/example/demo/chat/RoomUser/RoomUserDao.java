@@ -12,6 +12,8 @@ import com.example.demo.users.Users;
 @Repository
 public interface RoomUserDao extends JpaRepository<RoomUser, Long> {
 	List<RoomUser> findByChatRoom_Chatroomid(String chatroomid);
-	List<RoomUser> findByUser_Id(String id);
-	Optional<RoomUser> findByChatRoomAndUser(ChatRoom chatRoom, Users user);
+
+	List<RoomUser> findByRoomuser_Id(String id);
+
+	Optional<RoomUser> findByChatRoomAndRoomuser(ChatRoom chatRoom, Users roomuser);
 }
