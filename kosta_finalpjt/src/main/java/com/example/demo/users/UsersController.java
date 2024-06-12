@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.members.EduWorkExperienceInfoDto;
+import com.example.demo.members.EduWorkExperienceInfoService;
 import com.example.demo.members.MembersDto;
 import com.example.demo.members.MembersService;
 
@@ -24,6 +26,9 @@ public class UsersController {
 
 	@Autowired
 	private MembersService mservice;
+
+	@Autowired
+	private EduWorkExperienceInfoService eservice;
 
 	@GetMapping("/user/userjoin")
 	public String userjoinform() {
@@ -90,8 +95,10 @@ public class UsersController {
 		Map map = new HashMap();
 		UsersDto udto = uservice.getById(id);
 		MembersDto mdto = mservice.getByuserId(id);
+		udto.setMemberdto(mdto);
 		udto.setAprov(aprov);
-		uservice.save(udto);
+		uservice.update(udto);
+
 		if (aprov == 3) {
 			mdto.setLeavedt(LocalDate.from(LocalDateTime.now()));
 			mservice.save(mdto);
@@ -99,18 +106,6 @@ public class UsersController {
 			mdto.setLeavedt(null);
 			mservice.save(mdto);
 		}
-
-//		String aprovStr = "";
-//		if (udto.getAprov() == 0) {
-//			aprovStr = "승인대기상태";
-//		} else if (udto.getAprov() == 1) {
-//			aprovStr = "재직상태";
-//		} else if (udto.getAprov() == 2) {
-//			aprovStr = "휴직상태";
-//		} else if (udto.getAprov() == 3) {
-//			aprovStr = "퇴직상태";
-//		}
-//		map.put("aprovStr", aprovStr);
 		map.put("aprov", udto.getAprov());
 		return map;
 	}
@@ -130,8 +125,23 @@ public class UsersController {
 			aprovStr = "퇴직상태";
 		}
 		udto.setMemberdto(mservice.getByuserId(udto.getId()));
+		ArrayList<EduWorkExperienceInfoDto> elist = new ArrayList<EduWorkExperienceInfoDto>();
+		if (mservice.getByuserId(id) != null) {
+			elist = eservice.getByMembers(mservice.getByuserId(id).getMemberid());
+		}
+		ArrayList<EduWorkExperienceInfoDto> edulist = new ArrayList<EduWorkExperienceInfoDto>();
+		ArrayList<EduWorkExperienceInfoDto> expwoklist = new ArrayList<EduWorkExperienceInfoDto>();
+		for (EduWorkExperienceInfoDto edto : elist) {
+			if (edto.getType() == 0) {
+				edulist.add(edto);
+			} else {
+				expwoklist.add(edto);
+			}
+		}
 		map.addAttribute("user", udto);
 		map.addAttribute("aprovStr", aprovStr);
+		map.addAttribute("edulist", edulist);
+		map.addAttribute("expwoklist", expwoklist);
 		return "user/userinfo";
 	}
 
@@ -157,7 +167,7 @@ public class UsersController {
 				try {
 					if (mdto.getUserid() == null) {
 						udto.setMemberdto(
-								new MembersDto(null, 0, null, null, null, null, null, null, null, null, 0, null, null));
+								new MembersDto(null, 0, null, null, null, null, null, null, null, null, null, null, null, null));
 					} else if (mdto.getUserid() != null && udto.getId() == mdto.getUserid().getId()) {
 						udto.setMemberdto(mdto);
 					}
@@ -206,8 +216,8 @@ public class UsersController {
 					MembersDto mdto = mservice.getByuserId(udto.getId());
 					try {
 						if (mdto.getUserid() == null) {
-							udto.setMemberdto(new MembersDto(null, 0, null, null, null, null, null, null, null, null, 0,
-									null, null));
+							udto.setMemberdto(new MembersDto(null, 0, null, null, null, null, null, null, null, null, null,
+									null, null, null));
 						} else if (mdto.getUserid() != null && udto.getId() == mdto.getUserid().getId()) {
 							udto.setMemberdto(mdto);
 						}

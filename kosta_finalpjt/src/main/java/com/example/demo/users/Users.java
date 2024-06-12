@@ -28,7 +28,7 @@ public class Users {
 	private String pwd;
 	private String type;
 	private int aprov;
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<RoomUser> roomUsers = new ArrayList<>();
+
+	@OneToMany(mappedBy = "roomuser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<RoomUser> roomUsers = new ArrayList<RoomUser>();
 }
