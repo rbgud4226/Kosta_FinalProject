@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
+    <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" th:href="@{/css/record.css}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script type="text/javascript">
 console.log('[[${flag}]]')
@@ -43,6 +47,39 @@ const workout=()=>{
 </script>
 </head>
 <body>
+
+<div th:replace="~{/common/header :: header}"></div>
+<div th:replace="~{/common/leftnav :: leftNav}"></div>
+  <div class="main_body">
+    <div class="record_top">
+        <div class="record_top_wrapper">
+            <div class="record_msg">
+                <p class="font_b24 m_b2">근무시간입니다.</p>
+                <p class="font_b24">20245.46.46일 54</p>
+                <button class="btn_border round w_bg record_sta font_b24">출근완료</button>
+            </div>
+            <div class="record_btn_wrapper">
+                <button class="btn_square blue_btn font_b24 cursor record_marright">출근하기</button>
+                <button class="btn_square gray_btn font_b24 cursor record_marright">퇴근하기</button>
+                <button class="btn_square border_btn font_b24 cursor">휴가신청</button>
+            </div>
+        </div>
+
+    </div>
+    <div></div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
 <div th:text="${session.loginId + '출퇴근 페이지'}"></div>
 <div th:text="${flag + '출근여부'}"></div>
  <div th:text="${num + '번호확인'}"></div>

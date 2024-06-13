@@ -1,0 +1,25 @@
+.record_top{
+    width: 100%;
+    height: 360px;
+    border-bottom: 2px solid #E2E4EC;
+}
+.record_top_wrapper{
+    padding-top: 100px;
+}
+.record_msg{
+    margin-left: 55px;
+}
+.record_sta{
+    position: relative;
+    top: 30px;
+    width: 240px;
+    height: 72px;
+}
+.record_btn_wrapper{
+    display: flex;
+    justify-content: center;
+    padding-top: 35px;
+}
+.record_marright{
+    margin-right: 20px;
+}
