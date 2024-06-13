@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +20,8 @@ import com.example.demo.members.EduWorkExperienceInfoDto;
 import com.example.demo.members.EduWorkExperienceInfoService;
 import com.example.demo.members.MembersDto;
 import com.example.demo.members.MembersService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class UsersController {
@@ -49,7 +53,16 @@ public class UsersController {
 	}
 
 	@PostMapping("/user/userjoin")
-	public String userjoin(UsersDto dto) {
+	public String userjoin(@Valid UsersDto dto, Errors errors, Model model) {
+		if(errors.hasErrors()) {
+			model.addAttribute("user", dto);
+			
+			Map<String, String> validatorResult = uservice.validateHandling(errors);
+			for(String key : validatorResult.keySet()) {
+				model.addAttribute(key, validatorResult.get(key));
+			}
+			return "responsebody:user/userjoin";
+		}
 		dto.setAprov(0);
 		uservice.save(dto);
 		return "redirect:/";

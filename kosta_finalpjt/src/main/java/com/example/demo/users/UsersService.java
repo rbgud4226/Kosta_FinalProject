@@ -1,15 +1,21 @@
 package com.example.demo.users;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 
 import com.example.demo.depts.Depts;
 import com.example.demo.depts.Joblvs;
 import com.example.demo.members.MembersDto;
+
 
 /*
  * ==================================================================
@@ -128,7 +134,19 @@ public class UsersService {
 	public void delMember(String id) {
 		dao.deleteById(id);
 	}
-
+	
+	//회원가입 유효성 검사
+	@Transactional(readOnly = true)
+	public Map<String, String> validateHandling(Errors errors) {
+		Map<String, String> validatorResult = new HashMap<>();
+		
+		for(FieldError error : errors.getFieldErrors()) {
+			String validKeyName = String.format("valid_%s", error.getField());
+			validatorResult.put(validKeyName, error.getDefaultMessage());
+		}
+		return validatorResult;
+	}
+	
 	// 채팅용 임시
 	public Users getById2(String id) {
 		Users u = dao.findById(id).orElse(null);
