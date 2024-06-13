@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Insert title here</title>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script type="text/javascript">
@@ -54,10 +54,50 @@
           }
       });
   </script>
+  <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
+  <link rel="stylesheet" th:href="@{/css/common/header.css}">
+  <link rel="stylesheet" th:href="@{/css/charts/charts.css}">
 </head>
 <body>
-<a href="/index_emp">home</a>
-<div id="chart_div"></div>
-
+<div th:replace="~{/common/header :: header}"></div>
+<div th:replace="~{/common/leftnav :: leftNav}"></div>
+<div class="main_body">
+  <section id="calendar_area">
+    <div class="chart_body">
+      <div id="chart_div"></div>
+    </div>
+  </section>
+</div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $.ajax({
+            url : "/auth/chart/cdata",
+            dataType : "json",
+            method : "get",
+            success:function (list){
+                console.log(list);
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    headerToolbar:{
+                        left: 'prevYear,prev,next,nextYear today',
+                        center: 'title',
+                        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+                    },
+                    selectable : true,
+                    selectMirror : true,
+                    navLinks : true,
+                    editable : true,
+                    dayMaxEvents: true, // allow "more" link when too many events
+
+                    // 이벤트 객체 필드 document : https://fullcalendar.io/docs/event-object
+                    events: list
+                });
+
+                calendar.render();
+            }
+        });
+    });
+</script>
 </html>
