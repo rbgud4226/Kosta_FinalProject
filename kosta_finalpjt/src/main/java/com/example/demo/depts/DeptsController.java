@@ -91,15 +91,16 @@ public class DeptsController {
 	}
 
 	@GetMapping("/corp/joblvinfo")
-	public String joblvinfo(int Joblvid, ModelMap map) {
-		map.addAttribute("j", jservice.getByjoblvId(Joblvid));
+	public String joblvinfo(int joblvidx, ModelMap map) {
+		map.addAttribute("j", jservice.getByJoblvId(joblvidx));
 		return "corp/joblvinfo";
 	}
 
 	@PostMapping("/admin/corp/joblvedit")
 	public String joblvedit(JoblvsDto dto) {
+
 		jservice.save(dto);
-		return "redirect:/corp/joblvinfo?joblvid=" + dto.getJoblvid();
+		return "redirect:/corp/joblvinfo?joblvidx=" + dto.getJoblvidx();
 	}
 
 }

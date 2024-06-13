@@ -8,15 +8,10 @@
     <link rel="stylesheet" th:href="@{/css/common/header.css}">
 </head>
 <body>
-
 <div th:replace="~{/common/header :: header}"></div>
 <div th:replace="~{/common/leftnav :: leftNav}"></div>
 <div class="main_body">
 	<a href="auth/users/list">사용자목록</a>
-	<h3>emp 페이지</h3>
-	<div th:text="${session.loginId }"></div>
-	<div th:text="${session.type }"></div>
-	<div th:insert="~{header}"></div>
 	<a href="/auth/docx/add">문서테스트</a>
 	
 	<section id="chart">

@@ -4,8 +4,10 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class WorkInOutRecordController {
 	public String myrecord(String Members,ModelMap map) {
 		MembersDto md = mservice.getByuserId(Members);
 		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
+		if(m == null) {
+			return "error";
+		}
 		//출근기록x
 		boolean flag = false;
 		ArrayList<WorkInOutRecordDto> list = service.selectByDate(m.getMemberid());
@@ -45,15 +50,15 @@ public class WorkInOutRecordController {
 			//오늘날짜 출근 등록번호(퇴근시 필요)
 			map.put("num",list.get(0).getDaynum());
 		}
-		//내 근무기록
-        // 현재 달/년도 가져오기
-        LocalDate currentDate = LocalDate.now();
-        int currentMonth = currentDate.getMonthValue();
-        int currentYear = currentDate.getYear();
-		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
-		
-		//이번달 출근 기록
-		map.put("list", mylist);
+//		//내 근무기록
+//        // 현재 달/년도 가져오기
+//        LocalDate currentDate = LocalDate.now();
+//        int currentMonth = currentDate.getMonthValue();
+//        int currentYear = currentDate.getYear();
+//		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
+//		
+//		//이번달 출근 기록
+//		map.put("list", mylist);
 		//오늘 날짜 출근 여부
 		map.put("flag", flag);
 		//사원번호 반환
@@ -127,24 +132,25 @@ public class WorkInOutRecordController {
 	
 	//휴가 기록
 	@PostMapping("/offday")
-	public void offRecord(String Members,String test, String date1,String date2) {
-		System.out.println(Members);
+	public void offRecord(String Members,String res, String date1,String date2) {
 		 LocalDate startDate = LocalDate.parse(date1);
 	     LocalDate endDate = LocalDate.parse(date2);
-	     
-	      // 날짜 범위 동안 반복하여 주말을 제외하고 데이터베이스에 저장
+	     //멤버 정보
+	     MembersDto md = mservice.getByuserId(Members);
+		 Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
+		 String type =  res;
+		 
+	      //주말 제외 저장하기
 	       LocalDate currentDate = startDate;
 	       while (!currentDate.isAfter(endDate)) {
 	           if (!isWeekend(currentDate)) {
-	               System.out.println(currentDate + "일");
-	           } else {
-	               System.out.println(currentDate + "----");
+	        	   String dayOfWeek = currentDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);;
+	        	   service.save(new WorkInOutRecordDto(0,m, dayOfWeek, currentDate, "00:00", "00:00","00:00", type));
 	           }
-	           // 다음 날짜로 이동
 	           currentDate = currentDate.plusDays(1);
 	       }
 	}
-	// 주말여부
+	// 주말확인
     private static boolean isWeekend(LocalDate date) {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY;
