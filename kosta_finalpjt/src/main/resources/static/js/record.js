@@ -106,6 +106,7 @@ const arrow_btn = (num)=>{
 	myrecord();
 }
 
+let table = $(".record_list")[0];
 
 const myrecord=()=>{
 	$.ajax({
@@ -114,10 +115,35 @@ const myrecord=()=>{
 		dataType:'json',			//응답데이터 형태
 		data:{Members:mem,count:cnt},
 		success:function(res){		//응답 정상일때
-			console.log(res.list);
+			table_draw(res.list)
 		},
 		error:function(){			//응답 에러일때
 			console.log('error');
 		}
 	});
+}
+
+//테이블 그리기
+const table_draw = (arr)=>{	
+	while(table.rows.length > 0){
+		table.deleteRow(0);
+	}
+	for(let a of arr){
+			const tr_row = table.insertRow();
+
+	        cell = tr_row.insertCell(0);
+	        cell.textContent = a.day
+	        cell++
+
+	        cell = tr_row.insertCell(1);
+	        cell.textContent = a.dayOfWeek;
+	        cell++
+	        
+	        cell = tr_row.insertCell(2);
+	        cell.textContent = a.workHours;
+	        cell++
+	        
+	        cell = tr_row.insertCell(3);
+	        cell.textContent = a.state;
+	}
 }

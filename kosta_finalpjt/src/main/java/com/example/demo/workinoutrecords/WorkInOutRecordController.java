@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.web.bind.annotation.*;
-
 
 import com.example.demo.members.Members;
 import com.example.demo.members.MembersDto;
@@ -56,8 +52,7 @@ public class WorkInOutRecordController {
         LocalDate currentDate = LocalDate.now();
         int currentMonth = currentDate.getMonthValue() -1;
         int currentYear = currentDate.getYear();
-		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
-		
+		ArrayList<MemRecord> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
 		//이번달 출근 기록
 		map.put("list", mylist);
 		//오늘 날짜 출근 여부
@@ -160,33 +155,11 @@ public class WorkInOutRecordController {
     }
 	
 	//내 근태기록 확인하기
-//	@ResponseBody
-//	@GetMapping("/getmonth")
-//	public Map myrecord(String Members,int count) {
-//		MembersDto md = mservice.getByuserId(Members);
-//		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
-//        // 현재 날짜 가져오기
-//        LocalDate currentDate = LocalDate.now();
-//        //필요 달/년도 가져오기
-//        int currentMonth = currentDate.getMonthValue();
-//        int currentYear = currentDate.getYear();
-//        // 이전 달로 이동
-//        currentMonth = currentMonth  + count  - 1;
-//        if (currentMonth == 0) { 
-//        	currentMonth = 12; 
-//        	currentYear--;
-//        }
-//        ArrayList<WorkInOutRecordDto> list = service.selectUser(currentMonth, currentYear, m.getMemberid());
-//        Map map = new HashMap<>();
-//		map.put("list", list);
-//		return map;
-//	}
-	
-    @ResponseBody
+	@ResponseBody
 	@GetMapping("/getmonth")
-    public String myRecord(String Members, int count) throws JsonProcessingException {
-        MembersDto md = mservice.getByuserId(Members);
-        Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
+	public Map myrecord(String Members,int count) {
+		MembersDto md = mservice.getByuserId(Members);
+		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
         // 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
         //필요 달/년도 가져오기
@@ -195,31 +168,39 @@ public class WorkInOutRecordController {
         // 이전 달로 이동
         currentMonth = currentMonth  + count  - 1;
         if (currentMonth == 0) { 
-            currentMonth = 12; 
-            currentYear--;
+        	currentMonth = 12; 
+        	currentYear--;
         }
-        ArrayList<WorkInOutRecordDto> list = service.selectUser(currentMonth, currentYear, m.getMemberid());
-        // JSON 형식으로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println("111111111111111------------------------");
-        System.out.println(objectMapper.writeValueAsString(list));
-        System.out.println("---------------------------------");
-        String jsonString = objectMapper.writeValueAsString(list);
-     
-        return jsonString;
-    }
-    
-    
-    
-    
-    
-    
-    
+        ArrayList<MemRecord> list = service.selectUser(currentMonth, currentYear, m.getMemberid());
+        Map map = new HashMap<>();
+		map.put("list", list);
+		return map;
+	}
+	   
     
 	//관리자(직원기록 확인하기)
-	@ResponseBody
-	@GetMapping("/deptRecord")
-	public void list(int dept,int cnt) {
+//	@ResponseBody
+//	@GetMapping("/deptRecord")
+//	public void list(int dept,int cnt) {
+//		// 현재 날짜 가져오기
+//        LocalDate currentDate = LocalDate.now();
+//        // 현재 달/년도 가져오기
+//        int currentMonth = currentDate.getMonthValue();
+//        int currentYear = currentDate.getYear();
+//       
+//        // 이전 달로 이동
+//        int previousMonth = currentMonth + cnt;
+//        int previousYear = currentYear;
+//        if (previousMonth == 0) { 
+//            previousMonth = 12; 
+//            previousYear--;
+//        }
+//        ArrayList<DeptMonthRecord> list = service.selectDept(previousMonth, previousYear, dept);
+//	}
+	
+	//관리자
+	@GetMapping("/dept")
+	public String deptRecord(int dept,int cnt) {
 		// 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
         // 현재 달/년도 가져오기
@@ -228,25 +209,6 @@ public class WorkInOutRecordController {
        
         // 이전 달로 이동
         int previousMonth = currentMonth + cnt;
-        int previousYear = currentYear;
-        if (previousMonth == 0) { 
-            previousMonth = 12; 
-            previousYear--;
-        }
-        ArrayList<DeptMonthRecord> list = service.selectDept(previousMonth, previousYear, dept);
-	}
-	
-	//관리자
-	@GetMapping("/dept")
-	public String deptRecord() {
-		// 현재 날짜 가져오기
-        LocalDate currentDate = LocalDate.now();
-        // 현재 달/년도 가져오기
-        int currentMonth = currentDate.getMonthValue();
-        int currentYear = currentDate.getYear();
-       
-        // 이전 달로 이동
-        int previousMonth = currentMonth ;
         int previousYear = currentYear;
         if (previousMonth == 0) { 
             previousMonth = 12; 
