@@ -129,8 +129,11 @@ public class WorkInOutRecordController {
 	}
 	
 	//휴가 기록
+	@ResponseBody
 	@PostMapping("/offday")
 	public void offRecord(String Members,String res, String date1,String date2) {
+		 System.out.println("====================");
+		 System.out.println("Res: "+res + "date1: "+date1 + "date2: "+date2);
 		 LocalDate startDate = LocalDate.parse(date1);
 	     LocalDate endDate = LocalDate.parse(date2);
 	     //멤버 정보
