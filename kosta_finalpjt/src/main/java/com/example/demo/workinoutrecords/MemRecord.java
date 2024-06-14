@@ -15,12 +15,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class DeptMonthRecord {
-	private String usernm;
+public class MemRecord {
+	private String dayOfWeek;
 	private LocalDate day;
-	private String day_of_week;
-	private String workinTime;
-	private String workOutTime;
 	private String workHours;
 	private String state;
 }

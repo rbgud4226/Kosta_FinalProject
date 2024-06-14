@@ -103,3 +103,10 @@ body{
 .round{
 	border-radius: 50px;
 }
+.form_input_wrapper{
+	margin-bottom: 20px;
+}
+.form_td{
+	padding-bottom: 10px;
+	padding-right: 10px;
+}

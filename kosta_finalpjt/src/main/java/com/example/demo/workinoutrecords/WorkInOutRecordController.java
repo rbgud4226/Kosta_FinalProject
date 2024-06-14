@@ -50,15 +50,14 @@ public class WorkInOutRecordController {
 			//오늘날짜 출근 등록번호(퇴근시 필요)
 			map.put("num",list.get(0).getDaynum());
 		}
-//		//내 근무기록
-//        // 현재 달/년도 가져오기
-//        LocalDate currentDate = LocalDate.now();
-//        int currentMonth = currentDate.getMonthValue();
-//        int currentYear = currentDate.getYear();
-//		ArrayList<WorkInOutRecordDto> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
-//		
-//		//이번달 출근 기록
-//		map.put("list", mylist);
+		//내 근무기록
+        // 현재 달/년도 가져오기
+        LocalDate currentDate = LocalDate.now();
+        int currentMonth = currentDate.getMonthValue() -1;
+        int currentYear = currentDate.getYear();
+		ArrayList<MemRecord> mylist = service.selectUser(currentMonth, currentYear, m.getMemberid());
+		//이번달 출근 기록
+		map.put("list", mylist);
 		//오늘 날짜 출근 여부
 		map.put("flag", flag);
 		//사원번호 반환
@@ -82,8 +81,11 @@ public class WorkInOutRecordController {
         if (currentTime.isAfter(targetTime)) {
         	type="지각";
         }			
-		service.save(new WorkInOutRecordDto(0,m, null, null, null, null,null, type));
-		Map map = new HashMap<>();
+        WorkInOutRecordDto d = service.save(new WorkInOutRecordDto(0,m, null, null, null, null,null, type));
+		System.out.println(d);
+        Map map = new HashMap<>();
+        map.put("num", d.getDaynum());
+		map.put("flag", "true");
 		map.put("state", type);
 		return map;
 	}
@@ -127,12 +129,14 @@ public class WorkInOutRecordController {
         w.setState(type);
         w.setWorkHours(worktime);
         service.save(w);
-        
 	}
 	
 	//휴가 기록
+	@ResponseBody
 	@PostMapping("/offday")
 	public void offRecord(String Members,String res, String date1,String date2) {
+		 System.out.println("====================");
+		 System.out.println("Res: "+res + "date1: "+date1 + "date2: "+date2);
 		 LocalDate startDate = LocalDate.parse(date1);
 	     LocalDate endDate = LocalDate.parse(date2);
 	     //멤버 정보
@@ -161,30 +165,50 @@ public class WorkInOutRecordController {
 	//내 근태기록 확인하기
 	@ResponseBody
 	@GetMapping("/getmonth")
-	public Map myrecord(int Members,int cnt) {
+	public Map myrecord(String Members,int count) {
+		MembersDto md = mservice.getByuserId(Members);
+		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
         // 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
-        // 현재 달/년도 가져오기
+        //필요 달/년도 가져오기
         int currentMonth = currentDate.getMonthValue();
         int currentYear = currentDate.getYear();
-       
         // 이전 달로 이동
-        int previousMonth = currentMonth + cnt;
-        int previousYear = currentYear;
-        if (previousMonth == 0) { 
-            previousMonth = 12; 
-            previousYear--;
+        currentMonth = currentMonth  + count  - 1;
+        if (currentMonth == 0) { 
+        	currentMonth = 12; 
+        	currentYear--;
         }
-        ArrayList<WorkInOutRecordDto> list = service.selectUser(previousMonth, previousYear, Members);
+        ArrayList<MemRecord> list = service.selectUser(currentMonth, currentYear, m.getMemberid());
         Map map = new HashMap<>();
 		map.put("list", list);
 		return map;
 	}
-		
-	//관리자(직원지록 확인하기)
-	@ResponseBody
-	@GetMapping("/deptRecord")
-	public void list(int dept,int cnt) {
+	   
+    
+	//관리자(직원기록 확인하기)
+//	@ResponseBody
+//	@GetMapping("/deptRecord")
+//	public void list(int dept,int cnt) {
+//		// 현재 날짜 가져오기
+//        LocalDate currentDate = LocalDate.now();
+//        // 현재 달/년도 가져오기
+//        int currentMonth = currentDate.getMonthValue();
+//        int currentYear = currentDate.getYear();
+//       
+//        // 이전 달로 이동
+//        int previousMonth = currentMonth + cnt;
+//        int previousYear = currentYear;
+//        if (previousMonth == 0) { 
+//            previousMonth = 12; 
+//            previousYear--;
+//        }
+//        ArrayList<DeptMonthRecord> list = service.selectDept(previousMonth, previousYear, dept);
+//	}
+	
+	//관리자
+	@GetMapping("/dept")
+	public String deptRecord(int dept,int cnt) {
 		// 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
         // 현재 달/년도 가져오기
@@ -193,25 +217,6 @@ public class WorkInOutRecordController {
        
         // 이전 달로 이동
         int previousMonth = currentMonth + cnt;
-        int previousYear = currentYear;
-        if (previousMonth == 0) { 
-            previousMonth = 12; 
-            previousYear--;
-        }
-        ArrayList<DeptMonthRecord> list = service.selectDept(previousMonth, previousYear, dept);
-	}
-	
-	//관리자
-	@GetMapping("/dept")
-	public String deptRecord() {
-		// 현재 날짜 가져오기
-        LocalDate currentDate = LocalDate.now();
-        // 현재 달/년도 가져오기
-        int currentMonth = currentDate.getMonthValue();
-        int currentYear = currentDate.getYear();
-       
-        // 이전 달로 이동
-        int previousMonth = currentMonth ;
         int previousYear = currentYear;
         if (previousMonth == 0) { 
             previousMonth = 12; 
