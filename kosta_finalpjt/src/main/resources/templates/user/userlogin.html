@@ -1,51 +1,77 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript">
-const checklogin = () => {
-	if (userloginf.id.value.length <= 0) {
-		alert("ID는 필수 입력 사항");
-		userjoinf.id.focus();
-		return;
-	}
-	if (userloginf.pwd.value.length <= 0) {
-		alert("PWD는 필수 입력 사항");
-		userjoinf.pwd.focus();
-		return;
-	}
-	userloginf.submit();
-}
 
-const home = (type) => {
-	if (type == 'admin') {
-		location.href='/index_admin';
-	} else if (type == 'emp') {
-		location.href='/index_emp';
-	} else {
-		location.href='/';
-	}
-}
-</script>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript">
+		const checklogin = () => {
+			if (userloginf.id.value.length <= 0) {
+				alert("ID는 필수 입력 사항");
+				userjoinf.id.focus();
+				return;
+			}
+			if (userloginf.pwd.value.length <= 0) {
+				alert("PWD는 필수 입력 사항");
+				userjoinf.pwd.focus();
+				return;
+			}
+			userloginf.submit();
+		}
+
+		const home = (type) => {
+			if (type == 'admin') {
+				location.href = '/index_admin';
+			} else if (type == 'emp') {
+				location.href = '/index_emp';
+			} else {
+				location.href = '/';
+			}
+		}
+	</script>
 </head>
+
 <body>
-<h3>로그인 페이지</h3>
-<form action="/login" method="post" name="userloginf">
-<table border="1">
-	<tr>
-		<th>ID</th>
-		<td>
-			<input type="text" name="id" id="id">
-		</td>
-	</tr>
-	<tr>
-		<th>PWD</th><td><input type="password" name="pwd"></td>
-	</tr>
-</table>
-<div th:text="${loginFailMsg }"></div>
-<input type="button" value="로그인" th:onclick="checklogin()">
-</form>
-<input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
+	<h3>로그인 페이지</h3>
+	<!-- <form action="/login" method="post" name="userloginf">
+		<table border="1">
+			<tr>
+				<th>ID</th>
+				<td>
+					<input type="text" name="id" id="id">
+				</td>
+			</tr>
+			<tr>
+				<th>PWD</th>
+				<td><input type="password" name="pwd"></td>
+			</tr>
+		</table>
+		<div th:text="${loginFailMsg }"></div>
+		<input type="button" value="로그인" th:onclick="checklogin()">
+	</form>
+	<input type="button" value="홈버튼" th:onclick="home([[${session.type }]]);"><br /> -->
+
+	<div id="posts_list">
+		<div class="container col-md-6">
+			<form action="/login" method="post" name="userloginf">
+				<!--  <input type="hidden" name="_csrf" value="{{_csrf.token}}"/> -->
+				<div class="form-group">
+					<label>계정</label>
+					<input type="text" class="form-control" name="id" placeholder="아이디를 입력해주세요">
+				</div>
+				<div class="form-group">
+					<label>비밀번호</label>
+					<input type="password" class="form-control" name="pwd" placeholder="아이디를 입력해주세요">
+				</div>
+
+				<span th:if="${errorMessage}">
+					<p id="valid" class="alert alert-danger" th:text="${errorMessage}"></p>
+				</span>
+				<button class="form-control btn btn-primary bi bi-lock-fill"> 로그인</button>
+				<button type="button" class="btn btn-primary bi bi-person" th:onclick="home([[${session.type }]]);"> 홈</button>
+			</form>
+		</div>
+	</div>
 </body>
+
 </html>
