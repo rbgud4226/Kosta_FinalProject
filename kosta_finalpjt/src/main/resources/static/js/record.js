@@ -1,7 +1,24 @@
 let cnt = 0;
+//시계 변경
+let time = new Date(); 
+// 날짜
+let year = time.getFullYear();
+let month = ('0' + (time.getMonth() + 1)).slice(-2);
+let day = ('0' + time.getDate()).slice(-2);
+let dateString = year + '.' + month  + '.' + day + "일 ";
+// 시간
+var hours = ('0' + time.getHours()).slice(-2); 
+var minutes = ('0' + time.getMinutes()).slice(-2);
+
 window.onload=()=>{
     flagCheck();
+
+	// date 일자 관리
+	let minDate =  year + '-' + month + '-' + day;
+	$("#date1").attr("min", minDate);
 }
+
+
 
 // 출근 버튼
 const workin=()=>{
@@ -37,17 +54,6 @@ const workout=()=>{
 		}
 	});
 }
-
-//시계 변경
-let time = new Date(); 
-// 날짜
-let year = time.getFullYear();
-let month = ('0' + (time.getMonth() + 1)).slice(-2);
-let day = ('0' + time.getDate()).slice(-2);
-let dateString = year + '.' + month  + '.' + day + "일 ";
-// 시간
-var hours = ('0' + time.getHours()).slice(-2); 
-var minutes = ('0' + time.getMinutes()).slice(-2);
 
 var timeString = hours + ':' + minutes ;
 $("#record_time").html(dateString+timeString);
@@ -150,13 +156,16 @@ const table_draw = (arr)=>{
 
 // 휴가 기록하기
 const myoff=()=>{
+	let fdata = new FormData($('#offform')[0]);
 	$.ajax({
 		url:"/auth/record/offday",  //서버주소
-		type:"get",   				//전송방식
-		dataType:'json',			//응답데이터 형태
-		data:{Members:mem,count:cnt},
+		type:"post",   				//전송방식
+		dataType:'json',	
+		contentType: false,
+		processData: false,
+		data:fdata,
 		success:function(res){		//응답 정상일때
-			table_draw(res.list)
+			$(".btn-close").click();
 		},
 		error:function(){			//응답 에러일때
 			console.log('error');

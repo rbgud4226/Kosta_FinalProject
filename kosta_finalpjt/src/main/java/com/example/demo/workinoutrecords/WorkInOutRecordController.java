@@ -134,13 +134,14 @@ public class WorkInOutRecordController {
 	//휴가 기록
 	@ResponseBody
 	@PostMapping("/offday")
-	public void offRecord(String Members,String res, String date1,String date2) {
+	public Map offRecord(String members,String res, String date1, String date2) {
 		 System.out.println("====================");
+		 System.out.println(members);
 		 System.out.println("Res: "+res + "date1: "+date1 + "date2: "+date2);
 		 LocalDate startDate = LocalDate.parse(date1);
 	     LocalDate endDate = LocalDate.parse(date2);
 	     //멤버 정보
-	     MembersDto md = mservice.getByuserId(Members);
+	     MembersDto md = mservice.getByuserId(members);
 		 Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
 		 String type =  res;
 		 
@@ -153,6 +154,9 @@ public class WorkInOutRecordController {
 	           }
 	           currentDate = currentDate.plusDays(1);
 	       }
+	    Map map = new HashMap<>();
+		map.put("flag", "success");
+		return map;
 	}
 	// 주말확인
     private static boolean isWeekend(LocalDate date) {
