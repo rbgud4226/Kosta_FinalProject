@@ -147,3 +147,19 @@ const table_draw = (arr)=>{
 	        cell.textContent = a.state;
 	}
 }
+
+// 휴가 기록하기
+const myoff=()=>{
+	$.ajax({
+		url:"/auth/record/offday",  //서버주소
+		type:"get",   				//전송방식
+		dataType:'json',			//응답데이터 형태
+		data:{Members:mem,count:cnt},
+		success:function(res){		//응답 정상일때
+			table_draw(res.list)
+		},
+		error:function(){			//응답 에러일때
+			console.log('error');
+		}
+	});
+}

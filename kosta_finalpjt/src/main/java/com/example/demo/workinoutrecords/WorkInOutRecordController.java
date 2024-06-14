@@ -38,6 +38,9 @@ public class WorkInOutRecordController {
 	public String myrecord(String Members,ModelMap map) {
 		MembersDto md = mservice.getByuserId(Members);
 		Members m = new Members(md.getUserid(),md.getMemberid(),md.getBirthdt(),md.getEmail(),md.getCpnum(),md.getAddress(),md.getMemberimgnm(),md.getHiredt(),md.getLeavedt(),md.getDeptid(),md.getJoblvid(), md.getMgrid(), null);
+		if(m == null) {
+			return "error";
+		}
 		//출근기록x
 		boolean flag = false;
 		ArrayList<WorkInOutRecordDto> list = service.selectByDate(m.getMemberid());
@@ -156,6 +159,8 @@ public class WorkInOutRecordController {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY;
     }
+	
+	
 	
 	//내 근태기록 확인하기
 	@ResponseBody

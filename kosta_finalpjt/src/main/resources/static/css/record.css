@@ -42,8 +42,8 @@
 /* 화살표 */
 .arrow{
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 18px;
+    height: 18px;
     border-left: 8px solid #2e2f31;
     border-bottom: 8px solid #2e2f31;
     border-radius: 5px;
