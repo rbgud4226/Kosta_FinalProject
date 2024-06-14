@@ -45,7 +45,7 @@ public class MyUserDetails implements UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		System.out.println("MyUserDetails:" + u.getPwd());
+//		System.out.println("MyUserDetails:" + u.getPwd());
 		return u.getPwd();
 	}
 
