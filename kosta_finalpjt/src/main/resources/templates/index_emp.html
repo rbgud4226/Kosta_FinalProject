@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
+  <link rel="stylesheet" th:href="@{/css/common/header.css}">
+  <link rel="stylesheet" th:href="@{/css/charts/charts.css}">
+  <script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:replace="~{/common/header :: header}"></div>
+<div th:replace="~{/common/leftnav :: leftNav}"></div>
+<div class="main_body">
+
+  <!--	아래 영역은 임시 영역임  -->
+  <section id="test_link">
+    <div style="position: fixed; right: 100px; top: 50px">
+      <div style="border: 1px black solid; margin: 10px; padding: 3px; width: 200px;">
+        <h2>test용 간이 링크 영역</h2>
+        <div style="margin-top: 5px">
+          <button type="button" onclick="location.href='/auth/users/list'">사용자 목록</button>
+          <button type="button" onclick="location.href='/auth/docx/add'">문서테스트</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="main_section">
+    <div class="chart_body">
+      <div class="chart_head">
+        <b th:text="${session.loginId}"></b>
+        <b> 님 반갑습니다.</b>
+        <hr>
+      </div>
+      <!--  테이블 출력 영역-->
+      <div class="chart_area">
+        <div class="chart_area_head">
+          <div style="padding-top: 5px">
+            <p>일정 관리</p>
+          </div>
+          <div class="chart_menu">
+            <button type="button" onclick="location.href='/auth/chart/gantt'">간트차트</button>
+            <button type="button" onclick="location.href='/auth/chart/calendar'">달력</button>
+            <button type="button" id="modal_btn">일정추가</button>
+          </div>
+        </div>
+        <table>
+          <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>시작일</th>
+            <th>마감일</th>
+            <th>완성률</th>
+            <th>연관 일정</th>
+            <th></th>
+          </tr>
+          <tr th:each="s:${list}">
+            <td th:text="${s.taskid}"></td>
+            <td th:text="${s.title}"></td>
+            <td th:text="${s.st}"></td>
+            <td th:text="${s.ed}"></td>
+            <td th:text="${s.percent}"></td>
+            <td th:text="${s.dependencies}"></td>
+            <td><a th:href="@{/auth/chart/del(id=${s.taskid})}">삭제</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="board_body">
+      <div class="board_body_box">
+        <p>공지 게시판</p>
+      </div>
+      <div class="board_body_box">
+        <p>서류 게시판</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="modal_section">
+    <div class="modal_wrap">
+      <i class="fa-solid fa-xmark modal_close"></i>
+      <div class="modal_text">
+        <div style="margin-top: 40px; margin-bottom: 10px">
+        <h5>일정 추가</h5>
+        </div>
+        <div>
+          <form action="/auth/chart/add" method="post" name="f">
+            <table style="height: 300px; margin-top: 10px;">
+              <tr>
+                <th>id</th>
+                <td><input type="text" name="id" placeholder="id" th:value="${session.loginId}" readonly></td>
+              </tr>
+              <tr>
+                <th>title</th>
+                <td><input type="text" name="title" placeholder="title"></td>
+              </tr>
+              <tr>
+                <th>start date</th>
+                <td><input type="date" name="st"></td>
+              </tr>
+              <tr>
+                <th>end date</th>
+                <td><input type="date" name="ed"></td>
+              </tr>
+              <tr>
+                <th>percent</th>
+                <td><input type="text" name="percent" placeholder="percent"></td>
+              </tr>
+            </table>
+            <div style="display: flex; justify-content: end; margin-right: 15px;">
+              <input type="submit" value="save">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="modal_background"></div>
+<script type="text/javascript">
+    'use strict';
+    const modal_wrap = document.querySelector('.modal_wrap')
+    const modal_background = document.querySelector('.modal_background')
+
+    //Show modal
+    document.querySelector('#modal_btn').addEventListener('click', () => {
+        open()
+    })
+
+    //Hide modal
+    document.querySelector('.modal_close').addEventListener('click', () => {
+        close()
+    })
+
+    //Hide modal
+    window.addEventListener('click', (e) => {
+        e.target === modal_background ? close() : false
+    })
+
+    function close() {
+        modal_wrap.classList.remove('show-modal');
+        modal_background.classList.remove('show-modal');
+    }
+
+    function open() {
+        modal_wrap.classList.add('show-modal')
+        modal_background.classList.add('show-modal')
+    }
+</script>
+</body>
+</html>
