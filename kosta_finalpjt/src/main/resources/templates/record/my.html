@@ -14,7 +14,6 @@
 	let flag = '[[${flag}]]'
 	let mem = '[[${session.loginId}]]';
 	let num = '[[${num}]]';
-
 </script>
 </head>
 <body>
@@ -74,7 +73,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-         <form>
+         <form id="offform">
+            <input type="hidden" name="members" th:value="${session.loginId}">
             <table>
                 <tr>
                     <td  class="form_td">휴가 종류</td>
@@ -91,18 +91,18 @@
                 <tr>
                     <td class="form_td">휴가 시작일</td>
                     <td class="form_td"> 
-                        <input type="date" name="date1">
+                        <input type="date" name="date1" id="date1">
                     </td>
                 </tr>
                 <tr>
                     <td class="form_td">휴가 종료일</td>
                     <td class="form_td"> 
-                        <input type="date" name="date2">
+                        <input type="date" name="date2" id="date2">
                     </td>
                 </tr>
             </table>
                 <div class="modal-footer">
-                    <button type="button" class="btn blue_btn">제출하기</button>
+                    <button type="button" class="btn blue_btn" onclick="myoff()">제출하기</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   </div>
          </form>
