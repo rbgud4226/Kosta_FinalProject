@@ -52,14 +52,61 @@ a{
 	text-decoration: none;
   color: black;
 }
+
+/* 프로젝트용 기본 디자인css */
+
 body{
     background-color: #F5F7FA;
 }
-.nav_bg{
+.w_bg{
     background-color: #fff;
 }
 .main_body{
 	margin-left:250px;
 	padding:0 40px;
 	padding-top:80px;
+}
+
+.font_b24{
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.m_b2{
+	margin-bottom: 2px;
+}
+.cursor{
+	cursor: pointer;
+}
+
+/* 버튼용 디자인들 */
+.btn_square{
+	border-radius: 10px;
+	border: 0;
+	padding: 21px 37px;
+}
+.blue_btn{
+	background-color: #2B6BFF;
+	color: #fff;
+}
+.gray_btn{
+	background-color: #A3A8B6;
+	color: #fff;
+}
+.border_btn{
+	border: 2px solid #2B6BFF;
+	color: #2B6BFF;
+}
+.btn_border{
+	border: 0;
+}
+.round{
+	border-radius: 50px;
+}
+.form_input_wrapper{
+	margin-bottom: 20px;
+}
+.form_td{
+	padding-bottom: 10px;
+	padding-right: 10px;
 }
