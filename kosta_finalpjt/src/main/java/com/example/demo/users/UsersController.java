@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,7 +24,9 @@ import com.example.demo.members.MembersDto;
 import com.example.demo.members.MembersService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Controller
 public class UsersController {
 	@Autowired
@@ -34,35 +38,42 @@ public class UsersController {
 	@Autowired
 	private EduWorkExperienceInfoService eservice;
 
-	@GetMapping("/user/userjoin")
-	public String userjoinform() {
-		return "user/userjoin";
+	@Autowired
+	private UsersCheckIdValidator usersCheckIdValidator;
+
+//	@Autowired
+//	private UsersCheckUsernmValidator usersCheckUsernmValidator;
+
+	@Autowired
+	private UsersEqualPwdValidator usersEqualPwdValidator;
+
+	@InitBinder
+	public void validatorBinder(WebDataBinder binder) {
+		binder.addValidators(usersCheckIdValidator);
+//		binder.addValidators(usersCheckUsernmValidator);
+		binder.addValidators(usersEqualPwdValidator);
+
 	}
 
-	@ResponseBody
-	@GetMapping("/user/idcheck")
-	public Map idcheck(String id) {
-		Map map = new HashMap();
-		UsersDto udto = uservice.getById(id);
-		boolean flag = false;
-		if (udto == null) {
-			flag = true;
-		}
-		map.put("flag", flag);
-		return map;
+	@GetMapping("/user/userjoin")
+	public String userjoinform(Model model) {
+		model.addAttribute("user", new UsersDto());
+		return "user/userjoin";
 	}
 
 	@PostMapping("/user/userjoin")
 	public String userjoin(@Valid UsersDto dto, Errors errors, Model model) {
-		if(errors.hasErrors()) {
+		if (errors.hasErrors()) {
 			model.addAttribute("user", dto);
-			
+
 			Map<String, String> validatorResult = uservice.validateHandling(errors);
-			for(String key : validatorResult.keySet()) {
+			for (String key : validatorResult.keySet()) {
 				model.addAttribute(key, validatorResult.get(key));
+				System.out.println(validatorResult.get(key));
 			}
-			return "responsebody:user/userjoin";
+			return "/user/userjoin";
 		}
+		System.out.println(dto);
 		dto.setAprov(0);
 		uservice.save(dto);
 		return "redirect:/";
@@ -179,8 +190,8 @@ public class UsersController {
 				MembersDto mdto = mservice.getByuserId(udto.getId());
 				try {
 					if (mdto.getUserid() == null) {
-						udto.setMemberdto(
-								new MembersDto(null, 0, null, null, null, null, null, null, null, null, null, null, null, null));
+						udto.setMemberdto(new MembersDto(null, 0, null, null, null, null, null, null, null, null, null,
+								null, null, null));
 					} else if (mdto.getUserid() != null && udto.getId() == mdto.getUserid().getId()) {
 						udto.setMemberdto(mdto);
 					}
@@ -229,8 +240,8 @@ public class UsersController {
 					MembersDto mdto = mservice.getByuserId(udto.getId());
 					try {
 						if (mdto.getUserid() == null) {
-							udto.setMemberdto(new MembersDto(null, 0, null, null, null, null, null, null, null, null, null,
-									null, null, null));
+							udto.setMemberdto(new MembersDto(null, 0, null, null, null, null, null, null, null, null,
+									null, null, null, null));
 						} else if (mdto.getUserid() != null && udto.getId() == mdto.getUserid().getId()) {
 							udto.setMemberdto(mdto);
 						}
