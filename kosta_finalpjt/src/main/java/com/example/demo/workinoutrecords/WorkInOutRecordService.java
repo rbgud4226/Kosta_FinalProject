@@ -47,6 +47,7 @@ public class WorkInOutRecordService {
 		for(WorkInOutRecord w : wo) {
 			list.add(new WorkInOutRecordDto(w.getDaynum(),w.getUser(),w.getDayOfWeek(),w.getDay(),w.getWorkinTime(),w.getWorkOutTime(),w.getWorkHours(),w.getState()));
 		}
+		
 		return list;
 	}
 	

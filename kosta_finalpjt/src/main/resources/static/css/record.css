@@ -23,3 +23,57 @@
 .record_marright{
     margin-right: 20px;
 }
+.record_table{
+    border-radius: 10px 10px 0 0;
+    margin-top: 10px;
+    padding-bottom: 30px;
+}
+.record_table_title{
+    display: flex;
+    align-items: center;
+    padding: 40px 0;
+    width: 80%;
+    margin: 0 auto;
+}
+.record_table_title>p{
+    font-size: 20px;
+    width: 43%;
+}
+/* 화살표 */
+.arrow{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-left: 8px solid #2e2f31;
+    border-bottom: 8px solid #2e2f31;
+    border-radius: 5px;
+}
+.arrow_off{
+    border-left: 8px solid #828488;
+    border-bottom: 8px solid #828488;
+}
+.right_arrow {
+    transform: rotate(-135deg);
+}
+.left_arrow {
+    transform: rotate(45deg);
+}
+/* 테이블 기록 */
+.record_table_wrapper{
+    width: 80%;
+    border-top: 2px solid #E2E4EC;
+    margin: 0 auto;
+}
+.record_rtable{
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+}
+.record_rtable>thead{
+    line-height: 3rem;
+    border-bottom: 2px solid #E2E4EC;
+}
+.record_list>tr{
+    line-height: 3rem;
+    border-bottom: 2px solid #E2E4EC;
+}
