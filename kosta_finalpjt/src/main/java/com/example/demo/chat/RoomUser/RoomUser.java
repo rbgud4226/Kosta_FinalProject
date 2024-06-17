@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import com.example.demo.chat.Room.ChatRoom;
 import com.example.demo.users.Users;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +33,8 @@ public class RoomUser {
 
 	@ManyToOne
 	@JoinColumn(name = "chatroomid", referencedColumnName = "chatroomid", nullable = false)
-	private ChatRoom chatRoom;
+	@JsonBackReference
+	private ChatRoom room;
 
 	@ManyToOne
 	@JoinColumn(name = "userid", referencedColumnName = "id", nullable = false)

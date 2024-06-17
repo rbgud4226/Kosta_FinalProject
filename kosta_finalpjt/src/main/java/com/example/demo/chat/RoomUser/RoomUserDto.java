@@ -14,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RoomUserDto {
 	private Long id;
-	private ChatRoom chatRoom;
+	private ChatRoom room;
 	private Users roomuser;
 }
+
