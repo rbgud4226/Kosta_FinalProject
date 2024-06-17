@@ -9,32 +9,28 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/auth/chat")
 public class ChatRoomController {
 	@Autowired
 	private ChatRoomService chatRoomService;
 
-	@GetMapping("/starttest")
-	public String chatStart() {
-		return "/chat/chatindex";
-	}
+	@Autowired
+	private ChatRoomNameService chatRoomNameService;
 
-	@GetMapping("/room/{roomId}")
+	@GetMapping("/chat/chatroom/{roomId}")
 	public String getChatRoomByRoomId(@PathVariable String roomId, HttpSession session, ModelMap map) {
 		String userId1 = (String) session.getAttribute("loginId");
 		map.addAttribute("roomId", roomId);
 		map.addAttribute("userId1", userId1);
-		return "/chat/chatstart";
+		return "/chat/bootchat";
 	}
 
-	@GetMapping("/room")
+	@GetMapping("/chat/chatroom")
 	public String getChatRoom(@RequestParam List<String> userIds, HttpSession session, ModelMap map) {
 		String userId1 = (String) session.getAttribute("loginId");
 		if (!userIds.contains(userId1)) {
@@ -43,44 +39,75 @@ public class ChatRoomController {
 		ChatRoomDto chatRoomDto = chatRoomService.createChatRoom(userIds);
 		map.addAttribute("roomId", chatRoomDto.getChatroomid());
 		map.addAttribute("userId1", userId1);
-		return "/chat/chatstart";
+		return "/chat/bootchat";
 	}
 
-	@GetMapping("/rooms/{userId}")
+	@GetMapping("/chat/chatrooms/{userId}")
 	public String getChatRoomsByRoomId(@PathVariable String userId, HttpSession session, ModelMap map) {
 		String userId1 = (String) session.getAttribute("loginId");
 		ArrayList<ChatRoomDto> cr = chatRoomService.getChatRoomsListByName(userId, userId1);
 		map.addAttribute("chatRooms", cr);
 		map.addAttribute("userId1", userId1);
-		return "/chat/chatroomlist";
+		return "/chat/bootchat";
 	}
 
-	@GetMapping("/rooms")
-	public String getChatRooms(@RequestParam String user, HttpSession session, ModelMap map) {
-		String userId1 = (String) session.getAttribute("loginId");
-		ArrayList<ChatRoomDto> cr = chatRoomService.getChatRoomsListByName(user, userId1);
-		map.addAttribute("chatRooms", cr);
-		map.addAttribute("user", user);
-		return "/chat/chatroomlist";
+	@GetMapping("/chat/chatrooms/loadrooms/{userId}")
+	@ResponseBody
+	public ArrayList<ChatRoomDto> getPersonalChatRooms(@PathVariable String userId) {
+		ArrayList<ChatRoomDto> cr = chatRoomService.getAllChatRooms(userId);
+		for (ChatRoomDto chatRoom : cr) {
+			ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(chatRoom.getChatroomid());
+			List<ChatRoomName> roomNames = new ArrayList<>();
+			for (ChatRoomNameDto dto : roomNamesDto) {
+				if (dto.getHost().equals(userId)) {
+					roomNames.add(new ChatRoomName(dto.getId(), dto.getRoom(),dto.getHost(), dto.getRoomName()));   
+	            }
+			}
+			chatRoom.setChatRoomNames(roomNames);
+		}
+		return cr;
 	}
 
-	@GetMapping("/rooms/out")
+	@GetMapping("/chat/chatrooms/loadrooms/search/{userId}")
+	@ResponseBody
+	public ArrayList<ChatRoomDto> getChatRoomsSearch(@PathVariable String userId, HttpSession session) {
+		String loginId = (String) session.getAttribute("loginId");
+		ArrayList<ChatRoomDto> cr = chatRoomService.getChatRoomsListByName(userId, loginId);
+		return cr;
+	}
+
+	@GetMapping("/chat/chatrooms/loadrooms/searchroom/{chatroomid}/{userId1}")
+	@ResponseBody
+	public ChatRoomDto getChatRooms(@PathVariable String chatroomid, @PathVariable String userId1) {
+		 ChatRoomDto cr = chatRoomService.getChatRoomsByChatRoomId(chatroomid);
+		    ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(cr.getChatroomid());
+		    List<ChatRoomName> roomNames = new ArrayList<>();
+		    for (ChatRoomNameDto dto : roomNamesDto) {
+		        if (dto.getHost().equals(userId1)) {
+		            roomNames.add(new ChatRoomName(dto.getId(), dto.getRoom(), dto.getHost(), dto.getRoomName()));
+		        }
+		    }
+		    cr.setChatRoomNames(roomNames);
+		    return cr;
+	}
+
+	@GetMapping("/chat/chatrooms/out")
 	public String getOutRooms(@RequestParam String chatroomid, String userId) {
 		chatRoomService.getOutChatRoom(chatroomid, userId);
-		return "/member/list";
+		return "redirect:/chat/chatrooms/" + userId;
 	}
 
-	@GetMapping("/rooms/invite/{chatroomid}")
+	@GetMapping("/chat/chatrooms/invite/{chatroomid}")
 	@ResponseBody
 	public String InviteChatRoom(@PathVariable String chatroomid, String newuserId, ModelMap map) {
 		String mes = chatRoomService.inviteUserToChatRoom(chatroomid, newuserId);
 		map.addAttribute("inviteMessage", mes);
-		return "/auth/chat/room/" + chatroomid;
+		return "/chat/chatroom/" + chatroomid;
 	}
-	
-	@PostMapping("/rooms/edit")
-	public String editRoomName(@RequestParam String chatroomid, String newRoomName, ModelMap map) {
-		chatRoomService.editChatRoomName(chatroomid, newRoomName);
-		return "/chat/chatroomlist";
+
+	@PostMapping("/chat/chatrooms/edit")
+	public String editRoomName(@RequestParam String chatroomid, String newRoomName, String userId1) {
+		chatRoomService.editChatRoomName(chatroomid, newRoomName, userId1);
+		return "/chat/bootchat";
 	}
 }

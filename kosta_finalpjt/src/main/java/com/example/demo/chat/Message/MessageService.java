@@ -1,5 +1,8 @@
 package com.example.demo.chat.Message;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +27,15 @@ public class MessageService {
 		String mess = ms.getContent().replaceAll("(?:\r\n|\r|\n)", "<br>");
 		ms.setContent(mess);
 		return messagedao.save(ms);
+	}
+	
+	
+	public ArrayList<MessageDto> getMessageByRoomId(String roomId){
+		List<Message> l = messagedao.findByRoom_Chatroomid(roomId);
+		ArrayList<MessageDto> list = new ArrayList<>();
+		for(Message m : l) {
+			list.add(new MessageDto(m.getId(),m.getRoom(),m.getContent(), m.getSendDate(), m.getSender(), m.getType(), m.getNewuserId(), m.getFileName(), m.getFileId(),m.getFileRoot()));
+		}
+		return list;
 	}
 }

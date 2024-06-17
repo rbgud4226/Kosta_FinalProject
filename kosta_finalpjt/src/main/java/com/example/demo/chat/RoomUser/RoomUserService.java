@@ -14,18 +14,18 @@ public class RoomUserService {
 	@Autowired
 	private RoomUserDao roomuserdao;
 
-	public void save(Users roomuser, ChatRoom chatroom) {
-		if (!roomuserdao.findByChatRoomAndRoomuser(chatroom, roomuser).isPresent()) {
-			roomuserdao.save(new RoomUser(null, chatroom, roomuser));
+	public void save(Users roomuser, ChatRoom room) {
+		if (!roomuserdao.findByRoomAndRoomuser(room, roomuser).isPresent()) {
+			roomuserdao.save(new RoomUser(null, room, roomuser));
 		}
 
 	}
 
 	public ArrayList<RoomUserDto> findRoom(String chatroomid) {
-		List<RoomUser> l = roomuserdao.findByChatRoom_Chatroomid(chatroomid);
+		List<RoomUser> l = roomuserdao.findByRoom_Chatroomid(chatroomid);
 		ArrayList<RoomUserDto> list = new ArrayList<>();
 		for (RoomUser ru : l) {
-			list.add(new RoomUserDto(ru.getId(), ru.getChatRoom(), ru.getRoomuser()));
+			list.add(new RoomUserDto(ru.getId(), ru.getRoom(), ru.getRoomuser()));
 		}
 		return list;
 	}

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.users.Users;
@@ -39,15 +42,17 @@ public class MembersController {
 	@Value("${mDirName}")
 	private String mDirName;
 
+	
 	@GetMapping("/member/memberlist")
-	public String memberlist(ModelMap map) {
+	public ModelMap memberlist(ModelMap map) {
 		ArrayList<MembersDto> mlist = mservice.getAll();
-		map.addAttribute("mlist", mlist);
-		return "member/memberlist";
+		return map.addAttribute("mlist", mlist);
+//		return "member/memberlist";
 	}
 
-	@PostMapping("/member/getdeptby")
-	public ModelAndView getmemberby(String val, int type) {
+	@ResponseBody
+	@GetMapping("/member/getdeptby")
+	public Map getmemberby(String val, int type) {
 		ArrayList<MembersDto> mlist = new ArrayList<MembersDto>();
 		if (!val.equals("")) {
 			if (type == 1) {
@@ -70,11 +75,12 @@ public class MembersController {
 		} else {
 			mlist = null;
 		}
-		ModelAndView mav = new ModelAndView("member/memberlist");
-		mav.addObject("type", type);
-		mav.addObject("val", val);
-		mav.addObject("mlist", mlist);
-		return mav;
+//		ModelAndView mav = new ModelAndView("member/memberlist");
+//		mav.addObject("type", type);
+//		mav.addObject("val", val);
+		Map map = new HashMap<>();
+		map.put("mlist", mlist);
+		return map;
 	}
 
 	@GetMapping("/member/memberinfo")
