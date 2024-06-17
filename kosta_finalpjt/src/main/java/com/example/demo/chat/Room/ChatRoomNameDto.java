@@ -1,20 +1,17 @@
-package com.example.demo.chat.RoomUser;
-
-import com.example.demo.chat.Room.ChatRoom;
-import com.example.demo.users.Users;
+package com.example.demo.chat.Room;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomUserDto {
+public class ChatRoomNameDto {
 	private Long id;
 	private ChatRoom room;
-	private Users roomuser;
+	private String host;
+	private String roomName;
 }
-

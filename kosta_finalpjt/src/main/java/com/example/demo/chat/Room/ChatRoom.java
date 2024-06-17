@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.demo.chat.Message.Message;
 import com.example.demo.chat.RoomUser.RoomUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -24,17 +25,20 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatRoom {
 	@Id
-	private String chatroomid; // 채팅방 번호
-	private String name; // 채팅방 이름, 변경 불가능(유저목록 확인용)
-	private String roomName; // 수정 가능한 채팅방 이름
-	private String roomType; // 개인, 단체
+	private String chatroomid; 
+	private String name; 
+	private String roomType; 
+	private boolean status; 
+
+	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JsonManagedReference
+	private List<Message> chats = new ArrayList<>();
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JsonIgnore
-	private List<Message> chats = new ArrayList<>();
-
-	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<RoomUser> roomUsers = new ArrayList<>();
-
-	private boolean status; // 채팅방 상태
+	
+	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JsonManagedReference
+	private List<ChatRoomName> chatRoomNames= new ArrayList<>();
 }

@@ -14,6 +14,8 @@ import com.example.demo.users.Users;
 import com.example.demo.users.UsersDao;
 import com.example.demo.users.UsersService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ChatRoomService {
 
@@ -29,6 +31,9 @@ public class ChatRoomService {
 	@Autowired
 	private RoomUserService roomUserService;
 
+	@Autowired
+	private ChatRoomNameDao chatRoomNameDao;
+
 	public ChatRoomDto createChatRoom(List<String> userIds) {
 		String name = createChatRoomName(userIds);
 		ChatRoom chatRoom = chatRoomDao.findByName(name);
@@ -40,12 +45,12 @@ public class ChatRoomService {
 			if (!chatRoom.getRoomType().equals("PERSONAL") && !chatRoom.getRoomType().equals("PRIVATE")) {
 				chatRoom = createNewChatRoom(userIds, name);
 			}
-			return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getRoomName(),
+			return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getChatRoomNames(),
 					chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus());
 		} else {
 			chatRoom = createNewChatRoom(userIds, name);
 		}
-		return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getRoomName(),
+		return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getChatRoomNames(),
 				chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus());
 	}
 
@@ -53,20 +58,24 @@ public class ChatRoomService {
 		ChatRoom chatRoom = new ChatRoom();
 		chatRoom.setChatroomid(UUID.randomUUID().toString());
 		chatRoom.setName(name);
-		chatRoom.setRoomName(name);
-		boolean checkPrivate = false;
 		String[] l = chatRoom.getName().split("_");
 		if (l.length > 2) {
 			chatRoom.setRoomType("GROUP");
-		} 
-		else if (l.length == 2 && l[0].equals(l[1])) {
-		    chatRoom.setRoomType("PRIVATE");
-		} 
-		else {
+		} else if (l.length == 2 && l[0].equals(l[1])) {
+			chatRoom.setRoomType("PRIVATE");
+		} else {
 			chatRoom.setRoomType("PERSONAL");
 		}
 		chatRoom.setStatus(true);
 		chatRoomDao.save(chatRoom);
+
+		for (String roomName : l) {
+			ChatRoomName chatRoomName = new ChatRoomName();
+			chatRoomName.setRoom(chatRoom);
+			chatRoomName.setHost(roomName);
+			chatRoomName.setRoomName(name);
+			chatRoomNameDao.save(chatRoomName);
+		}
 
 		for (String userId : userIds) {
 			Users user = usersService.getById2(userId);
@@ -89,49 +98,56 @@ public class ChatRoomService {
 			}
 			chatRoomDao.save(chatRoom);
 		}
-		return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getRoomName(),
+		return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getChatRoomNames(),
 				chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus());
 	}
 
 	public ArrayList<ChatRoomDto> getChatRoomsListByName(String name, String loginId) {
 		List<ChatRoom> l = chatRoomDao.findAll();
 		ArrayList<ChatRoomDto> list = new ArrayList<>();
-			for (ChatRoom cr : l) {
-				if (cr.getName().contains(loginId) && cr.getName().contains(name) && cr.isStatus()) {
-						list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getRoomName(), cr.getRoomType(),
-								cr.getChats(), cr.getRoomUsers(), cr.isStatus()));
-				}		
+		for (ChatRoom cr : l) {
+			if (cr.getName().contains(loginId) && cr.getName().contains(name) && cr.isStatus()) {
+				list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getChatRoomNames(), cr.getRoomType(),
+						cr.getChats(), cr.getRoomUsers(), cr.isStatus()));
 			}
-		return list;
-	}
-	
-	public ArrayList<ChatRoomDto> getPersonalRoomListByType(String loginId){
-		List<ChatRoom> l = chatRoomDao.findAll();
-		ArrayList<ChatRoomDto> list = new ArrayList<>(); 
-			for(ChatRoom cr : l) {
-				if(cr.isStatus() && cr.getName().contains(loginId) && cr.getRoomType().contains("PERSONAL")) {
-					list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getRoomName(), cr.getRoomType(),
-							cr.getChats(), cr.getRoomUsers(), cr.isStatus()));
-				}
-			}
-		return list;
-	}
-	
-	public ArrayList<ChatRoomDto> getGroupRoomListByType(String loginId){
-		List<ChatRoom> l = chatRoomDao.findAll();
-		ArrayList<ChatRoomDto> list = new ArrayList<>(); 
-			for(ChatRoom cr : l) {
-				if(cr.isStatus() && cr.getName().contains(loginId) && cr.getRoomType().contains("GROUP")) {
-					list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getRoomName(), cr.getRoomType(),
-							cr.getChats(), cr.getRoomUsers(), cr.isStatus()));
-				}
-			}
+		}
 		return list;
 	}
 
-	public void editChatRoomName(String chatroomid, String newRoomName) {
+	public ArrayList<ChatRoomDto> getAllChatRooms(String loginId) {
+		List<ChatRoom> l = chatRoomDao.findAll();
+		ArrayList<ChatRoomDto> list = new ArrayList<>();
+		for (ChatRoom cr : l) {
+			if (cr.isStatus() && cr.getName().contains(loginId)) {
+				list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getChatRoomNames(), cr.getRoomType(),
+						cr.getChats(), cr.getRoomUsers(), cr.isStatus()));
+			}
+		}
+		return list;
+	}
+
+	public ChatRoomDto getChatRoomsByChatRoomId(String chatroomid) {
+		ChatRoom c = chatRoomDao.findByChatroomid(chatroomid);
+		ChatRoomDto cr = new ChatRoomDto(c.getChatroomid(), c.getName(), c.getChatRoomNames(), c.getRoomType(),
+				c.getChats(), c.getRoomUsers(), c.isStatus());
+		return cr;
+	}
+
+	@Transactional
+	public void editChatRoomName(String chatroomid, String newRoomName, String userId1) {
 		ChatRoom chatRoom = chatRoomDao.findByChatroomid(chatroomid);
-		chatRoom.setRoomName(newRoomName);
+		if (chatRoom == null) {
+			throw new NullPointerException("채팅방이 존재하지 않습니다.");
+		}
+		List<ChatRoomName> roomNames = chatRoom.getChatRoomNames();
+
+		for (ChatRoomName crn : roomNames) {
+			if (newRoomName == null || newRoomName.trim().isEmpty()) {
+				crn.setRoomName("채팅방 이름없음");
+			} else {
+				crn.setRoomName(newRoomName);
+			}
+		}
 		chatRoomDao.save(chatRoom);
 	}
 
@@ -142,7 +158,7 @@ public class ChatRoomService {
 			if (chatRoom == null) {
 				throw new NullPointerException("채팅방이 존재하지 않습니다.");
 			}
-			if(chatRoom.getRoomType().equals("PRIVATE")) {
+			if (chatRoom.getRoomType().equals("PRIVATE")) {
 				inviteMessage = "PRIVATE 방은 사용자를 초대할수 없습니다";
 				return inviteMessage;
 			}
@@ -156,7 +172,6 @@ public class ChatRoomService {
 				String addUserIds = createChatRoomName(userIdList);
 				chatRoom.setRoomType("GROUP");
 				chatRoom.setName(addUserIds);
-				chatRoom.setRoomName(addUserIds);
 				chatRoomDao.save(chatRoom);
 				inviteMessage = newuserId + "님이 초대완료 되었습니다";
 				return inviteMessage;

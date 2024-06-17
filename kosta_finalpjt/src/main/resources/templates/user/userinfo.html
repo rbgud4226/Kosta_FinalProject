@@ -104,5 +104,6 @@ const home = (type) => {
 <input type="hidden" name="id" th:value="${user.id }"><br/>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
+   <a th:href="@{/user/list}">사용자목록</a>
 </body>
 </html>
