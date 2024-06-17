@@ -4,11 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
+    <script type="text/javascript">
+        const home = (type) => {
+            if (type == 'admin') {
+                location.href = '/index_admin';
+            } else if (type == 'emp') {
+                location.href = '/index_emp';
+            } else {
+                location.href = '/';
+            }
+        }
+    </script>
+    <style>
+        select[readonly] {
+            background-color: #ddd;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
     <h3>보고서 작성폼</h3>
-    <a href="/auth/docx/list">리스트 페이지</a>
     <form action="/auth/docx/addreport" method="post">
         작성글제목:<input type="text" name="title"><br />
         작성자:<input type="text" name="writer" th:value="${session.loginId }" readonly><br />
@@ -16,9 +32,11 @@
         업무계획:<textarea cols="15" rows="4" name="taskplan"></textarea><br />
         업무진행과정:<textarea cols="15" rows="4" name="taskprocs"></textarea><br />
         결제권한:<select name="senior" multiple>
-        <option th:each="m:${mlist}" th:value="${m.userid.id}" th:text="${m.userid.usernm +' / '+ m.joblv}" ></option>
+            <option th:each="m:${mlist}" th:value="${m.userid.id}"
+                th:text="${m.userid.usernm +' / '+ m.joblvid.joblvid}"></option>
         </select>
-        결재현황:<select name="status">
+        <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+            onChange="this.selectedIndex = this.initialSelect;" readonly>
             <option value="1" selected>미승인</option>
             <option value="2">승인</option>
             <option value="3">보류</option>
@@ -26,6 +44,9 @@
         <input type="hidden" name="formtype" value="보고서">
         <input type="submit" value="등록">
     </form>
+    <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br />
+    <a href="/auth/docx/list">리스트 페이지</a>
+
 </body>
 
 </html>

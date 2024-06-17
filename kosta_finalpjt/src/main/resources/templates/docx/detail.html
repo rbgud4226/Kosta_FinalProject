@@ -4,28 +4,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/common/reset.css}"> -->
+    
+    <script type="text/javascript">
+        const approveDocx = (docxkey, formtype) => {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/auth/docx/approve';
+
+            const docxkeyInput = document.createElement('input');
+            docxkeyInput.type = 'hidden';
+            docxkeyInput.name = 'docxkey';
+            docxkeyInput.value = docxkey;
+            form.appendChild(docxkeyInput);
+
+            const formtypeInput = document.createElement('input');
+            formtypeInput.type = 'hidden';
+            formtypeInput.name = 'formtype';
+            formtypeInput.value = formtype;
+            form.appendChild(formtypeInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const buttons = document.querySelectorAll('button[data-docxkey][data-formtype]');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    
+                    const docxkey = parseInt(this.getAttribute('data-docxkey'), 10);
+                    const formtype = this.getAttribute('data-formtype');
+                    if (!isNaN(formnum) && !isNaN(docxkey)) {
+                        approveDocx(docxkey, formtype);
+                    } else {
+                        console.error('Invalid data attributes:', { docxkey, formtype });
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
     <a href="/auth/docx/list">문서리스트</a>
     <h3>문서 상세 페이지</h3>
-    <form action="">
-        문서제목:<span th:text="${d.title}" aria-readonly="true"></span><br/>
-        작성자:<span th:text="${d.writer.id}" aria-readonly="true"></span><br/>
-        기한:<span th:text="${d.enddt}" aria-readonly="true"></span><br/>
-        업무계획:<span th:text="${d.taskplan}" aria-readonly="true"></span><br/>
-        업무진행과정:<span th:text="${d.taskprocs}" aria-readonly="true"></span><br/>
-        결재현황:<span th:text="${d.status}" aria-readonly="true" id="status"></span><br/>
-        결재권한:
-        <ul>
-            <li th:each="docx : ${docx}">
-                <ul>
+    <table border="1">
+        <tr>
+            <th>문서제목</th>
+            <th>작성자</th>
+            <th>기한</th>
+            <th>업무계획</th>
+            <th>업무진행과정</th>
+            <th>결재현황</th>
+            <th>결재권한</th>
+            <th>결재순서</th>
+            <th>결재위치</th>
+        </tr>
+        <tr>
+
+            <td><span th:text="${d.title}" aria-readonly="true"></span></td>
+            <td><span th:text="${d.writer.id}" aria-readonly="true"></span></td>
+            <td><span th:text="${d.enddt}" aria-readonly="true"></span></td>
+            <td><span th:text="${d.taskplan}" aria-readonly="true"></span></td>
+            <td><span th:text="${d.taskprocs}" aria-readonly="true"></span></td>
+            <td><span th:text="${d.status}" aria-readonly="true" id="status"></span></td>
+            <td>
+                <ul th:each="docx : ${docx}">
                     <li th:each="senior : ${docx.senior}" th:text="${senior}"></li>
                 </ul>
-            </li>
-        </ul>
-        <input type="hidden" name="formtype" value="보고서">
-    </form>
+            </td>
+            <td><span th:text="${d.docxorder}" aria-readonly="true"></span></td>
+            <td><span th:text="${d.orderloc}" aria-readonly="true"></span></td>
+            <td>
+                <button type="button"
+                th:if="${flag}"
+                data-docxkey="${docx[0].docxkey}"
+                data-formtype="${docx[0].formtype}" th:onclick="approveDocx([[${docx[0].docxkey}]], [[${docx[0].formtype}]])">결재</button>
+            </td>
+        </tr>
+    </table>
+
 </body>
 
 </html>
