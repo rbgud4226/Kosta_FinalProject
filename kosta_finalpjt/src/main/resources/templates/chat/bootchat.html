@@ -5,13 +5,13 @@
 <title>채팅방</title>
 </head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/chat/chatdesign.css}">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+	<link rel="stylesheet" th:href="@{/css/chat/chatreset.css}">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
     <link rel="stylesheet" th:href="@{/css/common/header.css}">
@@ -298,12 +298,11 @@
             
             var response = document.getElementById('chat-content');
             response.innerHTML = ""; 
-            messages.sort(function(a, b) {
-                return new Date(a.sendDate).getTime() - new Date(b.sendDate).getTime();
-            });
             messages.forEach(function(message) {	
-            	var span = document.createElement('span');
-                span.className = 'time';
+            	var spanName = document.createElement('span');
+                spanName.className = 'senderName';
+                var spanTime = document.createElement('span');
+                spanTime.className = 'time';
             	var li = document.createElement('li');
                 var p = document.createElement('p');        
                 if (message.sender === userId1) {
@@ -313,28 +312,31 @@
                 }
                 
                 if (message.type === 'INVITE' || message.type === 'MESSAGE') {
+                	spanName.textContent = message.sender;
                     p.innerHTML = message.sender + "<br/>" + message.content;
-                    span.textContent = message.sendDate.substring(13, 18);
+                    spanTime.textContent = message.sendDate.substring(13, 18);
                 } else if (message.type === "FILE") {
                     var fileLink;
                     var fileType = message.fileName.split('.').pop().toLowerCase();
                     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'].includes(fileType)) {
-                        
                         fileLink = '<img src="' + message.fileRoot + '" alt="' + message.fileName + '" style="width:200px; height:200px;">';
+                        spanName.textContent = message.sender;
                         p.innerHTML = message.sender + "<br/>" + fileLink;
-                        span.textContent = message.sendDate.substring(13, 18);
+                        spanTime.textContent = message.sendDate.substring(13, 18);
                     } else {
-                        
                         fileLink = '<a href="' + message.fileRoot + '" download="' + message.fileName + '">' + message.fileName + '</a>';
+                        spanName.textContent = message.sender;
                         p.innerHTML = message.sender + "<br/>" + fileLink;
-                        span.textContent = message.sendDate.substring(13, 18);
+                        spanTime.textContent = message.sendDate.substring(13, 18);
                     }
                 }
+                li.appendChild(spanName);
                 li.appendChild(p);
-                li.appendChild(span);
+                li.appendChild(spanTime);
                 response.appendChild(li);
             });
         }
+       
 
         function searchChatRooms() {
             var user = document.getElementById('search').value;
@@ -449,11 +451,13 @@
                                             <ul id="chat-content">
                                                 <li class="sender">
                                                 	<span class="senderName"></span>
+                                                	<span class="sendN" id="sendN"></span>
                                                     <p></p>
-                                                    <span class="time"></span>
+                                                    <span class="time" id="time"></span>
                                                 </li>
                                                 <li class="reply">
                                                 	<span class="replyName"></span>
+                                                	<span class="sendN" id="sendN"></span>
                                                     <p></p>
                                                     <span class="time"></span>
                                                 </li>                                          
