@@ -15,6 +15,21 @@
                 <li >알람</li>
                 <li >사진</li>
                 <li >이름</li>
+                <li ></li>
+                <li th:text="${session.loginId }"></li>
+                <li th:text="${session.usernm }"></li>
+                <li th:text="${session.type }"></li>
+                <li th:text="${session.memberimgnm }"></li>
+                <!-- <li th:if="${not empty session.memberimgnm }">
+                    <img style="border-radius: 20px" th:onerror="this.src='/kosta_finalpjt/src/main/resources/static/img/common/human.png'"
+                    src="${session.memberimgnm }" width="40px" height="40px" />
+                </li>
+                <li th:unless="${empty session.memberimgnm }">
+                        <img style="border-radius: 20px" th:onerror="this.src='/kosta_finalpjt/src/main/resources/static/img/common/human.png'"
+                        src=th:src="@{/member/memberimg(memberimgnm=${member?.memberimgnm })}" width="40px" height="40px" />
+                </li> -->
+                <li th:text="${session.deptnm }"></li>
+                <li th:text="${session.joblvnm }"></li>
             </ul>
         </div>
     </nav>
