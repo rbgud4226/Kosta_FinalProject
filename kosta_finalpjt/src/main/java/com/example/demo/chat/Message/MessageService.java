@@ -31,7 +31,7 @@ public class MessageService {
 	
 	
 	public ArrayList<MessageDto> getMessageByRoomId(String roomId){
-		List<Message> l = messagedao.findByRoom_Chatroomid(roomId);
+		List<Message> l = messagedao.findByRoom_ChatroomidOrderByIdAsc(roomId);
 		ArrayList<MessageDto> list = new ArrayList<>();
 		for(Message m : l) {
 			list.add(new MessageDto(m.getId(),m.getRoom(),m.getContent(), m.getSendDate(), m.getSender(), m.getType(), m.getNewuserId(), m.getFileName(), m.getFileId(),m.getFileRoot()));
