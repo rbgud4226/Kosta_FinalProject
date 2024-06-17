@@ -1,8 +1,8 @@
 package com.example.demo.chat.Message;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,20 +30,17 @@ public class MessageController {
 	@Autowired
 	private ChatRoomService chatRoomService;
 
-	@Autowired
-	private MessageDao messagedao;
-
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 
-	@MessageMapping("/{roomId}")
+	@MessageMapping("/chat/message/{roomId}")
 	@SendTo("/room/{roomId}")
-	public List<Message> sendMessage(@Payload MessageDto chatMessage, @DestinationVariable String roomId) {
+	public ArrayList<MessageDto> sendMessage(@Payload MessageDto chatMessage, @DestinationVariable String roomId) {
 		if (chatMessage.getType().equals("INVITE")) {
 			String msg = chatRoomService.inviteUserToChatRoom(roomId, chatMessage.getNewuserId());
 			chatMessage.setContent(msg);
 			messageService.save(chatMessage, roomId);
-			List<Message> list = messagedao.findByRoom_Chatroomid(roomId);
+			ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 			list.get(0).setNewuserId(msg);
 			return list;
 		} else if (chatMessage.getType().equals("FILE")) {
@@ -53,17 +50,18 @@ public class MessageController {
 			chatMessage.setContent("FILE");
 		}
 		messageService.save(chatMessage, roomId);
-		List<Message> list = messagedao.findByRoom_Chatroomid(roomId);
+		ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 		return list;
 	}
 
-	@GetMapping("auth/message/room/{roomId}")
+	@GetMapping("/chat/message/room/{roomId}")
 	@ResponseBody
-	public List<Message> getMessages(@PathVariable String roomId) {
-		return messagedao.findByRoom_Chatroomid(roomId);
+	public ArrayList<MessageDto> getMessages(@PathVariable String roomId) {
+		ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
+		return list;
 	}
 
-	@PostMapping("/auth/upload")
+	@PostMapping("/chat/message/upload")
 	@ResponseBody
 	public Map<String, String> FileUpload(@RequestParam("file") MultipartFile file) {
 		try {

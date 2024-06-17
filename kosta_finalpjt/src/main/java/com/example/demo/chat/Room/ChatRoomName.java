@@ -1,13 +1,12 @@
-package com.example.demo.chat.RoomUser;
+package com.example.demo.chat.Room;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.example.demo.chat.Room.ChatRoom;
-import com.example.demo.users.Users;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,21 +23,21 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomUser {
+public class ChatRoomName {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roomuser_seq")
-	@SequenceGenerator(name = "roomuser_seq", sequenceName = "roomuser_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roomName_seq")
+	@SequenceGenerator(name = "roomName_seq", sequenceName = "roomName_sequence", allocationSize = 1)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "chatroomid", referencedColumnName = "chatroomid", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonBackReference
 	private ChatRoom room;
+	
+	private String host;
 
-	@ManyToOne
-	@JoinColumn(name = "userid", referencedColumnName = "id", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Users roomuser;
+	private String roomName;
 
 }

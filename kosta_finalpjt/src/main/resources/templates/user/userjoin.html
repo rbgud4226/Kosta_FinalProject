@@ -95,7 +95,7 @@
 					<span th:if="${valid_usernm}" th:text="${valid_usernm}" id="valid"></span>
 				</div>
 
-				<input type="hidden" name="type" value="admin" checked>
+				<input type="hidden" name="type" value="emp" checked>
 				<input type="hidden" name="aprov" value="0" checked>
 				<button type="submit" class="btn btn-primary bi bi-person"> 가입</button>
 				<button type="button" class="btn btn-primary bi bi-person" th:onclick="home([[${session.type }]]);">

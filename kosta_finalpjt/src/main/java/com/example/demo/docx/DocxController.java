@@ -1,5 +1,7 @@
 package com.example.demo.docx;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -7,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/auth/docx")
@@ -42,69 +45,32 @@ public class DocxController {
 		}
 		return "redirect:/auth/docx/list";
 	}
-	
-	
-	@GetMapping("/addmeet")
-	public String meetForm() {
-		return "docx/addmeet";
-	}
 
-//	@PostMapping("/addmeet")
-//	public String addmeet(DocxDto dto) {
-//		service.save(dto);
-//		return "redirect:/index";
-//	}
-	
-	@GetMapping("/addvacation")
-	public String vacationForm() {
-		return "docx/addvacation";
-	}
 
-//	@PostMapping("/addvacation")
-//	public String addvacation(DocxDto dto,ModelMap map) {
-//		service.save(dto);
-//	
-//		return "redirect:/index";
-//	}
-
-	@GetMapping("/edit")
-	public ModelAndView editForm(int num) {
-		DocxDto d = service.getDocx(num);
-		ModelAndView mav = new ModelAndView();
-		if (d.getFormtype().equals("report")) {
-			mav.setViewName("docx/editreport");
-		} else if (d.getFormtype().equals("meet")) {
-			mav.setViewName("docx/editmeet");
-		} else if (d.getFormtype().equals("vacation")) {
-			mav.setViewName("docx/editvacation");
-		}
-		mav.addObject("d", d);
-		return mav;
-	}
-
-//	@PostMapping("/editreport")
-//	public String editReport(DocxDto dto) {
-//		service.save(dto);
-//		return "redirect:/docx/list";
-//	}
-//
-//	@PostMapping("/editmeet")
-//	public String editMeeting(DocxDto dto) {
-//		service.save(dto);
-//		return "redirect:/docxlist";
-//	}
-//
-//	@PostMapping("/editvacation")
-//	public String editVacation(DocxDto dto) {
-//		service.save(dto);
-//		return "redirect:/docxlist";
-//	}
-
+	//전체문서 리스트 출력
 	@GetMapping("/list")
 	public String list(ModelMap map) {
 		map.addAttribute("list", service.getAll());
 		return "docx/list";
 	}
+	
+	//결재걸린 문서 리스트 출력
+	@GetMapping("/slist")
+	public String slist(ModelMap map, HttpSession session) {
+		String loginId = (String)session.getAttribute("loginId");
+		map.addAttribute("list",service.SelectedList(loginId));
+		return "docx/slist";
+	}
+	
+	
+	//내가 작성한 문서만 출력
+	@GetMapping("/mylist")
+	public String myList(ModelMap map, String writer) {
+		map.addAttribute("mylist", service.getMyList(writer));
+		return "docx/mylist";
+	}
+	
+	//검색 컨트롤러
 	 @PostMapping("/list")
 	    public String list(ModelMap map,
 	                              @RequestParam(value = "searchType", required = false) String searchType,
@@ -118,35 +84,70 @@ public class DocxController {
 	        return "docx/list";
 	    }
 
-//	@RequestMapping("/writerlist")
-//	public String writerList(String writer, ModelMap map) {
-//		map.addAttribute("wlist", service.getByWriter(writer));
-//		return "docx/list";
-//	}
-
-//	@RequestMapping("/titlelist")
-//	public String titleList(String title,ModelMap map) {
-//		map.addAttribute("wlist", service.getByTitle(title));
-//		return "docx/list";
-//	}
-	
-//	@RequestMapping("/seniorlist")
-//	public String seniorList(String senior,ModelMap map) {
-//		map.addAttribute("wlist", service.getBySenior(senior));
-//		return "docx/list";
-//	}
-	
 	@GetMapping("/getdocx")
-	public String get(int formnum, int docxkey,String formtype,ModelMap map) {
+	public String get(int formnum, int docxkey,String formtype,ModelMap map,HttpSession session) {
+		boolean flag = false;
+		String loginid = (String) session.getAttribute("loginId");
+		List<DocxDto> l = service.findByDocxKeyTypeSenior(docxkey, formtype);
+		for(DocxDto d : l) {
+			if(d.getOrderloc()==d.getDocxorder() && d.getSenior().equals(loginid)) {
+				flag = true;
+				break;
+			}
+		}
 		map.addAttribute("d", service.getDocx(formnum));
-		map.addAttribute("docx", service.findByDocxKeyAndFormType(docxkey, formtype));
-		//service에 findByDocxKeyAndFormType 관련 기능 추가해서 여기서 map에 담기
+		map.addAttribute("docx", l);
+		map.addAttribute("flag",flag);
+		System.out.println( "현재 문서의 정보 출력 : "+service.findByDocxKeyTypeSenior(docxkey, formtype));
 		return "docx/detail";
 	}
+	
+	//결재처리 메서드
+	
+	@PostMapping("/approve")
+	public String approveDocx(int docxkey, String formtype) {
+		service.approveDocx(docxkey,formtype);
+		return "redirect:/auth/docx/list";
+	}
+//	@RequestMapping("/approve")
+//	public String approveDocx(@RequestParam int docxkey, @RequestParam String formtype, @RequestParam int orderloc) {
+//		System.out.println("데이터 잘 받아오는지 확인:"+orderloc);
+//		List<DocxDto> docxlist = service.findByDocxKeyTypeSenior(docxkey, formtype);
+//		System.out.println("리스트 확인"+docxlist);
+//		if(docxlist != null && !docxlist.isEmpty()) {
+//			for(DocxDto docx : docxlist) {
+//				if(docx.getOrderloc() == orderloc) {
+//					int uploc = orderloc +1;
+//					docx.setOrderloc(uploc);
+//					service.save(docx,formtype,docxkey,uploc);
+//					break;
+//				}
+//			}
+//			  boolean allApproved = true;
+//		        for (DocxDto docx : docxlist) {
+//		            if (docx.getOrderloc() < docxlist.size() - 1) {
+//		                allApproved = false;
+//		                break;
+//		            }
+//		        }
+//		        
+//		        if (allApproved) {
+//		            DocxDto docx = docxlist.get(0);
+//		            docx.setStatus(2);
+//		            service.saveDocx(docx);
+//		        }
+//		}
+//		
+//		return "redirect:/auth/docx/list";
+//	}
+	
+	
 
 	@RequestMapping("/deldocx")
 	public String deldocx(int formnum) {
 		service.delDocx(formnum);
 		return "redirect:/auth/docx/list";
 	}
+	
+
 }
