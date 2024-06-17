@@ -6,10 +6,6 @@
 </head>
 <body>
 <h3>유저목록</h3>
-
- <a th:href="@{/auth/chat/rooms/{userId1}(userId1=${session.loginId})}">채팅방목록</a>
- 
- 
 <table border="1">
 <tr><th>선택</th><th>id</th><th>이름</th><th>타입</th></tr>
 <tr th:each="b:${list}">
@@ -20,12 +16,6 @@
 </tr>
 </table>
 <button onclick="createChatRoom()">채팅방 생성</button>
-
-    <form action="/auth/chat/rooms" method="GET">
-    	<input type="hidden" name="loginId" th:value="${session.loginId}">
-        <input type="text" name="user" placeholder="검색할이름">
-        <button type="submit">검색</button>
-    </form>
 
 <script th:inline="javascript">
 function createChatRoom() {
@@ -41,7 +31,7 @@ function createChatRoom() {
     
     const loginId = [[${session.loginId}]];
     selectedUserIds.push(loginId);
-    const url = `/auth/chat/room?userIds=${selectedUserIds.join(',')}`;
+    const url = `/chat/chatroom?userIds=${selectedUserIds.join(',')}`;
     window.location.href = url;
 }
 </script>

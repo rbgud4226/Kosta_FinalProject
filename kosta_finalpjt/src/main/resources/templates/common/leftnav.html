@@ -50,7 +50,7 @@
                             </a>
                         </li>
                         <li class="li_link">
-                            <a href="#" class="nav_link">
+                            <a th:href="@{/chat/chatrooms/{userId1}(userId1=${session.loginId})}" class="nav_link">
                                 <div class="icon_wrapper">
                                     <img th:src="@{/img/common/home.png}" class="nav_link_icon">
                                 </div>
