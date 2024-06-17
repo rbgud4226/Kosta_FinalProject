@@ -142,10 +142,12 @@ public class ChatRoomService {
 		List<ChatRoomName> roomNames = chatRoom.getChatRoomNames();
 
 		for (ChatRoomName crn : roomNames) {
-			if (newRoomName == null || newRoomName.trim().isEmpty()) {
-				crn.setRoomName("채팅방 이름없음");
-			} else {
-				crn.setRoomName(newRoomName);
+			if (crn.getHost().equals(userId1)) {
+				if (newRoomName == null || newRoomName.trim().isEmpty()) {
+					crn.setRoomName("채팅방 이름없음");
+				} else {
+					crn.setRoomName(newRoomName);
+				}
 			}
 		}
 		chatRoomDao.save(chatRoom);
