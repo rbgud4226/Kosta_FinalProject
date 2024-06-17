@@ -37,4 +37,6 @@ public class DocxDto {
 	private int docxorder; //결재 순서
 	private int status; // 결재 현황
 	private int docxkey;
+	private int orderloc; // 현재 결재위치
+	
 }

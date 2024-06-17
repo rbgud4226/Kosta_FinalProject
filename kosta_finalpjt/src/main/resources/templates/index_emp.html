@@ -14,13 +14,14 @@
 <div th:replace="~{/common/leftnav :: leftNav}"></div>
 <div class="main_body">
 
+
   <!--	아래 영역은 임시 영역임  -->
   <section id="test_link">
-    <div style="position: fixed; right: 100px; top: 50px">
+    <div style="position: fixed; right: 100px; top: 50px; z-index: 500;">
       <div style="border: 1px black solid; margin: 10px; padding: 3px; width: 200px;">
         <h2>test용 간이 링크 영역</h2>
         <div style="margin-top: 5px">
-          <button type="button" onclick="location.href='/auth/users/list'">사용자 목록</button>
+          <button type="button" onclick="location.href='/member/memberlist'">사용자 목록</button>
           <button type="button" onclick="location.href='/auth/docx/add'">문서테스트</button>
         </div>
       </div>
@@ -118,6 +119,7 @@
       </div>
     </div>
   </section>
+
 </div>
 <div class="modal_background"></div>
 <script type="text/javascript">

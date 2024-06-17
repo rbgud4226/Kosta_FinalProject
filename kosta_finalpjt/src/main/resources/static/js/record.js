@@ -12,7 +12,6 @@ var minutes = ('0' + time.getMinutes()).slice(-2);
 
 window.onload=()=>{
     flagCheck();
-
 	// date 일자 관리
 	let minDate =  year + '-' + month + '-' + day;
 	$("#date1").attr("min", minDate);
