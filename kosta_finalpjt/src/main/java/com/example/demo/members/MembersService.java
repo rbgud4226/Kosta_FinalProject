@@ -27,9 +27,6 @@ public class MembersService {
 	@Autowired
 	private MembersDao mdao;
 
-	@Autowired
-	private UsersDao udao;
-
 	public MembersDto save(MembersDto dto) {
 		Members m = mdao.save(new Members(dto.getUserid(), dto.getMemberid(), dto.getBirthdt(), dto.getEmail(),
 				dto.getCpnum(), dto.getAddress(), dto.getMemberimgnm(), dto.getHiredt(), dto.getLeavedt(),

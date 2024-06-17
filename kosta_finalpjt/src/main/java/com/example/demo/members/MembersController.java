@@ -34,9 +34,10 @@ public class MembersController {
 	private EduWorkExperienceInfoService eservice;
 
 	@Value("${spring.servlet.multipart.location}")
-	private String path;
-
-	private String dirName = "";
+	private String mpath;
+	
+	@Value("${mDirName}")
+	private String mDirName;
 
 	@GetMapping("/member/memberlist")
 	public String memberlist(ModelMap map) {
@@ -100,7 +101,7 @@ public class MembersController {
 	public ResponseEntity<byte[]> read_img(String memberimgnm) {
 		ResponseEntity<byte[]> result = null;
 		if (memberimgnm != "") {
-			File f = new File(path + dirName + memberimgnm);
+			File f = new File(mpath + mDirName + memberimgnm);
 			HttpHeaders header = new HttpHeaders();
 			try {
 				header.add("Content-Type", Files.probeContentType(f.toPath()));
@@ -126,7 +127,7 @@ public class MembersController {
 	@PostMapping("/member/memberadd")
 	public String memberadd(MembersDto dto) {
 //		System.out.println("memberimgnm:" + dto.getMemberimgnm());
-		System.out.println(dto);
+//		System.out.println(dto);
 		MembersDto mdto = mservice.save(dto);
 //		MembersDto mdto = null;
 //		if (dto.getMemberid() == 0) {
@@ -141,7 +142,7 @@ public class MembersController {
 			String f2 = oname.substring(oname.lastIndexOf(".") + 1, oname.length());
 			String f3 = oname.substring(0, oname.lastIndexOf("."));
 			String fname = f3 + " (" + mdto.getUserid().getUsernm() + ")." + f2;
-			File newFile = new File(path + dirName + fname);
+			File newFile = new File(mpath + mDirName + fname);
 			try {
 				dto.getMemberimgf().transferTo(newFile);
 				mdto.setMemberimgnm(newFile.getName());
