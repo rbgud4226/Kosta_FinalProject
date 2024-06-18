@@ -125,7 +125,7 @@ public class WorkInOutRecordController {
         if(hours>=9) {
         	hours--;
         }
-        String worktime = String.format("%d:%02d", hours, minutes);
+        String worktime = String.format("%02d:%02d", hours, minutes);
         
         w.setState(type);
         w.setWorkHours(worktime);
@@ -209,8 +209,10 @@ public class WorkInOutRecordController {
 	//부서 근태 부서장 페이지 이동
 	@GetMapping("/dept")
 	public ModelAndView deptList(int dept) {
+		System.out.println("=====dept=====");
 		ModelAndView mav = new ModelAndView("record/dept");
 		System.out.println(deptRecord(dept, -1));
+		System.out.println("=====RECORD=====");
 		mav.addObject("list", deptRecord(dept, -1));
 		return mav;
 	}
@@ -232,7 +234,7 @@ public class WorkInOutRecordController {
             previousMonth = 12; 
             previousYear--;
         }
-
+        System.out.println("dept: "+dept);
         Map map = new HashMap<>();
         map.put("list", service.chartMonthandDept(previousMonth, previousYear, dept));
         return map;
