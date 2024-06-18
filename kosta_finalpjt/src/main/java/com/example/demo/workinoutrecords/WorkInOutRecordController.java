@@ -125,7 +125,7 @@ public class WorkInOutRecordController {
         if(hours>=9) {
         	hours--;
         }
-        String worktime = String.format("%d:%02d", hours, minutes);
+        String worktime = String.format("%02d:%02d", hours, minutes);
         
         w.setState(type);
         w.setWorkHours(worktime);
