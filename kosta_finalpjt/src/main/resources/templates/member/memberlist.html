@@ -12,7 +12,7 @@
 <body>
 <h3>직원 목록 페이지</h3>
     <!-- Button trigger modal -->
-<button type="button" class="btn_square blue_btn cursor font_b24" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class="btn_square blue_btn cursor font_b24" data-bs-toggle="modal" data-bs-target="#exampleModal"> <!-- 여기 가져와야됨 -->
 	멤버추가
 </button>
 <!-- Modal -->
@@ -41,7 +41,7 @@
 			  </tr>
 			</table>
 		</form>
-         <form class="modal_list" action="/member/test">
+         <form class="modal_list" action="/chat/chatroom">
 			<table class="table_w100 modal_table">
 				<thead class="list_line ">
 					<tr>
@@ -68,7 +68,7 @@
 				</tbody>
 			</table>
                 <div class="modal-footer">
-                    <input type="submit" value="선택" class="btn blue_btn">
+                    <input type="submit" value="초대" class="btn blue_btn">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   </div>
          </form>

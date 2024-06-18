@@ -19,11 +19,13 @@
         var stompClient = null;
         var roomId = null;
         var userId1 = [[${userId1}]];
+        var partId = []
 
         function connect(newRoomId) {
         	roomId = newRoomId;
             var socket = new SockJS('/auth/ws');
             stompClient = Stomp.over(socket);
+            stompClient.connect({}, function(frame) {
             var subscriptionId = 'sub-' + userId1;
                 stompClient.subscribe('/room/' + roomId, function(messageOutput) {
                 	 var message = JSON.parse(messageOutput.body);
@@ -40,6 +42,7 @@
                 loadChatRoomsConnect(roomId, userId1);             
             });
         }
+           
        
         function loadMessages(roomId) {
             var URL = 'http://localhost:8081/chat/message/room/';
@@ -96,9 +99,8 @@
             var chatMembers = '';
             if (chatRoom.roomType !== 'PRIVATE') {
 	           	if (chatRoom.chatRoomNames.length > 0) {
-	                var name = chatRoom.chatRoomNames[0].roomName.replace(/_/g, ' ').trim();
-	                var participants = chatRoom.chatRoomNames[0].roomName.replace(/_/g, ',').trim();
-	                chatMembers = participants;
+	                var name = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
+	                chatMembers = name;
 	                chatRoomNames = name;
 	            }
 	         } else {
@@ -181,7 +183,7 @@
  	           var chatMembers = '';
  	           if (chatRoom.roomType !== 'PRIVATE') {
  	           		if (chatRoom.chatRoomNames.length > 0) {
- 	                	 var name = chatRoom.chatRoomNames[0].roomName.replace(/_/g, ' ').trim();
+ 	                	 var name = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
  	                 	 chatMembers = chatRoom.recentMsg;
  	                 	 chatRecentMsg = chatRoom.recentMsg;
  	                 	 chatRoomNames = name;
@@ -226,29 +228,38 @@
         
         
         function getOutRoom(roomId){
-        	 const date = new Date();
-             const yoptions = { 
-             		  year: 'numeric', 
-             		  month: 'long', 
-             		  day: '2-digit'
-             		};
-             const hoptions = {
-             		 hour: '2-digit', 
-            		 	 minute: '2-digit',
-            		 	 second: '2-digit',
-            		  	 hour12: false 
-             }
-             const sendDay = date.toLocaleString('ko-KR', yoptions);
-             const sendTime = date.toLocaleString('ko-KR', hoptions);
-             var message = {
-             		 'type': 'OUT',
-                     'sender' : userId1,
-                     'content' : userId1 + "님이 퇴장했습니다.",
-                     'sendDate' : sendDay + ' ' + sendTime
-                 };  
-                 stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message));
-                 document.getElementById('message').value = '';
-        }
+       	 const date = new Date();
+            const yoptions = { 
+            		  year: 'numeric', 
+            		  month: 'long', 
+            		  day: '2-digit'
+            		};
+            const hoptions = {
+            		 hour: '2-digit', 
+           		 	 minute: '2-digit',
+           		 	 second: '2-digit',
+           		  	 hour12: false 
+            }
+            const sendDay = date.toLocaleString('ko-KR', yoptions);
+            const sendTime = date.toLocaleString('ko-KR', hoptions);
+            var message = {
+            		 'type': 'OUT',
+                    'sender' : userId1,
+                    'content' : userId1 + "님이 퇴장했습니다.",
+                    'sendDate' : sendDay + ' ' + sendTime
+                };  
+                stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message));
+                document.getElementById('message').value = '';
+                
+                fetch('/chat/chatrooms/out/' + roomId + '/' + userId1, {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                });
+       }
 
         function sendMessage(roomId) {
             const date = new Date();
@@ -268,10 +279,12 @@
             
             var content = document.getElementById('message').value;
             var sender = document.getElementById('sender').value;
+            var partId = document.getElementById('partid').value;
             var message = {
             	'type': 'MESSAGE',	
                 'content' : content,
                 'sender' : sender,
+                'partid' : partId,
                 'sendDate' : sendDay + ' ' + sendTime
             };  
             stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message));
@@ -295,6 +308,7 @@
             const sendTime = date.toLocaleString('ko-KR', hoptions);
             
         	var sender = document.getElementById('sender').value;
+        	var partId = document.getElementById('partid').value;
             var fileInput = document.getElementById('upload');
             var file = fileInput.files[0];
             var formData = new FormData();
@@ -312,6 +326,7 @@
                         'fileName': response.fileName,
                         'fileRoot': response.fileRoot, 
                         'sender': sender,
+                        'partid' : partId,
                         'sendDate': sendDay + ' ' + sendTime
                     };
                     stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message), function(){
@@ -359,7 +374,7 @@
                 }
                 
                 if (message.type === 'INVITE' || message.type === 'MESSAGE' || message.type === 'OUT') {
-                	spanName.textContent = message.sender;
+                	spanName.textContent = message.partid;
                     p.innerHTML = message.content;
                     spanTime.textContent = message.sendDate.substring(13, 18);
                 } else if (message.type === "FILE") {
@@ -367,12 +382,12 @@
                     var fileType = message.fileName.split('.').pop().toLowerCase();
                     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'].includes(fileType)) {
                         fileLink = '<img src="' + message.fileRoot + '" alt="' + message.fileName + '" style="width:200px; height:200px;">';
-                        spanName.textContent = message.sender;
+                        spanName.textContent = message.partid;
                         p.innerHTML = fileLink;
                         spanTime.textContent = message.sendDate.substring(13, 18);
                     } else {
                         fileLink = '<a href="' + message.fileRoot + '" download="' + message.fileName + '">' + message.fileName + '</a>';
-                        spanName.textContent = message.sender;
+                        spanName.textContent = message.partid;
                         p.innerHTML = fileLink;
                         spanTime.textContent = message.sendDate.substring(13, 18);
                     }
@@ -484,7 +499,7 @@
                                                                 <hr class="dropdown-divider">
                                                             </li>
                                                             <li>
-                                                            <a class="dropdown-item" href="" id="outButton" onclick="getOutRoom(roomId)">채팅방 나가기</a>
+                                                            <a class="dropdown-item" href="#" id="outButton" onclick="getOutRoom(roomId)">채팅방 나가기</a>
                                                             </li>
                                                         </ul>
                                                     </li>
@@ -516,6 +531,7 @@
                                         <form action="">
                                             <textarea id="message" class="form-control" aria-label="message…" placeholder="Write message…" maxlength="1000"></textarea>
 											<input type="hidden" id="sender" th:value="${userId1}">
+											<input type="hidden" id="partid" th:value="${partId}">
                                             <button type="button" id="sendButton"><i class="fa fa-paper-plane" aria-hidden="true"></i>전송</button>
                                         </form>
 
