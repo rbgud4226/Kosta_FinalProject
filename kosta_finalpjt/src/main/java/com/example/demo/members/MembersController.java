@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.users.Users;
 import com.example.demo.users.UsersDto;
@@ -47,6 +48,16 @@ public class MembersController {
 		ArrayList<MembersDto> mlist = mservice.getAll();
 		return map.addAttribute("mlist", mlist);
 //		return "member/memberlist";
+	}
+	
+	@GetMapping("/member/test")
+	public void membertest(@RequestParam(name = "userid", required = false) List<String> userids) {
+		System.out.println("===================");
+		System.out.println(userids);
+        for (String userid : userids) {
+            System.out.println(userid);
+        }
+        
 	}
 
 	@ResponseBody
