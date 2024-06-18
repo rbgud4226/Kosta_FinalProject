@@ -44,7 +44,7 @@
 					<label class="w25">비밀번호 확인</label>
 					<input type="password" class="form-control" name="confirm_pwd" placeholder="비밀번호를 다시 한번 입력해주세요." >
 				</div>
-				<div class="alert alert-danger" th:if="${valid_pwd}" th:text="${valid_pwd}" id="valid"></div>
+				<div class="alert alert-danger" th:if="${valid_confirm_pwd}" th:text="${valid_confirm_pwd}" id="valid"></div>
 				<div class="form-group">
 					<label class="w25">이름</label>
 					<input type="text" name="usernm" th:value="${user != null ? user.usernm : ''}" class="form-control"
