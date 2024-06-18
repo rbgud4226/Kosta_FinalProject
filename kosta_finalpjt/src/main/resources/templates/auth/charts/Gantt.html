@@ -19,60 +19,78 @@
 <div class="main_body">
   <section id="calendar_area">
     <div class="chart_body">
-      <div id="chart_div"></div>
+      <div class="chart_area">
+        <div class="chart_area_scroll">
+          <div id="chart_div"></div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 <script type="text/javascript">
-    $(document).ready(function (){
-        google.charts.load('current', {'packages':['gantt']});
+    $(document).ready(function () {
+        google.charts.load('current', {'packages': ['gantt']});
         google.charts.setOnLoadCallback(drawChart);
+
         function drawChart() {
             var loginId = document.getElementById(usersid);
 
-                $.ajax({
-                    url : "/auth/chart/data",
-                    dataType : 'json',
-                    method : 'GET',
-                    data : {
-                        loginId : loginId
-                    }
-                }).done(function (list){
-                    var data = new google.visualization.DataTable();
-                    data.addColumn('string', 'Task ID');
-                    data.addColumn('string', 'Task Name');
-                    data.addColumn('date', 'Start Date');
-                    data.addColumn('date', 'End Date');
-                    data.addColumn('number', 'Duration');
-                    data.addColumn('number', 'Percent Complete');
-                    data.addColumn('string', 'Dependencies');
+            $.ajax({
+                url: "/auth/chart/data",
+                dataType: 'json',
+                method: 'GET',
+                data: {
+                    loginId: loginId
+                }
+            }).done(function (list) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Task ID');
+                data.addColumn('string', 'Task Name');
+                data.addColumn('date', 'Start Date');
+                data.addColumn('date', 'End Date');
+                data.addColumn('number', 'Duration');
+                data.addColumn('number', 'Percent Complete');
+                data.addColumn('string', 'Dependencies');
 
-                    list.forEach(function (row){
-                        console.log(row);
-                        var startDate = new Date(row.st);
-                        var endDate = new Date(row.ed);
-                        var id = '"' + row.taskid + '"';
-                        data.addRow([
-                            id,
-                            row.title,
-                            startDate,
-                            endDate,
-                            null,
-                            row.percent,
-                            null
-                        ]);
+                list.forEach(function (row) {
+                    console.log(row);
+                    var startDate = new Date(row.st);
+                    var endDate = new Date(row.ed);
+                    var id = '"' + row.taskid + '"';
+                    data.addRow([
+                        id,
+                        row.title,
+                        startDate,
+                        endDate,
+                        null,
+                        row.percent,
+                        null
+                    ]);
 
-                        var options = {
-                            height: 275
-                        };
+                    var options = {
+                        height: 700,
+                        gantt: {
+                            criticalPathEnabled: false,
+                            arrow: {
+                                angle: 100,
+                                width: 5,
+                                color: 'green',
+                                radius: 0
+                            }
+                        },
+                        tooltip: {
+                            isHtml: true,
+                            dateFormat: 'EEEE' // 요일로 포맷 지정
+                        }
+                    };
 
-                        var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+                    var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
 
-                        chart.draw(data, options);
-                    });
-                }).fail(function (jqXHR, textStatus, errorThrown){
-                    console.error("Error : " + textStatus, errorThrown);
+                    chart.draw(data, options);
                 });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error("Error : " + textStatus, errorThrown);
+            });
         }
     });
 </script>
