@@ -116,7 +116,7 @@ public class MembersService {
 	}
 
 	public ArrayList<MembersDto> getByDeptNmLike(String deptnm) {
-		ArrayList<Depts> dlist = ddao.findByDeptnmLike(deptnm);
+		ArrayList<Depts> dlist = ddao.findByDeptnmLike("%"+deptnm+"%");
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Depts d : dlist) {
 			List<Members> l = mdao.findByDeptid(d);
@@ -144,7 +144,7 @@ public class MembersService {
 	}
 
 	public ArrayList<MembersDto> getByJobLvLike(String joblvnm) {
-		ArrayList<Joblvs> jlist = jdao.findByJoblvnmLike(joblvnm);
+		ArrayList<Joblvs> jlist = jdao.findByJoblvnmLike("%"+joblvnm+"%");
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Joblvs j : jlist) {
 			List<Members> l = mdao.findByJoblvid(j);

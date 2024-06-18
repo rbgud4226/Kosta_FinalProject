@@ -74,19 +74,18 @@ public class MembersController {
 				}
 			} else if (type == 2) {
 				ArrayList<UsersDto> ulist = uservice.getByUsernmLike(val);
-				System.out.println(ulist);
 				for (UsersDto udto : ulist) {
 					if (udto != null && mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0, null)) != null) {
 						mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0, null)));
 					}
 				}
-				System.out.println(mlist);
 			} else if (type == 3) {
 				mlist = mservice.getByJobLvLike(val);
 			}
 		} else {
 			mlist = null;
 		}
+		System.out.println(mlist);
 //		ModelAndView mav = new ModelAndView("member/memberlist");
 //		mav.addObject("type", type);
 //		mav.addObject("val", val);

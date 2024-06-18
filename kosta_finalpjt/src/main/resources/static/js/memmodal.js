@@ -1,6 +1,8 @@
 const list_search = ()=>{
     let list_input = $(".list_input").val();
     let type = $(".select_box").val();
+
+	console.log("input: "+list_input+ " /type: "+type)
     
     $.ajax({
 		url:"/member/getdeptby",  //서버주소
