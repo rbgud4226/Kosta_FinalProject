@@ -27,4 +27,5 @@ public class ChatRoomDto {
 	private List<RoomUser> roomUsers;
 	private boolean status; 
 	private String recentMsg;
+	private String participants;
 }

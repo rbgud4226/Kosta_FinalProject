@@ -41,4 +41,6 @@ public class ChatRoom {
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JsonManagedReference
 	private List<ChatRoomName> chatRoomNames= new ArrayList<>();
+	
+	private String participants;
 }

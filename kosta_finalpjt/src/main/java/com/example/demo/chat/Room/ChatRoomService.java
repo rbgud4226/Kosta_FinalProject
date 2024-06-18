@@ -33,6 +33,9 @@ public class ChatRoomService {
 
 	@Autowired
 	private ChatRoomNameDao chatRoomNameDao;
+	
+	@Autowired
+	private ChatRoomNameService chatRoomNameService;
 
 	public ChatRoomDto createChatRoom(List<String> userIds) {
 		String name = createChatRoomName(userIds);
@@ -46,18 +49,26 @@ public class ChatRoomService {
 				chatRoom = createNewChatRoom(userIds, name);
 			}
 			return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getChatRoomNames(),
-					chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus(), null);
+					chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus(), null, null);
 		} else {
 			chatRoom = createNewChatRoom(userIds, name);
 		}
 		return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getChatRoomNames(),
-				chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus(), null);
+				chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus(), null ,null);
 	}
 
 	private ChatRoom createNewChatRoom(List<String> userIds, String name) {
+		List<String> participantsN = new ArrayList<>();
+		for(String s : userIds) {
+			participantsN.add(usersService.getById2(s).getUsernm());
+		}
+		String partN = createChatRoomName(participantsN);
+		
 		ChatRoom chatRoom = new ChatRoom();
 		chatRoom.setChatroomid(UUID.randomUUID().toString());
 		chatRoom.setName(name);
+		chatRoom.setParticipants(partN);
+
 		String[] l = chatRoom.getName().split("_");
 		if (l.length > 2) {
 			chatRoom.setRoomType("GROUP");
@@ -74,35 +85,64 @@ public class ChatRoomService {
 			chatRoomName.setRoom(chatRoom);
 			chatRoomName.setHost(roomName);
 			chatRoomName.setRoomName(name);
+			chatRoomName.setEditableName(partN);
 			chatRoomNameDao.save(chatRoomName);
 		}
 
-		for (String userId : userIds) {
-			Users user = usersService.getById2(userId);
+		for (String userid : userIds) {
+			Users user = usersService.getById2(userid);
 			roomUserService.save(user, chatRoom);
 		}
 		return chatRoom;
 	}
 	
-	public String getOutChatRoom(String chatroomid, String userId) {
-		String getOutMessage = "";
-		ChatRoom chatRoom = chatRoomDao.findByChatroomid(chatroomid);
-		if (chatRoom.getRoomType().equals("GROUP")) {
-			String[] userIds = chatRoom.getName().split("_");
-			List<String> userIdList = new ArrayList<>(Arrays.asList(userIds));
-			userIdList.remove(userId);
-			if (userIdList.isEmpty()) {
-				chatRoom.setStatus(false);
-			} else {
-				String addUserIds = createChatRoomName(userIdList);
-				chatRoom.setName(addUserIds);
-				getOutMessage = userId + "님이 나갔습니다";
-			}
-			chatRoomDao.save(chatRoom);
-		}
-		System.out.println(getOutMessage);
-		return getOutMessage;
+
+	public String getOutChatRoom(String chatroomid, String userid) {
+	    String getOutMessage = "";
+	    ChatRoom chatRoom = chatRoomDao.findByChatroomid(chatroomid);
+	    if (chatRoom.getRoomType().equals("GROUP")) {
+	        String[] userIds = chatRoom.getName().split("_");
+	        String[] partis = chatRoom.getParticipants().split("_");
+	        String part = usersService.getById2(userid).getUsernm();
+	        List<String> userIdList = new ArrayList<>(Arrays.asList(userIds));
+	        List<String> partisList = new ArrayList<>(Arrays.asList(partis));
+
+	        partisList.remove(part);
+	        userIdList.remove(userid);
+
+	        if (partisList.isEmpty()) {
+	            chatRoom.setStatus(false);
+	        } else {
+	            String addUserIds = createChatRoomName(userIdList);
+	            chatRoom.setName(addUserIds);
+	            chatRoom.setParticipants(createChatRoomName(partisList));
+	            getOutMessage = part + "님이 나갔습니다";
+	        }
+	        chatRoomDao.save(chatRoom);
+	    }
+	    System.out.println(getOutMessage);
+	    return getOutMessage;
 	}
+//	public String getOutChatRoom(String chatroomid, String userid) {
+//		String getOutMessage = "";
+//		ChatRoom chatRoom = chatRoomDao.findByChatroomid(chatroomid);
+//		if (chatRoom.getRoomType().equals("GROUP")) {
+//			String[] userIds = chatRoom.getName().split("_");
+//			List<String> userIdList = new ArrayList<>(Arrays.asList(userIds));
+//			userIdList.remove(userid);
+//			if (userIdList.isEmpty()) {
+//				chatRoom.setStatus(false);
+//			} else {
+//				String addUserIds = createChatRoomName(userIdList);
+//				chatRoom.setName(addUserIds);
+//				getOutMessage = userid + "님이 나갔습니다";
+//			}
+//			chatRoomDao.save(chatRoom);
+//		}
+//		System.out.println(getOutMessage);
+//		return getOutMessage;
+//	}
+
 
 	public ArrayList<ChatRoomDto> getChatRoomsListByName(String name, String loginId) {
 		List<ChatRoom> l = chatRoomDao.findAll();
@@ -110,7 +150,7 @@ public class ChatRoomService {
 		for (ChatRoom cr : l) {
 			if (cr.getName().contains(loginId) && cr.getName().contains(name) && cr.isStatus()) {
 				list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getChatRoomNames(), cr.getRoomType(),
-						cr.getChats(), cr.getRoomUsers(), cr.isStatus(), null));
+						cr.getChats(), cr.getRoomUsers(), cr.isStatus(), null, null));
 			}
 		}
 		return list;
@@ -122,7 +162,7 @@ public class ChatRoomService {
 		for (ChatRoom cr : l) {
 			if (cr.isStatus() && cr.getName().contains(loginId)) {
 				list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getChatRoomNames(), cr.getRoomType(),
-						cr.getChats(), cr.getRoomUsers(), cr.isStatus(), null));
+						cr.getChats(), cr.getRoomUsers(), cr.isStatus(),null, null));
 			}
 		}
 		return list;
@@ -131,7 +171,7 @@ public class ChatRoomService {
 	public ChatRoomDto getChatRoomsByChatRoomId(String chatroomid) {
 		ChatRoom c = chatRoomDao.findByChatroomid(chatroomid);
 		ChatRoomDto cr = new ChatRoomDto(c.getChatroomid(), c.getName(), c.getChatRoomNames(), c.getRoomType(),
-				c.getChats(), c.getRoomUsers(), c.isStatus(), null);
+				c.getChats(), c.getRoomUsers(), c.isStatus(), null, null);
 		return cr;
 	}
 
@@ -146,9 +186,9 @@ public class ChatRoomService {
 		for (ChatRoomName crn : roomNames) {
 			if (crn.getHost().equals(userId1)) {
 				if (newRoomName == null || newRoomName.trim().isEmpty()) {
-					crn.setRoomName("채팅방 이름없음");
+					crn.setEditableName("채팅방 이름 없음");
 				} else {
-					crn.setRoomName(newRoomName);
+					crn.setEditableName(newRoomName);
 				}
 			}
 		}
