@@ -64,7 +64,9 @@
                 <span th:case="3">보류</span>
                 <span th:case="*">알 수 없음</span>
             </td>
-            <td><a th:href="@{/auth/docx/deldocx(formnum=${s.formnum})}">삭제</a></td>
+            <td th:if="${s.writer.id} == ${session.loginId} and ${s.status} == 1">
+                <a th:href="@{/auth/docx/deldocx(docxkey=${s.docxkey})}">삭제</a>
+            </td>
         </tr>
     </table>
     <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br />
