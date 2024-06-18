@@ -11,6 +11,7 @@ const member_table = (arr)=>{
 	        cell = tr_row.insertCell(0);
 			var input = document.createElement("input");
 			input.type = "checkbox";
+			input.name = "userid";
 			input.value = a.userid.id;
 			input.classList.add("list_ch")
 	        cell.appendChild(input);
