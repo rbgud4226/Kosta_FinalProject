@@ -12,6 +12,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.demo.depts.Depts;
 import com.example.demo.depts.Joblvs;
 import com.example.demo.users.Users;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -58,20 +60,24 @@ public class Members {
 
 	@ManyToOne
 	@JoinColumn(name = "depts_deptid")
+	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Depts deptid;
 
 	@ManyToOne
 	@JoinColumn(name = "joblvs_joblvid")
+	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Joblvs joblvid;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mgrid")
+	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Members mgrid;
 
 	@OneToMany(mappedBy = "mgrid", cascade = CascadeType.PERSIST, orphanRemoval = false, fetch = FetchType.LAZY)
+	@JsonIgnore
 	@ToString.Exclude
 	private List<Members> mgrinmembers = new ArrayList<Members>();
 
