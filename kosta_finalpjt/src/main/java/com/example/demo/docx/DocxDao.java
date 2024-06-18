@@ -9,7 +9,7 @@ import com.example.demo.users.Users;
 
 @Repository
 public interface DocxDao extends JpaRepository<Docx, Integer> {
-	List<Docx> findByWriter (Users writer);
+	List<Docx> findDistinctByWriter (Users writer);
 	List<Docx> findByFormtypeOrderByFormnumDesc(String formtype);
 	List<Docx> findByTitleLike(String title);
 	
@@ -21,6 +21,6 @@ public interface DocxDao extends JpaRepository<Docx, Integer> {
 	//중복제거 해서 전체 리스트 가져오기
 	List<Docx> findByDocxorder(int num);
 	
-	
+	List<Docx> findBySenior(String senior);
 	
 }
