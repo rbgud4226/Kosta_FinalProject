@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.members.Members;
 import com.example.demo.members.MembersDto;
@@ -135,9 +136,6 @@ public class WorkInOutRecordController {
 	@ResponseBody
 	@PostMapping("/offday")
 	public Map offRecord(String members,String res, String date1, String date2) {
-		 System.out.println("====================");
-		 System.out.println(members);
-		 System.out.println("Res: "+res + "date1: "+date1 + "date2: "+date2);
 		 LocalDate startDate = LocalDate.parse(date1);
 	     LocalDate endDate = LocalDate.parse(date2);
 	     //멤버 정보
@@ -163,9 +161,7 @@ public class WorkInOutRecordController {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY;
     }
-	
-	
-	
+		
 	//내 근태기록 확인하기
 	@ResponseBody
 	@GetMapping("/getmonth")
@@ -210,9 +206,19 @@ public class WorkInOutRecordController {
 //        ArrayList<DeptMonthRecord> list = service.selectDept(previousMonth, previousYear, dept);
 //	}
 	
-	//관리자
+	//부서 근태 부서장 페이지 이동
 	@GetMapping("/dept")
-	public String deptRecord(int dept,int cnt) {
+	public ModelAndView deptList(int dept) {
+		ModelAndView mav = new ModelAndView("record/dept");
+		System.out.println(deptRecord(dept, -1));
+		mav.addObject("list", deptRecord(dept, -1));
+		return mav;
+	}
+	
+	//관리자
+	@ResponseBody
+	@GetMapping("/list")
+	public Map deptRecord(int dept,int cnt) {
 		// 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
         // 현재 달/년도 가져오기
@@ -226,8 +232,10 @@ public class WorkInOutRecordController {
             previousMonth = 12; 
             previousYear--;
         }
-		service.chartMonthandDept(previousMonth, previousYear, 1);
-		return "/record/dept";
+
+        Map map = new HashMap<>();
+        map.put("list", service.chartMonthandDept(previousMonth, previousYear, dept));
+        return map;
 	}
 	
 }
