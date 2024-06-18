@@ -58,6 +58,9 @@ public class Docx {
 	private int docxorder; //결재 순서
 	private int status; // 결재 현황
 	private int docxkey; //유니크 값
+	private int orderloc; // 현재 결재위치
+	
+	
 	
 	
 	@PrePersist
@@ -68,8 +71,4 @@ public class Docx {
 		startdt = strNowDate;
 	}
 
-
-	
-	
-	
 }
