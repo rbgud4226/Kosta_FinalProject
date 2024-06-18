@@ -19,7 +19,7 @@ public class ChatRoomNameService {
 		List<ChatRoomName> l = chatRoomNameDao.findByRoom_chatroomid(chatroomid);
 		ArrayList<ChatRoomNameDto> list = new ArrayList<>();
 		for(ChatRoomName crn : l) {
-			list.add(new ChatRoomNameDto(crn.getId(), crn.getRoom(),crn.getHost(), crn.getRoomName()));
+			list.add(new ChatRoomNameDto(crn.getId(), crn.getRoom(),crn.getHost(), crn.getRoomName(), crn.getEditableName()));
 		}
 		return list;
 	}
