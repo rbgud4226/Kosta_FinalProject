@@ -33,7 +33,7 @@
         업무진행과정:<textarea cols="15" rows="4" name="taskprocs"></textarea><br />
         결제권한:<select name="senior" multiple>
             <option th:each="m:${mlist}" th:value="${m.userid.id}"
-                th:text="${m.userid.usernm +' / '+ m.joblvid.joblvid}"></option>
+                th:text="${m.userid.usernm +' / '+ m.joblvid}"></option>
         </select>
         <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
             onChange="this.selectedIndex = this.initialSelect;" readonly>
