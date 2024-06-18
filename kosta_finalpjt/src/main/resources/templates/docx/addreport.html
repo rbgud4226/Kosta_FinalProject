@@ -14,8 +14,64 @@
                 location.href = '/';
             }
         }
+
+        const openTab = (evt, tabName) => {
+            // Hide all tab contents
+            let tabContents = document.getElementsByClassName("tabcontent");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+
+            // Remove active class from all tab links
+            let tabLinks = document.getElementsByClassName("tablinks");
+            for (let i = 0; i < tabLinks.length; i++) {
+                tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab and add an "active" class to the link
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
     </script>
     <style>
+        select[readonly] {
+            background-color: #ddd;
+            pointer-events: none;
+        }
+         /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+        }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
         select[readonly] {
             background-color: #ddd;
             pointer-events: none;
@@ -24,29 +80,96 @@
 </head>
 
 <body>
-    <h3>보고서 작성폼</h3>
-    <form action="/auth/docx/addreport" method="post">
-        작성글제목:<input type="text" name="title"><br />
-        작성자:<input type="text" name="writer" th:value="${session.loginId }" readonly><br />
-        기한: <input type="date" name="enddt"><br />
-        업무계획:<textarea cols="15" rows="4" name="taskplan"></textarea><br />
-        업무진행과정:<textarea cols="15" rows="4" name="taskprocs"></textarea><br />
-        결제권한:<select name="senior" multiple>
-            <option th:each="m:${mlist}" th:value="${m.userid.id}"
-                th:text="${m.userid.usernm +' / '+ m.joblvid}"></option>
-        </select>
-        <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
-            onChange="this.selectedIndex = this.initialSelect;" readonly>
-            <option value="1" selected>미승인</option>
-            <option value="2">승인</option>
-            <option value="3">보류</option>
-        </select>
-        <input type="hidden" name="formtype" value="보고서">
-        <input type="submit" value="등록">
-    </form>
+    <h3>문서 작성폼</h3>
+    <!-- Tab 링크들 -->
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'report')" id="defaultOpen">보고서</button>
+        <button class="tablinks" onclick="openTab(event, 'vacation')">휴가 신청서</button>
+        <button class="tablinks" onclick="openTab(event, 'meeting')">회의록</button>
+    </div>
+    <!-- Tab 보고서 양식 시작 -->
+    <div id="report" class="tabcontent">
+        <h3>보고서 작성 양식</h3>
+        <form action="/auth/docx/addreport" method="post">
+            작성글제목:<input type="text" name="title"><br />
+            작성자:<input type="text" name="writer" th:value="${session.loginId }" readonly><br />
+            기한: <input type="date" name="enddt"><br />
+            업무계획:<textarea cols="15" rows="4" name="taskplan"></textarea><br />
+            업무진행과정:<textarea cols="15" rows="4" name="taskprocs"></textarea><br />
+            결제권한:<select name="senior" multiple>
+                <option th:each="m:${mlist}" th:value="${m.userid.id}" th:text="${m.userid.usernm +' / '+ m.joblvid}">
+                </option>
+            </select>
+            <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                onChange="this.selectedIndex = this.initialSelect;" readonly>
+                <option value="1" selected>미승인</option>
+                <option value="2">승인</option>
+                <option value="3">보류</option>
+            </select>
+            <input type="hidden" name="formtype" value="보고서">
+            <input type="submit" value="등록">
+        </form>
+    </div>
+    <!-- 휴가서 작성 양식 -->
+    <div id="vacation" class="tabcontent">
+        <h3>휴가 신청서 작성폼</h3>
+        <form action="/auth/docx/addvacation" method="post">
+            작성글제목:<input type="text" name="title"><br />
+            작성자:<input type="text" name="writer" th:value="${session.loginId}" readonly><br />
+            시작일: <input type="date" name="startdt"><br />
+            종료일: <input type="date" name="enddt"><br />
+            휴가구분:<select name="dayoffclasf">
+                <option value="연차">연차</option>
+                <option value="병가">병가</option>
+                <option value="기타">기타</option>
+            </select><br />
+            비고:<textarea cols="15" rows="4" name="note"></textarea><br />
+            결제권한:<select name="senior" multiple>
+                <option th:each="m:${mlist}" th:value="${m.userid.id}" th:text="${m.userid.usernm + ' / ' + m.joblvid}">
+                </option>
+            </select>
+            <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                onChange="this.selectedIndex = this.initialSelect;" readonly>
+                <option value="1" selected>미승인</option>
+                <option value="2">승인</option>
+                <option value="3">보류</option>
+            </select>
+            <input type="hidden" name="formtype" value="휴가 신청서">
+            <input type="submit" value="등록">
+        </form>
+    </div>
+    <!-- 회의록 작성 양식 -->
+    <div id="meeting" class="tabcontent">
+        <h3>회의록 작성폼</h3>
+        <form action="/auth/docx/addmeeting" method="post">
+            작성글제목:<input type="text" name="title"><br />
+            작성자:<input type="text" name="writer" th:value="${session.loginId}" readonly><br />
+            회의일시: <input type="datetime-local" name="startdt"><br />
+            회의장소:<input type="text" name="deptandmeetloc"><br />
+            참석자:<textarea cols="15" rows="4" name="participant"></textarea><br />
+            회의내용:<textarea cols="15" rows="4" name="taskprocsres"></textarea><br />
+            결제권한:<select name="senior" multiple>
+                <option th:each="m:${mlist}" th:value="${m.userid.id}" th:text="${m.userid.usernm + ' / ' + m.joblvid}">
+                </option>
+            </select>
+            <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                onChange="this.selectedIndex = this.initialSelect;" readonly>
+                <option value="1" selected>미승인</option>
+                <option value="2">승인</option>
+                <option value="3">보류</option>
+            </select>
+            <input type="hidden" name="formtype" value="회의록">
+            <input type="submit" value="등록">
+        </form>
+    </div>
+
     <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br />
     <a href="/auth/docx/list">리스트 페이지</a>
 
+    <script>
+        // Open the default tab
+        document.getElementById("defaultOpen").click();
+    </script>
 </body>
 
 </html>
