@@ -17,10 +17,10 @@ public class DeptsController {
 
 	@Autowired
 	private DeptsService dservice;
-	
+
 	@Autowired
 	private MembersService mservice;
-	
+
 	@Autowired
 	private JoblvsService jservice;
 
@@ -70,7 +70,7 @@ public class DeptsController {
 		mav.addObject("dlist", dlist);
 		return mav;
 	}
-	
+
 	@GetMapping("/corp/joblvlist")
 	public String joblvlist(ModelMap map) {
 		ArrayList<JoblvsDto> jlist = jservice.getAll();
