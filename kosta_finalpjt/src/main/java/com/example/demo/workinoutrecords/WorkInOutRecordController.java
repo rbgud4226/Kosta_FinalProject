@@ -247,5 +247,4 @@ public class WorkInOutRecordController {
     map.put("list", service.chartMonthandDept(previousMonth, previousYear, dept));
     return map;
   }
-
 }
