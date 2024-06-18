@@ -84,6 +84,37 @@
                     </ul>
                 </div>
             </li>
+            <li class="nav_li" th:if="${session.type != 'emp'}">
+                <div>
+                    <p class="nav_main_title">connect system</p>
+                    <ul>
+                        <li class="li_link">
+                            <a th:href="@{/admin/user/userlist}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">사용자목록</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/corp/deptlist}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">부서목록</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/corp/joblvlist}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">직급목록</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </div>
 	<div class="left_footer">
