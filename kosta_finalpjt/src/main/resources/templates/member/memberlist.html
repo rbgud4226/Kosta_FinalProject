@@ -53,7 +53,7 @@
 				<tbody class="modal_body">
 					<!-- <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
 						<td>
-							<input type="checkbox" class="list_ch">
+							<input name="userid" type="checkbox" class="list_ch" th:value="${m?.userid?.usernm}">
 						</td>
 						<td class="form_td" >
 							<p class="f600 list_name" th:text="${m?.userid?.usernm }"></p>
