@@ -25,19 +25,23 @@
             var socket = new SockJS('/auth/ws');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function(frame) {
-                var subscriptionId = 'sub-' + userId1;
-                
+            var subscriptionId = 'sub-' + userId1;
                 stompClient.subscribe('/room/' + roomId, function(messageOutput) {
-                    showMessage(JSON.parse(messageOutput.body));
-                }, { id: subscriptionId });
+                	 var message = JSON.parse(messageOutput.body);
+                	 var cri = message[0].room.chatroomid;
+                     if (cri === roomId) {
+                         showMessage(message);
+                     }
+                 }, { id: subscriptionId });
+                
+                stompClient.subscribe('/recent/update', function() {
+                	recentChatRooms(userId1);
+                });
                 loadMessages(roomId);	  
                 loadChatRoomsConnect(roomId, userId1);             
             });
-            var exitChatRoomLink = document.getElementById('getOutRoom');
-            exitChatRoomLink.href = '/chat/chatrooms/out?chatroomid='+ roomId + '&userId=' +userId1;
-            console.log(exitChatRoomLink.href);
         }
-                
+       
         function loadMessages(roomId) {
             var URL = 'http://localhost:8081/chat/message/room/';
             $.ajax({
@@ -58,7 +62,7 @@
         	if(!id){
         		id = userId1;
         		URL = 'http://localhost:8081/chat/chatrooms/loadrooms/';
-        	}
+        		}
             $.ajax({
                 url: URL + id,
                 type: 'GET',
@@ -70,8 +74,6 @@
                 }
             });
         }
-        
-        
 
         function loadChatRoomsConnect(chatroomid, userId1){
             var URL = 'http://localhost:8081/chat/chatrooms/loadrooms/searchroom/';
@@ -96,7 +98,8 @@
             if (chatRoom.roomType !== 'PRIVATE') {
 	           	if (chatRoom.chatRoomNames.length > 0) {
 	                var name = chatRoom.chatRoomNames[0].roomName.replace(/_/g, ' ').trim();
-	                chatMembers = name;
+	                var participants = chatRoom.chatRoomNames[0].roomName.replace(/_/g, ',').trim();
+	                chatMembers = participants;
 	                chatRoomNames = name;
 	            }
 	         } else {
@@ -140,6 +143,21 @@
             }
         }
         
+        function recentChatRooms(userId1) {
+            var URL = 'http://localhost:8081/chat/chatrooms/loadrooms/';
+            $.ajax({
+                url: URL + userId1,
+                type: 'GET',
+                success: function(response) {
+                    loadChatRoomsView(response, userId1);
+                },
+                error: function() {
+                    alert('채팅방을 불러오는데 실패했습니다.');
+                }
+            });
+        }
+        
+        
         function loadChatRooms(userId1) {
             var URL = 'http://localhost:8081/chat/chatrooms/loadrooms/';
             $.ajax({
@@ -165,7 +183,8 @@
  	           if (chatRoom.roomType !== 'PRIVATE') {
  	           		if (chatRoom.chatRoomNames.length > 0) {
  	                	 var name = chatRoom.chatRoomNames[0].roomName.replace(/_/g, ' ').trim();
- 	                 	 chatMembers = name;
+ 	                 	 chatMembers = chatRoom.recentMsg;
+ 	                 	 chatRecentMsg = chatRoom.recentMsg;
  	                 	 chatRoomNames = name;
  	             		}
  	         	} else {
@@ -204,6 +223,32 @@
                 };  
                 stompClient.send("/send/" + roomId, {}, JSON.stringify(message));
                 document.getElementById('message').value = '';
+        }
+        
+        
+        function getOutRoom(roomId){
+        	 const date = new Date();
+             const yoptions = { 
+             		  year: 'numeric', 
+             		  month: 'long', 
+             		  day: '2-digit'
+             		};
+             const hoptions = {
+             		 hour: '2-digit', 
+            		 	 minute: '2-digit',
+            		 	 second: '2-digit',
+            		  	 hour12: false 
+             }
+             const sendDay = date.toLocaleString('ko-KR', yoptions);
+             const sendTime = date.toLocaleString('ko-KR', hoptions);
+             var message = {
+             		 'type': 'OUT',
+                     'sender' : userId1,
+                     'content' : userId1 + "님이 퇴장했습니다.",
+                     'sendDate' : sendDay + ' ' + sendTime
+                 };  
+                 stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message));
+                 document.getElementById('message').value = '';
         }
 
         function sendMessage(roomId) {
@@ -270,7 +315,9 @@
                         'sender': sender,
                         'sendDate': sendDay + ' ' + sendTime
                     };
-                    stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message));
+                    stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message), function(){
+                    	 loadChatRooms(userId1);
+                    });
                 },
                 error: function() {
                     alert('파일 업로드에 실패했습니다.');
@@ -299,6 +346,7 @@
             var response = document.getElementById('chat-content');
             response.innerHTML = ""; 
             messages.forEach(function(message) {	
+            	if (message.room.chatroomid !== roomId) return;
             	var spanName = document.createElement('span');
                 spanName.className = 'senderName';
                 var spanTime = document.createElement('span');
@@ -311,7 +359,7 @@
                     li.className = 'reply';
                 }
                 
-                if (message.type === 'INVITE' || message.type === 'MESSAGE') {
+                if (message.type === 'INVITE' || message.type === 'MESSAGE' || message.type === 'OUT') {
                 	spanName.textContent = message.sender;
                     p.innerHTML = message.content;
                     spanTime.textContent = message.sendDate.substring(13, 18);
@@ -437,7 +485,7 @@
                                                                 <hr class="dropdown-divider">
                                                             </li>
                                                             <li>
-                                                            	<a class="dropdown-item" href="" id="getOutRoom">채팅방 나가기</a>
+                                                            <a class="dropdown-item" href="" id="outButton" onclick="getOutRoom(roomId)">채팅방 나가기</a>
                                                             </li>
                                                         </ul>
                                                     </li>
