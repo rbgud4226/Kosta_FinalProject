@@ -24,7 +24,6 @@
         	roomId = newRoomId;
             var socket = new SockJS('/auth/ws');
             stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
             var subscriptionId = 'sub-' + userId1;
                 stompClient.subscribe('/room/' + roomId, function(messageOutput) {
                 	 var message = JSON.parse(messageOutput.body);
