@@ -116,7 +116,6 @@
         <form action="/auth/docx/addvacation" method="post">
             작성글제목:<input type="text" name="title"><br />
             작성자:<input type="text" name="writer" th:value="${session.loginId}" readonly><br />
-            시작일: <input type="date" name="startdt"><br />
             종료일: <input type="date" name="enddt"><br />
             휴가구분:<select name="dayoffclasf">
                 <option value="연차">연차</option>
