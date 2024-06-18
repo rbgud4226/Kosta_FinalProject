@@ -41,8 +41,8 @@
 			  </tr>
 			</table>
 		</form>
-         <form action="">
-			<table class="table_w100">
+         <form class="modal_list" action="/member/test">
+			<table class="table_w100 modal_table">
 				<thead class="list_line ">
 					<tr>
 						<td><input type="checkbox"></td>
@@ -50,10 +50,10 @@
 						<td class="f600">E-mail</td>
 					</tr>
 				</thead>
-				<tbody>
-					<tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
+				<tbody class="modal_body">
+					<!-- <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
 						<td>
-							<input type="checkbox" class="list_ch">
+							<input name="userid" type="checkbox" class="list_ch" th:value="${m?.userid?.usernm}">
 						</td>
 						<td class="form_td" >
 							<p class="f600 list_name" th:text="${m?.userid?.usernm }"></p>
@@ -64,7 +64,7 @@
 
 						</td>
 						<td class="form_td" th:text="${m?.email}"></td>
-					</tr>
+					</tr> -->
 				</tbody>
 			</table>
                 <div class="modal-footer">

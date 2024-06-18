@@ -35,13 +35,13 @@
         </div>
     </div>
 	<!-- 기록 테이블 --> 
-	    <div class="record_table w_bg">
+	<div class="record_table w_bg">
         <div class="record_table_title">
             <p>근무기록 확인</p>
             <div class="record_month font_b24">
-                <div id="record_left" class="arrow left_arrow cursor" onclick="arrow_btn(-1)"></div>
+                <div id="record_left" class="arrow left_arrow cursor" onclick="myrecord(-1)"></div>
                 <span class="month">2022.07</span>
-                <div id="record_right" class="arrow right_arrow arrow_off" onclick="arrow_btn(+1)"></div>
+                <div id="record_right" class="arrow right_arrow arrow_off" onclick="myrecord(+1)"></div>
             </div>
         </div>
         <div class="record_table_wrapper">
@@ -113,5 +113,6 @@
   </div>
 
 </body>
-<script th:src="@{/js/record.js}"></script>
+<script th:src="@{/js/record_common.js}"></script>
+<script th:src="@{/js/record_emp.js}"></script>
 </html>

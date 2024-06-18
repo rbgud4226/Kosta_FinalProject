@@ -2,24 +2,30 @@ package com.example.demo.members;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.depts.DeptsService;
+import com.example.demo.depts.JoblvsService;
 import com.example.demo.users.Users;
 import com.example.demo.users.UsersDto;
 import com.example.demo.users.UsersService;
@@ -32,23 +38,41 @@ public class MembersController {
 
 	@Autowired
 	private UsersService uservice;
+	
+	@Autowired
+	private DeptsService dservice;
+	
+	@Autowired
+	private JoblvsService jservice;
 
 	@Autowired
 	private EduWorkExperienceInfoService eservice;
 
+	@Autowired
+    ResourceLoader resourceLoader;
+	
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 
-	private String dirName = "";
+	private String dirName = "Pictures/kosta/kostafinalpjt_data/kostafinalpjt_img/";
 
-	
 	@GetMapping("/member/memberlist")
 	public ModelMap memberlist(ModelMap map) {
 		ArrayList<MembersDto> mlist = mservice.getAll();
 		return map.addAttribute("mlist", mlist);
 //		return "member/memberlist";
 	}
-
+  
+	@GetMapping("/member/test")
+	public void membertest(@RequestParam(name = "userid", required = false) List<String> userids) {
+		System.out.println("===================");
+		System.out.println(userids);
+        for (String userid : userids) {
+            System.out.println(userid);
+        }
+        
+	}
+  
 	@ResponseBody
 	@GetMapping("/member/getdeptby")
 	public Map getmemberby(String val, int type) {
@@ -58,22 +82,22 @@ public class MembersController {
 				if (val.equals("0")) {
 					mlist = null;
 				} else {
-					mlist = mservice.getByDeptNm(val);
+					mlist = mservice.getByDeptNmLike(val);
 				}
 			} else if (type == 2) {
-				UsersDto udto = uservice.getByUsernm(val);
-				if (udto == null) {
-					mlist.add(null);
-				} else {
-					mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0, null)));
+				ArrayList<UsersDto> ulist = uservice.getByUsernmLike(val);
+				for (UsersDto udto : ulist) {
+					if (udto != null && mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0, null)) != null) {
+						mlist.add(mservice.getByuserNm(new Users(udto.getId(), "", "", "", 0, null)));
+					}
 				}
-//				System.out.println(mlist);
 			} else if (type == 3) {
-				mlist = mservice.getByJobLv(Integer.parseInt(val));
+				mlist = mservice.getByJobLvLike(val);
 			}
 		} else {
 			mlist = null;
 		}
+		System.out.println(mlist);
 //		ModelAndView mav = new ModelAndView("member/memberlist");
 //		mav.addObject("type", type);
 //		mav.addObject("val", val);
@@ -105,9 +129,9 @@ public class MembersController {
 	@GetMapping("/member/memberimg")
 	public ResponseEntity<byte[]> read_img(String memberimgnm) {
 		ResponseEntity<byte[]> result = null;
+		HttpHeaders header = new HttpHeaders();
 		if (memberimgnm != "") {
 			File f = new File(path + dirName + memberimgnm);
-			HttpHeaders header = new HttpHeaders();
 			try {
 				header.add("Content-Type", Files.probeContentType(f.toPath()));
 				result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(f), header, HttpStatus.OK);
@@ -115,7 +139,14 @@ public class MembersController {
 				e.printStackTrace();
 			}
 		} else {
-			result = new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+			try {
+				InputStream istream = resourceLoader.getResource("classpath:/static/img/common/human.png").getInputStream();
+				header.setContentType(MediaType.IMAGE_PNG);
+				result = new ResponseEntity<byte[]>(istream.readAllBytes(), header, HttpStatus.OK);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 		return result;
@@ -126,6 +157,8 @@ public class MembersController {
 		MembersDto mdto = mservice.getByuserId(id);
 		map.addAttribute("member", mdto);
 		map.addAttribute("userid", id);
+		map.addAttribute("dlist", dservice.getAll());
+		map.addAttribute("jlist", jservice.getAll());
 		return "member/memberedit";
 	}
 
@@ -133,6 +166,8 @@ public class MembersController {
 	public String memberadd(MembersDto dto) {
 //		System.out.println("memberimgnm:" + dto.getMemberimgnm());
 		System.out.println(dto);
+		System.out.println((dto.getDeptid()));
+		System.out.println((dto.getJoblvid()));
 		MembersDto mdto = mservice.save(dto);
 //		MembersDto mdto = null;
 //		if (dto.getMemberid() == 0) {
@@ -140,7 +175,7 @@ public class MembersController {
 //		} else {
 //			mdto = mservice.update(dto);
 //		}
-		
+
 		if (!dto.getMemberimgf().isEmpty()) {
 			String oname = dto.getMemberimgf().getOriginalFilename();
 			String f1 = oname.substring(oname.lastIndexOf("."));

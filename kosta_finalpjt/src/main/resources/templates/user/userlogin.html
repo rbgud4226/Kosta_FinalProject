@@ -68,7 +68,7 @@
 					<p id="valid" class="alert alert-danger" th:text="${errorMessage}"></p>
 				</span>
 				<button class="form-control btn btn-primary bi bi-lock-fill"> 로그인</button>
-				<button type="button" class="btn btn-primary bi bi-person" th:onclick="home([[${session.type }]]);"> 홈</button>
+				<button type="button" class="btn btn-primary bi bi-person" th:onclick="location.href='/'"> 홈</button>
 			</form>
 		</div>
 	</div>

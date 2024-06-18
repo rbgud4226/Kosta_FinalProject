@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.depts.Depts;
+import com.example.demo.depts.DeptsDao;
 import com.example.demo.depts.Joblvs;
+import com.example.demo.depts.JoblvsDao;
 import com.example.demo.users.Users;
 import com.example.demo.users.UsersDao;
 
@@ -29,6 +31,12 @@ public class MembersService {
 
 	@Autowired
 	private UsersDao udao;
+
+	@Autowired
+	private DeptsDao ddao;
+
+	@Autowired
+	private JoblvsDao jdao;
 
 	public MembersDto save(MembersDto dto) {
 		Members m = mdao.save(new Members(dto.getUserid(), dto.getMemberid(), dto.getBirthdt(), dto.getEmail(),
@@ -103,6 +111,48 @@ public class MembersService {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
 					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
 					m.getMgrid(), null, null));
+		}
+		return list;
+	}
+
+	public ArrayList<MembersDto> getByDeptNmLike(String deptnm) {
+		ArrayList<Depts> dlist = ddao.findByDeptnmLike("%"+deptnm+"%");
+		ArrayList<MembersDto> list = new ArrayList<>();
+		for (Depts d : dlist) {
+			List<Members> l = mdao.findByDeptid(d);
+			for (Members m : l) {
+				list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
+						m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(),
+						m.getJoblvid(), m.getMgrid(), null, null));
+			}
+
+		}
+		return list;
+	}
+
+	public ArrayList<MembersDto> getByUsersLike(String usernm) {
+		ArrayList<Users> ulist = udao.findByUsernmLike(usernm);
+		ArrayList<MembersDto> list = new ArrayList<>();
+		for (Users u : ulist) {
+			Members m = mdao.findByUserid(u);
+			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
+					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+					m.getMgrid(), null, null));
+		}
+		return list;
+
+	}
+
+	public ArrayList<MembersDto> getByJobLvLike(String joblvnm) {
+		ArrayList<Joblvs> jlist = jdao.findByJoblvnmLike("%"+joblvnm+"%");
+		ArrayList<MembersDto> list = new ArrayList<>();
+		for (Joblvs j : jlist) {
+			List<Members> l = mdao.findByJoblvid(j);
+			for (Members m : l) {
+				list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
+						m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(),
+						m.getJoblvid(), m.getMgrid(), null, null));
+			}
 		}
 		return list;
 	}

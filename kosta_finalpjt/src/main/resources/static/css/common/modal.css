@@ -50,3 +50,15 @@
 .list_search{
     line-height: 0;
 }
+.modal_list {
+    position: relative;
+    height: 500px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.modal-footer{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
