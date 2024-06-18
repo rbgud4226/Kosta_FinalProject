@@ -39,6 +39,7 @@ public class RoomUser {
 	@ManyToOne
 	@JoinColumn(name = "userid", referencedColumnName = "id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonBackReference
 	private Users roomuser;
 
 }

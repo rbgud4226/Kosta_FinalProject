@@ -24,11 +24,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.chat.Room.ChatRoomDto;
+import com.example.demo.chat.Room.ChatRoomService;
 import com.example.demo.depts.DeptsService;
 import com.example.demo.depts.JoblvsService;
 import com.example.demo.users.Users;
 import com.example.demo.users.UsersDto;
 import com.example.demo.users.UsersService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MembersController {
@@ -47,6 +51,9 @@ public class MembersController {
 
 	@Autowired
 	private EduWorkExperienceInfoService eservice;
+	
+	@Autowired
+	private ChatRoomService chatRoomService;
 
 	@Autowired
     ResourceLoader resourceLoader;
@@ -64,12 +71,15 @@ public class MembersController {
 	}
   
 	@GetMapping("/member/test")
-	public void membertest(@RequestParam(name = "userid", required = false) List<String> userids) {
-		System.out.println("===================");
-		System.out.println(userids);
-        for (String userid : userids) {
-            System.out.println(userid);
-        }
+	public String membertest(@RequestParam(name = "userid", required = false) List<String> userIds, HttpSession session, ModelMap map) {
+		String userId1 = (String) session.getAttribute("loginId");
+		if (!userIds.contains(userId1)) {
+			userIds.add(userId1);
+		}
+		ChatRoomDto chatRoomDto = chatRoomService.createChatRoom(userIds);
+		map.addAttribute("roomId", chatRoomDto.getChatroomid());
+		map.addAttribute("userId1", userId1);
+		return "/chat/bootchat";
         
 	}
   
