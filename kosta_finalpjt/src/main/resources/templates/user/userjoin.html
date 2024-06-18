@@ -4,55 +4,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<link rel="stylesheet" th:href="@{/css/common/reset.css}">
+	<link rel="stylesheet" th:href="@{/css/userform.css}">
+	 <script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
+	
 	<script type="text/javascript">
-		// const checkjoin = () => {
-		// 	if (userjoinf.id.value.length <= 0) {
-		// 		alert("ID는 필수 입력 사항");
-		// 		userjoinf.id.focus();
-		// 		return;
-		// 	}
-		// 	if (userjoinf.pwd.value.length <= 0) {
-		// 		alert("PWD는 필수 입력 사항");
-		// 		userjoinf.pwd.focus();
-		// 		return;
-		// 	}
-		// 	if (userjoinf.usernm.value.length <= 0) {
-		// 		alert("NAME은 필수 입력 사항");
-		// 		userjoinf.usernm.focus();
-		// 		return;
-		// 	}
-		// 	if (userjoinf.type.value.length <= 0) {
-		// 		alert("TYPE은 필수 입력 사항");
-		// 		userjoinf.type.focus();
-		// 		return;
-		// 	}
-		// 	if (!flag) {
-		// 		alert("ID 중복체크 해야함");
-		// 		userjoinf.idcheckname.focus();
-		// 		return;
-		// 	}
-		// 	userjoinf.submit();
-		// }
-
-		// let flag = false;
-
-		// const idcheck = () => {
-		// 	flag = false;
-		// 	const req = new XMLHttpRequest();
-		// 	req.onload = () => {
-		// 		let obj = JSON.parse(req.responseText);//req.responseText => {flag:true}
-		// 		let txt = '중복된 아이디';
-		// 		if(obj.flag){
-		// 			txt = '사용가능 아이디';
-		// 			flag = true;
-		// 		}
-		// 		document.getElementById('res').innerHTML = txt;
-		// 	}
-		// 	let id = document.getElementById('id').value;
-		// 	req.open('get', '/user/idcheck?id=' + id);
-		// 	req.send();
-		// }
-
 		const home = (type) => {
 			if (type == 'admin') {
 				location.href = '/index_admin';
@@ -66,43 +24,46 @@
 </head>
 
 <body>
-	<h3>회원가입 페이지</h3>
 	<div id="posts_list">
-		<div class="container col-md-4">
+		<div class="container login_wrapper">
+			<div id="loginBoxTitle">HRD SYSTEM JOIN</div>
 			<form th:action="@{/user/userjoin}" method="post">
-				<!-- <input type="hidden" name="_csrf" th:value="${_csrf.token}"/> -->
 				<div class="form-group">
-					<label>계정</label>
+					<label class="w25">유저ID</label>
 					<input type="text" name="id" th:value="${user != null ? user.id : ''}" class="form-control"
-						placeholder="계정을 입력해주세요" />
-					<span th:if="${valid_id}" th:text="${valid_id}" id="valid"></span>
+					placeholder="가입할 계정ID를 입력해주세요">
 				</div>
+				<div class="alert alert-danger" th:if="${valid_id}" th:text="${valid_id}" id="valid"></div>
 				<div class="form-group">
-					<label>비밀번호</label>
+					<label class="w25">비밀번호</label>
 					<input type="password" name="pwd" th:value="${user != null ? user.pwd : ''}" class="form-control"
-						placeholder="비밀번호를 입력해주세요" />
-					<span th:if="${valid_pwd}" th:text="${valid_pwd}" id="valid"></span>
+					placeholder="비밀번호를 입력해주세요" >
 				</div>
+				<div class="alert alert-danger" th:if="${valid_pwd}" th:text="${valid_pwd}" id="valid"></div>
 				<div class="form-group">
-					<label>비밀번호 확인</label>
-					<input type="password" name="confirm_pwd" class="form-control" placeholder="비밀번호 확인을 입력해주세요" />
-					<span th:if="${valid_confirm_pwd}" th:text="${valid_confirm_pwd}" id="valid"></span>
+					<label class="w25">비밀번호 확인</label>
+					<input type="password" class="form-control" name="confirm_pwd" placeholder="비밀번호를 다시 한번 입력해주세요." >
 				</div>
+				<div class="alert alert-danger" th:if="${valid_pwd}" th:text="${valid_pwd}" id="valid"></div>
 				<div class="form-group">
-					<label>이름</label>
+					<label class="w25">이름</label>
 					<input type="text" name="usernm" th:value="${user != null ? user.usernm : ''}" class="form-control"
-						placeholder="이름을 입력해주세요" />
-					<span th:if="${valid_usernm}" th:text="${valid_usernm}" id="valid"></span>
+					placeholder="가입할 유저의 이름을 입력해주세요" >
 				</div>
-
+				<div class="alert alert-danger" th:if="${valid_usernm}" th:text="${valid_usernm}" id="valid"></div>
 				<input type="hidden" name="type" value="emp" checked>
 				<input type="hidden" name="aprov" value="0" checked>
-				<button type="submit" class="btn btn-primary bi bi-person"> 가입</button>
-				<button type="button" class="btn btn-primary bi bi-person" th:onclick="home([[${session.type }]]);">
-					홈</button>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary bi bi-person join_btn"> 가입</button>
+				</div>
+				
 			</form>
 		</div>
 	</div>
+
+
+<!-- --------------------------------------------------------------- -->
+
 </body>
 
 </html>

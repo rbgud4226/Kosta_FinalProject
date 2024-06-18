@@ -28,16 +28,21 @@ public class HomeController {
 
 	@RequestMapping("/")
 	public String home(HttpSession session) {
+		String loginId = (String) session.getAttribute("loginId");
 		String type = (String) session.getAttribute("type");
 		String indexPath = "";
-		if (type == "admin") {
-			indexPath = "/index_admin";
-		} else if (type == "emp") {
-			indexPath = "/index_emp";
-		} else {
-			indexPath = "/index";
+		if(loginId == null) {
+			indexPath = "user/userlogin";
 		}
-//		System.out.println(type);
+		else{
+			if(type == "admin"){
+				indexPath = "/index_admin";
+			}else if (type == "emp") {
+				indexPath = "/index_emp";
+			} else {
+				indexPath = "/index";
+			}
+		} 
 		return indexPath;
 	}
 

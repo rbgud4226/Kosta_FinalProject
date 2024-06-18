@@ -1,0 +1,69 @@
+.login_wrapper{
+    width: 600px;
+    padding: 100px 30px;
+    background: white;
+    border-radius: 15px;
+}
+#loginBoxTitle {
+    text-align: center;
+    color:#000000;
+    font-weight: bold;
+    font-size: 32px;
+
+    padding: 5px;
+    margin-bottom: 60px;
+    background: linear-gradient(to right, #a3a3de, #5030a1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+body{
+    position: relative;
+    height: 100vh;
+}
+#posts_list{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.form-group{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+.form-group label{
+    width: 20%;
+}
+.login_check{
+    display: flex;
+    align-items: center;
+}
+.login_checkbox{
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+.w40{
+    width: 40%;
+}
+.form-group .w25{
+    width: 25%;
+}
+.join_link{
+    position: absolute;
+    padding: 10px 0;
+    top: 69%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 600px;
+    background: white;
+    border-radius: 15px;
+}
+.alert-danger{
+    margin-top: 10px;
+}
+.join_btn{
+    width: 100%;
+}
