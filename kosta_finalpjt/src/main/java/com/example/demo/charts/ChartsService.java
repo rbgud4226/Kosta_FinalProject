@@ -19,23 +19,23 @@ public class ChartsService {
   public ChartsDto save(ChartsDto dto){
     Charts g = dao.save(new Charts(dto.getUsers(), 0,dto.getResource(), dto.getTitle(), dto.getSt(),
         dto.getEd(), dto.getPercent(), dto.getDependencies(), dto.getStatus()));
-    return new ChartsDto(g.getUsers(), g.getTaskid(),g.getResource(), g.getTitle(), g.getSt(), g.getEd(),
-        g.getPercent(), g.getDependencies(), g.getStatus());
+    return new ChartsDto(g.getUsers(), g.getTaskid(),g.getChartResource(), g.getTitle(), g.getSt(), g.getEd(),
+        g.getPercent(), g.getDependencies(), g.getChartStatus());
   }
 
   public ChartsDto get(int id){
     Optional<Charts> optional = dao.findById(id);
     Charts g = optional.get();
-    return new ChartsDto(g.getUsers(), g.getTaskid(), g.getResource(), g.getTitle(), g.getSt(),
-        g.getEd(), g.getPercent(), g.getDependencies(), g.getStatus());
+    return new ChartsDto(g.getUsers(), g.getTaskid(), g.getChartResource(), g.getTitle(), g.getSt(),
+        g.getEd(), g.getPercent(), g.getDependencies(), g.getChartStatus());
   }
 
   public ArrayList<ChartsDto> getAll(){
     List<Charts> l = dao.findAll();
     ArrayList<ChartsDto> list = new ArrayList<>();
     for(Charts g : l){
-      list.add(new ChartsDto(g.getUsers(), g.getTaskid(), g.getResource(), g.getTitle(), g.getSt(),
-          g.getEd(), g.getPercent(), g.getDependencies(), g.getStatus()));
+      list.add(new ChartsDto(g.getUsers(), g.getTaskid(), g.getChartResource(), g.getTitle(), g.getSt(),
+          g.getEd(), g.getPercent(), g.getDependencies(), g.getChartStatus()));
     }
     return list;
   }
@@ -44,8 +44,8 @@ public class ChartsService {
     List<Charts> l = dao.findByUsersOrderByTaskidDesc(new Users(id,null,null,null,0,null));
     ArrayList<ChartsDto> list = new ArrayList<>();
     for(Charts g : l){
-      list.add(new ChartsDto(g.getUsers(), g.getTaskid(), g.getResource(), g.getTitle(), g.getSt(),
-          g.getEd(), g.getPercent(), g.getDependencies(), g.getStatus()));
+      list.add(new ChartsDto(g.getUsers(), g.getTaskid(), g.getChartResource(), g.getTitle(), g.getSt(),
+          g.getEd(), g.getPercent(), g.getDependencies(), g.getChartStatus()));
     }
     return list;
   }
@@ -53,7 +53,7 @@ public class ChartsService {
   public ArrayList<ChartsDto> ganttList(String id){
     List<Charts> l = dao.findByUsersOrderByTaskidDesc(new Users(id,null,null,null,0,null));
     ArrayList<ChartsDto> fillteredList = l.stream()
-        .map(g -> new ChartsDto(g.getUsers(), g.getTaskid(), g.getResource(), g.getTitle(), g.getSt(), g.getEd(), g.getPercent(), g.getDependencies(), g.getStatus()))
+        .map(g -> new ChartsDto(g.getUsers(), g.getTaskid(), g.getChartResource(), g.getTitle(), g.getSt(), g.getEd(), g.getPercent(), g.getDependencies(), g.getChartStatus()))
         .filter(chartsDto -> chartsDto.getStatus().contains("yes"))
         .collect(Collectors.toCollection(ArrayList::new));
     return fillteredList;

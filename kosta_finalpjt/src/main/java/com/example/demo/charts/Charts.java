@@ -32,12 +32,12 @@ public class Charts {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_charts")
   private int taskid;
 
-  private String resource;
+  private String chartResource;
   private String title;
   private String st;
   private String ed;
   @ColumnDefault("0")
   private int percent;
   private String dependencies;
-  private String status;
+  private String chartStatus;
 }
