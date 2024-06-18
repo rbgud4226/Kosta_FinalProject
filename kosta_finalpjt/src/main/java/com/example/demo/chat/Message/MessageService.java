@@ -23,7 +23,7 @@ public class MessageService {
 		  if (chatroom == null) {
 		        throw new NullPointerException("없는방 " + roomId);
 		    }
-		Message ms = new Message(message.getId(), chatroom, message.getContent(), message.getSendDate(), message.getSender(), message.getType(), message.getNewuserId(), message.getFileName(), message.getFileId(), message.getFileRoot());
+		Message ms = new Message(message.getId(), chatroom, message.getContent(), message.getSendDate(), message.getSender(), message.getType(), message.getNewuserId(), message.getFileName(), message.getFileId(), message.getFileRoot(), message.getPartid());
 		String mess = ms.getContent().replaceAll("(?:\r\n|\r|\n)", "<br>");
 		ms.setContent(mess);
 		return messagedao.save(ms);
@@ -34,7 +34,7 @@ public class MessageService {
 		List<Message> l = messagedao.findByRoom_ChatroomidOrderByIdAsc(roomId);
 		ArrayList<MessageDto> list = new ArrayList<>();
 		for(Message m : l) {
-			list.add(new MessageDto(m.getId(),m.getRoom(),m.getContent(), m.getSendDate(), m.getSender(), m.getType(), m.getNewuserId(), m.getFileName(), m.getFileId(),m.getFileRoot()));
+			list.add(new MessageDto(m.getId(),m.getRoom(),m.getContent(), m.getSendDate(), m.getSender(), m.getType(), m.getNewuserId(), m.getFileName(), m.getFileId(),m.getFileRoot(),m.getPartid()));
 		}
 		return list;
 	}

@@ -46,8 +46,9 @@ public class Message {
 	private String fileName;
 	private String fileId;
 	private String fileRoot; 
+	private String partid;
 	
-	public Message(Long id, ChatRoom room, String sendDate, String sender, String type, String newuserId) {
+	public Message(Long id, ChatRoom room, String sendDate, String sender, String type, String newuserId, String partid) {
 		super();
 		this.id = id;
 		this.room = room;
@@ -55,5 +56,6 @@ public class Message {
 		this.sender = sender;
 		this.type = type;
 		this.newuserId = newuserId;
+		this.partid = partid;
 	}
 }
