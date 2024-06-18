@@ -140,8 +140,8 @@ public class DocxController {
 	}
 	
 	@RequestMapping("/deldocx")
-	public String deldocx(int formnum) {
-		service.delDocx(formnum);
+	public String deldocx(int docxkey) {
+		service.delDocx(docxkey);
 		return "redirect:/auth/docx/list";
 	}
 	

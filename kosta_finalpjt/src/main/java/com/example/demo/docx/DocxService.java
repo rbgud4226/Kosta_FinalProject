@@ -212,8 +212,8 @@ public class DocxService {
 	}
 
 	// 문서 삭제
-	public void delDocx(int formnum) {
-		dao.deleteById(formnum);
+	public void delDocx(int docxkey) {
+		dao.deleteByDocxkey(docxkey);
 	}
 
 	public ArrayList<DocxDto> SelectedList(String id) {
