@@ -62,7 +62,7 @@ public class MembersController {
 		return map.addAttribute("mlist", mlist);
 //		return "member/memberlist";
 	}
-	
+  
 	@GetMapping("/member/test")
 	public void membertest(@RequestParam(name = "userid", required = false) List<String> userids) {
 		System.out.println("===================");
@@ -72,7 +72,7 @@ public class MembersController {
         }
         
 	}
-
+  
 	@ResponseBody
 	@GetMapping("/member/getdeptby")
 	public Map getmemberby(String val, int type) {
