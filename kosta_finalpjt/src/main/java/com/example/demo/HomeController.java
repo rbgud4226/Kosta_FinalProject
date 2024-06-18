@@ -27,8 +27,18 @@ public class HomeController {
 	private ChartsService chartsService;
 
 	@RequestMapping("/")
-	public String home() {
-		return "index";
+	public String home(HttpSession session) {
+		String type = (String) session.getAttribute("type");
+		String indexPath = "";
+		if (type == "admin") {
+			indexPath = "/index_admin";
+		} else if (type == "emp") {
+			indexPath = "/index_emp";
+		} else {
+			indexPath = "/index";
+		}
+//		System.out.println(type);
+		return indexPath;
 	}
 
 	@GetMapping("/loginform")
@@ -53,8 +63,26 @@ public class HomeController {
 	}
 
 	@RequestMapping("/index_admin")
-	public void adminHome(ModelMap map) {
-
+	public void adminHome(HttpSession session, ModelMap map) {
+		map.addAttribute("usernm", uservice.getById((String) session.getAttribute("loginId")));
+		MembersDto mdto = mservice.getByuserId((String) session.getAttribute("loginId"));
+		if (mdto != null) {
+			if (mdto.getMemberimgnm() == "") {
+				session.setAttribute("memberimgnm", "");
+			} else {
+				session.setAttribute("memberimgnm", mdto.getMemberimgnm());
+			}
+			if (mdto.getDeptid() == null) {
+				session.setAttribute("deptnm", "미등록 상태");
+			} else {
+				session.setAttribute("deptnm", mdto.getDeptid().getDeptnm());
+			}
+			if (mdto.getJoblvid() == null) {
+				session.setAttribute("joblvnm", "미등록 상태");
+			} else {
+				session.setAttribute("joblvnm", mdto.getJoblvid().getJoblvnm());
+			}
+		}
 	}
 
 	@RequestMapping("/index_emp")
@@ -63,9 +91,9 @@ public class HomeController {
 		MembersDto mdto = mservice.getByuserId((String) session.getAttribute("loginId"));
 		if (mdto != null) {
 			if (mdto.getMemberimgnm() == "") {
-				session.setAttribute("memberimgnm", mdto.getMemberimgnm());
+				session.setAttribute("memberimgnm", "");
 			} else {
-				session.setAttribute("memberimgnm", "Default image");
+				session.setAttribute("memberimgnm", mdto.getMemberimgnm());
 			}
 			if (mdto.getDeptid() == null) {
 				session.setAttribute("deptnm", "미등록 상태");
