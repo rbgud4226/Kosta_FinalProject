@@ -20,7 +20,7 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			"join users u on u.id = m.userid_id " + 
 			"WHERE EXTRACT(MONTH FROM W.day) = :month " + 
 			"AND EXTRACT(YEAR FROM W.day) = :year " +
-			"AND DEPTID_DEPTID = :dept " + 
+			"AND DEPTIDS_DEPTID = :dept " + 
 			"ORDER by day", nativeQuery = true)
 	List<Object[]> selectMonth(@Param("month")int month,@Param("year")int year,@Param("dept")int dept);
 

@@ -79,7 +79,9 @@ public class WorkInOutRecordService {
 	
 	//부서 직원 통계기록
 	public ArrayList<ChartDeptMember> chartMonthandDept(int month,int year,int dept){
+		System.out.println("MONTH!!!!");
 		List<Object[]> deptlist = dao.chartDept(month, year, dept);
+		
 		ArrayList<ChartDeptMember> list = new ArrayList<ChartDeptMember>();
 		for(Object[] a: deptlist) {
 			ChartDeptMember c = new ChartDeptMember();
