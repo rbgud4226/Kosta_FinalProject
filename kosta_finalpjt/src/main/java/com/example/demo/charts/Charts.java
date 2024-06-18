@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -23,7 +25,7 @@ public class Charts {
   @ManyToOne
   @JoinColumn(nullable = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private Users id;
+  private Users users;
 
   @Id
   @SequenceGenerator(name = "seq_gen", sequenceName = "seq_charts", allocationSize = 1)
@@ -33,6 +35,7 @@ public class Charts {
   private String title;
   private String st;
   private String ed;
+  @ColumnDefault("0")
   private int percent;
   private String dependencies;
 }

@@ -15,16 +15,16 @@ public class ChartsService {
   private ChartsDao dao;
 
   public ChartsDto save(ChartsDto dto){
-    Charts g = dao.save(new Charts(dto.getId(), 0, dto.getTitle(), dto.getSt(),
+    Charts g = dao.save(new Charts(dto.getUsers(), 0, dto.getTitle(), dto.getSt(),
         dto.getEd(), dto.getPercent(), dto.getDependencies()));
-    return new ChartsDto(g.getId(), g.getTaskid(), g.getTitle(), g.getSt(), g.getEd(),
+    return new ChartsDto(g.getUsers(), g.getTaskid(), g.getTitle(), g.getSt(), g.getEd(),
         g.getPercent(), g.getDependencies());
   }
 
   public ChartsDto get(int id){
     Optional<Charts> optional = dao.findById(id);
     Charts g = optional.get();
-    return new ChartsDto(g.getId(), g.getTaskid(), g.getTitle(), g.getSt(),
+    return new ChartsDto(g.getUsers(), g.getTaskid(), g.getTitle(), g.getSt(),
         g.getEd(), g.getPercent(), g.getDependencies());
   }
 
@@ -32,7 +32,17 @@ public class ChartsService {
     List<Charts> l = dao.findAll();
     ArrayList<ChartsDto> list = new ArrayList<>();
     for(Charts g : l){
-      list.add(new ChartsDto(g.getId(), g.getTaskid(), g.getTitle(), g.getSt(),
+      list.add(new ChartsDto(g.getUsers(), g.getTaskid(), g.getTitle(), g.getSt(),
+          g.getEd(), g.getPercent(), g.getDependencies()));
+    }
+    return list;
+  }
+
+  public ArrayList<ChartsDto> getbyUsers(String id){
+    List<Charts> l = dao.findByUsersOrderByTaskidDesc(new Users(id,null,null,null,0,null));
+    ArrayList<ChartsDto> list = new ArrayList<>();
+    for(Charts g : l){
+      list.add(new ChartsDto(g.getUsers(), g.getTaskid(), g.getTitle(), g.getSt(),
           g.getEd(), g.getPercent(), g.getDependencies()));
     }
     return list;

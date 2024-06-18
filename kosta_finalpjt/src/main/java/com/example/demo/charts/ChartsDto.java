@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChartsDto {
-  private Users id;
+  private Users users;
   private int taskid;
   private String title;
   private String st;

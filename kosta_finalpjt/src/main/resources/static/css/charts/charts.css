@@ -31,6 +31,7 @@
     border: 1px black solid;
     padding: 5px;
     height: 270px;
+    overflow-y: scroll;
 }
 .chart_area_head {
     display: flex;
@@ -42,6 +43,13 @@
     border-top: black 2px solid;
     border-bottom: black 2px solid;
     border-collapse: collapse;
+    height: 50px;
+    overflow-y: scroll;
+}
+.chart_area th{
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 .chart_area tr{
     border-bottom: black 1px solid;
