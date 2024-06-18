@@ -30,12 +30,16 @@
 .chart_area {
     border: 1px black solid;
     padding: 5px;
-    height: 270px;
-    overflow-y: scroll;
+    height: 400px;
 }
 .chart_area_head {
     display: flex;
     justify-content: space-between;
+}
+.chart_area_scroll{
+    height: 350px;
+    overflow-y: scroll;
+    overflow-x: scroll;
 }
 .chart_area table {
     width: 100%;

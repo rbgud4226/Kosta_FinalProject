@@ -47,26 +47,28 @@
             <button type="button" id="modal_btn">일정추가</button>
           </div>
         </div>
-        <table>
-          <tr>
-            <th>번호</th>
-            <th>이름</th>
-            <th>시작일</th>
-            <th>마감일</th>
-            <th>완성률</th>
-            <th>연관 일정</th>
-            <th></th>
-          </tr>
-          <tr th:each="s:${list}">
-            <td th:text="${s.taskid}"></td>
-            <td th:text="${s.title}"></td>
-            <td th:text="${s.st}"></td>
-            <td th:text="${s.ed}"></td>
-            <td th:text="${s.percent}"></td>
-            <td th:text="${s.dependencies}"></td>
-            <td><a th:href="@{/auth/chart/del(id=${s.taskid})}">삭제</a></td>
-          </tr>
-        </table>
+        <div class="chart_area_scroll">
+          <table>
+            <tr>
+              <th>번호</th>
+              <th>이름</th>
+              <th>시작일</th>
+              <th>마감일</th>
+              <th>완성률</th>
+              <th>연관 일정</th>
+              <th></th>
+            </tr>
+            <tr th:each="s:${list}">
+              <td th:text="${s.taskid}"></td>
+              <td th:text="${s.title}"></td>
+              <td th:text="${s.st}"></td>
+              <td th:text="${s.ed}"></td>
+              <td th:text="${s.percent}"></td>
+              <td th:text="${s.dependencies}"></td>
+              <td><a th:href="@{/auth/chart/del(id=${s.taskid})}">삭제</a></td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
 
