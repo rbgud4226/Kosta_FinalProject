@@ -38,4 +38,17 @@ public class MessageService {
 		}
 		return list;
 	}
+	
+	public String getRecentMessageByRoomId(String roomId) {
+		List<Message> l = messagedao.findByRoom_ChatroomidOrderByIdAsc(roomId);
+		String recentMsg = "";
+		for(int i=0; i<l.size(); i++) {
+			recentMsg = l.get(l.size()-1).getContent();
+		}
+		recentMsg = recentMsg.replaceAll("<br>", " ");
+		if(recentMsg.length() >= 13) {
+			recentMsg = recentMsg.substring(0, 12) + "..."; 
+		}
+		return recentMsg;
+	}
 }

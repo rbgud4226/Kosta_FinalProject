@@ -26,4 +26,5 @@ public class ChatRoomDto {
 	@JsonIgnore
 	private List<RoomUser> roomUsers;
 	private boolean status; 
+	private String recentMsg;
 }

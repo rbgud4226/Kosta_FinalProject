@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.chat.Message.MessageService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -21,6 +23,9 @@ public class ChatRoomController {
 
 	@Autowired
 	private ChatRoomNameService chatRoomNameService;
+	
+	@Autowired
+	private MessageService messageService;
 
 	@GetMapping("/chat/chatroom/{roomId}")
 	public String getChatRoomByRoomId(@PathVariable String roomId, HttpSession session, ModelMap map) {
@@ -56,6 +61,7 @@ public class ChatRoomController {
 	public ArrayList<ChatRoomDto> getPersonalChatRooms(@PathVariable String userId) {
 		ArrayList<ChatRoomDto> cr = chatRoomService.getAllChatRooms(userId);
 		for (ChatRoomDto chatRoom : cr) {
+			String recentMsg = messageService.getRecentMessageByRoomId(chatRoom.getChatroomid());
 			ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(chatRoom.getChatroomid());
 			List<ChatRoomName> roomNames = new ArrayList<>();
 			for (ChatRoomNameDto dto : roomNamesDto) {
@@ -63,6 +69,7 @@ public class ChatRoomController {
 					roomNames.add(new ChatRoomName(dto.getId(), dto.getRoom(),dto.getHost(), dto.getRoomName()));   
 	            }
 			}
+			chatRoom.setRecentMsg(recentMsg);
 			chatRoom.setChatRoomNames(roomNames);
 		}
 		return cr;
@@ -91,10 +98,12 @@ public class ChatRoomController {
 		    return cr;
 	}
 
-	@GetMapping("/chat/chatrooms/out")
-	public String getOutRooms(@RequestParam String chatroomid, String userId) {
-		chatRoomService.getOutChatRoom(chatroomid, userId);
-		return "redirect:/chat/chatrooms/" + userId;
+	@GetMapping("/chat/chatrooms/out/{roomId}/{userId1}")
+	@ResponseBody
+	public String getOutRooms(@PathVariable String chatroomid, String userId, ModelMap map) {
+		String mes = chatRoomService.getOutChatRoom(chatroomid, userId);
+		map.addAttribute("getOutMessage", mes);
+		return "/chat/chatrooms/" + userId;
 	}
 
 	@GetMapping("/chat/chatrooms/invite/{chatroomid}")
