@@ -5,61 +5,15 @@
   <title>Insert title here</title>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script type="text/javascript">
-      $(document).ready(function (){
-          google.charts.load('current', {'packages':['gantt']});
-          google.charts.setOnLoadCallback(drawChart);
-          function drawChart() {
-
-              $.ajax({
-                  url : "/auth/chart/data",
-                  dataType : 'json',
-                  method : 'GET'
-              }).done(function (list){
-                  var data = new google.visualization.DataTable();
-                  data.addColumn('string', 'Task ID');
-                  data.addColumn('string', 'Task Name');
-                  data.addColumn('date', 'Start Date');
-                  data.addColumn('date', 'End Date');
-                  data.addColumn('number', 'Duration');
-                  data.addColumn('number', 'Percent Complete');
-                  data.addColumn('string', 'Dependencies');
-
-                  list.forEach(function (row){
-                      console.log(row);
-                      var startDate = new Date(row.st);
-                      var endDate = new Date(row.ed);
-                      var id = '"' + row.taskid + '"';
-                      data.addRow([
-                          id,
-                          row.title,
-                          startDate,
-                          endDate,
-                          null,
-                          row.percent,
-                          null
-                      ]);
-
-                      var options = {
-                          height: 275
-                      };
-
-                      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
-
-                      chart.draw(data, options);
-                  });
-              }).fail(function (jqXHR, textStatus, errorThrown){
-                  console.error("Error : " + textStatus, errorThrown);
-              });
-          }
-      });
-  </script>
   <link rel="stylesheet" th:href="@{/css/common/reset.css}">
   <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
   <link rel="stylesheet" th:href="@{/css/common/header.css}">
   <link rel="stylesheet" th:href="@{/css/charts/charts.css}">
 </head>
 <body>
+<div style="display: none">
+  <input type="text" th:value="${session.loginId}" id="usersid">
+</div>
 <div th:replace="~{/common/header :: header}"></div>
 <div th:replace="~{/common/leftnav :: leftNav}"></div>
 <div class="main_body">
@@ -69,35 +23,58 @@
     </div>
   </section>
 </div>
-</body>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $.ajax({
-            url : "/auth/chart/cdata",
-            dataType : "json",
-            method : "get",
-            success:function (list){
-                console.log(list);
-                var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    headerToolbar:{
-                        left: 'prevYear,prev,next,nextYear today',
-                        center: 'title',
-                        right: 'dayGridMonth,dayGridWeek,dayGridDay'
-                    },
-                    selectable : true,
-                    selectMirror : true,
-                    navLinks : true,
-                    editable : true,
-                    dayMaxEvents: true, // allow "more" link when too many events
+<script type="text/javascript">
+    $(document).ready(function (){
+        google.charts.load('current', {'packages':['gantt']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var loginId = document.getElementById(usersid);
 
-                    // 이벤트 객체 필드 document : https://fullcalendar.io/docs/event-object
-                    events: list
+                $.ajax({
+                    url : "/auth/chart/data",
+                    dataType : 'json',
+                    method : 'GET',
+                    data : {
+                        loginId : loginId
+                    }
+                }).done(function (list){
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Task ID');
+                    data.addColumn('string', 'Task Name');
+                    data.addColumn('date', 'Start Date');
+                    data.addColumn('date', 'End Date');
+                    data.addColumn('number', 'Duration');
+                    data.addColumn('number', 'Percent Complete');
+                    data.addColumn('string', 'Dependencies');
+
+                    list.forEach(function (row){
+                        console.log(row);
+                        var startDate = new Date(row.st);
+                        var endDate = new Date(row.ed);
+                        var id = '"' + row.taskid + '"';
+                        data.addRow([
+                            id,
+                            row.title,
+                            startDate,
+                            endDate,
+                            null,
+                            row.percent,
+                            null
+                        ]);
+
+                        var options = {
+                            height: 275
+                        };
+
+                        var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+                        chart.draw(data, options);
+                    });
+                }).fail(function (jqXHR, textStatus, errorThrown){
+                    console.error("Error : " + textStatus, errorThrown);
                 });
-
-                calendar.render();
-            }
-        });
+        }
     });
 </script>
+</body>
 </html>

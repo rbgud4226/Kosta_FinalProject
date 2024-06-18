@@ -21,7 +21,12 @@ public class ChartsController {
 
   @PostMapping("/add")
   public String addChart(ChartsDto dto){
-    service.save(dto);
+    ChartsDto cd = dto;
+    System.out.println("테스트출력 : "+cd);
+    if(cd.getEd().isEmpty()){
+      cd.setEd(cd.getSt());
+    }
+    service.save(cd);
     return "redirect:/index_emp";
   }
 
@@ -37,8 +42,9 @@ public class ChartsController {
 
   @GetMapping("/data")
   @ResponseBody
-  public ArrayList<ChartsDto> data(){
-    ArrayList<ChartsDto> list = service.getAll();
+  public ArrayList<ChartsDto> data(HttpSession session){
+    String loginid = (String) session.getAttribute("loginId");
+    ArrayList<ChartsDto> list = service.getbyUsers(loginid);
     return list;
   }
 

@@ -87,7 +87,8 @@ public class HomeController {
 
 	@RequestMapping("/index_emp")
 	public void empHome(HttpSession session, ModelMap map) {
-		map.addAttribute("usernm", uservice.getById((String) session.getAttribute("loginId")));
+		String loginid = (String) session.getAttribute("loginId");
+		map.addAttribute("usernm", uservice.getById(loginid));
 		MembersDto mdto = mservice.getByuserId((String) session.getAttribute("loginId"));
 		if (mdto != null) {
 			if (mdto.getMemberimgnm() == "") {
@@ -106,7 +107,7 @@ public class HomeController {
 				session.setAttribute("joblvnm", mdto.getJoblvid().getJoblvnm());
 			}
 		}
-		map.addAttribute("list", chartsService.getAll());
+		map.addAttribute("list", chartsService.getbyUsers(loginid));
 	}
 
 }
