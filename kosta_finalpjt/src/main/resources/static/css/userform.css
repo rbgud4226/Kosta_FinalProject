@@ -1,3 +1,11 @@
+.form_wrapper{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .login_wrapper{
     width: 600px;
     padding: 100px 30px;
@@ -21,10 +29,7 @@ body{
     height: 100vh;
 }
 #posts_list{
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+
 }
 .form-group{
     display: flex;
@@ -51,15 +56,12 @@ body{
     width: 25%;
 }
 .join_link{
-    position: absolute;
     padding: 10px 0;
-    top: 69%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     text-align: center;
     width: 600px;
     background: white;
     border-radius: 15px;
+    margin: 15px auto;
 }
 .alert-danger{
     margin-top: 10px;
