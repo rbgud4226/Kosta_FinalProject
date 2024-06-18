@@ -51,9 +51,9 @@ const home = (type) => {
 </tr>
 <tr><th>입사일</th><td th:text="${user?.memberdto?.hiredt }"></td></tr>
 <tr th:if="${user.aprov == 3 }"><th>퇴사일</th><td th:text="${user?.memberdto?.leavedt }"></td></tr>
-<tr><th>부서</th><td th:text="${user?.memberdto?.deptid?.deptid }"></td></tr>
+<tr><th>부서</th><td th:text="${user?.memberdto?.deptid?.deptnm }"></td></tr>
 <tr><th>부서장</th><td th:text="${user?.memberdto?.mgrid?.memberid }"></td></tr>
-<tr><th>직급</th><td th:text="${user?.memberdto?.joblvid?.joblvid }"></td></tr>
+<tr><th>직급</th><td th:text="${user?.memberdto?.joblvid?.joblvnm }"></td></tr>
 </table>
 
 <table border="1">
