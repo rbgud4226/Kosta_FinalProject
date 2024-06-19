@@ -34,9 +34,11 @@ public class ChatRoomController {
 	@GetMapping("/chat/chatroom/{roomId}")
 	public String getChatRoomByRoomId(@PathVariable String roomId, HttpSession session, ModelMap map) {
 		String userId1 = (String) session.getAttribute("loginId");
+		String partId = usersService.getById2(userId1).getUsernm();
+		map.addAttribute("partId", partId);
 		map.addAttribute("roomId", roomId);
 		map.addAttribute("userId1", userId1);
-		return "/chat/bootchat";
+		return "redirect:/chat/bootchat";
 	}
 
 	@GetMapping("/chat/chatroom")
@@ -57,6 +59,8 @@ public class ChatRoomController {
 	public String getChatRoomsByRoomId(@PathVariable String userid, HttpSession session, ModelMap map) {
 		String userId1 = (String) session.getAttribute("loginId");
 		ArrayList<ChatRoomDto> cr = chatRoomService.getChatRoomsListByName(userid, userId1);
+		String partId = usersService.getById2(userId1).getUsernm();
+		map.addAttribute("partId", partId);
 		map.addAttribute("chatRooms", cr);
 		map.addAttribute("userId1", userId1);
 		return "/chat/bootchat";
@@ -86,6 +90,18 @@ public class ChatRoomController {
 	public ArrayList<ChatRoomDto> getChatRoomsSearch(@PathVariable String userid, HttpSession session) {
 		String loginId = (String) session.getAttribute("loginId");
 		ArrayList<ChatRoomDto> cr = chatRoomService.getChatRoomsListByName(userid, loginId);
+		for (ChatRoomDto chatRoom : cr) {
+			String recentMsg = messageService.getRecentMessageByRoomId(chatRoom.getChatroomid());
+			ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(chatRoom.getChatroomid());
+			List<ChatRoomName> roomNames = new ArrayList<>();
+			for (ChatRoomNameDto dto : roomNamesDto) {
+				if (dto.getHost().equals(loginId)) {
+					roomNames.add(new ChatRoomName(dto.getId(), dto.getRoom(),dto.getHost(), dto.getRoomName(), dto.getEditableName()));   
+	            }
+			}
+			chatRoom.setRecentMsg(recentMsg);
+			chatRoom.setChatRoomNames(roomNames);
+		}
 		return cr;
 	}
 
@@ -105,7 +121,6 @@ public class ChatRoomController {
 	}
 
 	@GetMapping("/chat/chatrooms/out/{roomId}/{userid}")
-	@ResponseBody
 	public String getOutRooms(@PathVariable String roomId, @PathVariable String userid, ModelMap map) {
 	    String mes = chatRoomService.getOutChatRoom(roomId, userid);
 	    map.addAttribute("getOutMessage", mes);
@@ -117,12 +132,12 @@ public class ChatRoomController {
 	public String InviteChatRoom(@PathVariable String chatroomid, String newuserId, ModelMap map) {
 		String mes = chatRoomService.inviteUserToChatRoom(chatroomid, newuserId);
 		map.addAttribute("inviteMessage", mes);
-		return "/chat/chatroom/" + chatroomid;
+		return "redirect:/chat/chatroom/" + chatroomid;
 	}
 
 	@PostMapping("/chat/chatrooms/edit")
 	public String editRoomName(@RequestParam String chatroomid, String newRoomName, String userId1) {
 		chatRoomService.editChatRoomName(chatroomid, newRoomName, userId1);
-		return "/chat/bootchat";
+		return "redirect:/chat/bootchat";
 	}
 }

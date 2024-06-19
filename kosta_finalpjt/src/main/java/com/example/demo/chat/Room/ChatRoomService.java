@@ -33,9 +33,6 @@ public class ChatRoomService {
 
 	@Autowired
 	private ChatRoomNameDao chatRoomNameDao;
-	
-	@Autowired
-	private ChatRoomNameService chatRoomNameService;
 
 	public ChatRoomDto createChatRoom(List<String> userIds) {
 		String name = createChatRoomName(userIds);
@@ -100,7 +97,7 @@ public class ChatRoomService {
 	public String getOutChatRoom(String chatroomid, String userid) {
 	    String getOutMessage = "";
 	    ChatRoom chatRoom = chatRoomDao.findByChatroomid(chatroomid);
-	    if (chatRoom.getRoomType().equals("GROUP")) {
+	    if (chatRoom.getRoomType().equals("GROUP") || chatRoom.getRoomType().equals("PERSONAL")) {
 	        String[] userIds = chatRoom.getName().split("_");
 	        String[] partis = chatRoom.getParticipants().split("_");
 	        String part = usersService.getById2(userid).getUsernm();
@@ -120,37 +117,17 @@ public class ChatRoomService {
 	        }
 	        chatRoomDao.save(chatRoom);
 	    }
-	    System.out.println(getOutMessage);
 	    return getOutMessage;
 	}
-//	public String getOutChatRoom(String chatroomid, String userid) {
-//		String getOutMessage = "";
-//		ChatRoom chatRoom = chatRoomDao.findByChatroomid(chatroomid);
-//		if (chatRoom.getRoomType().equals("GROUP")) {
-//			String[] userIds = chatRoom.getName().split("_");
-//			List<String> userIdList = new ArrayList<>(Arrays.asList(userIds));
-//			userIdList.remove(userid);
-//			if (userIdList.isEmpty()) {
-//				chatRoom.setStatus(false);
-//			} else {
-//				String addUserIds = createChatRoomName(userIdList);
-//				chatRoom.setName(addUserIds);
-//				getOutMessage = userid + "님이 나갔습니다";
-//			}
-//			chatRoomDao.save(chatRoom);
-//		}
-//		System.out.println(getOutMessage);
-//		return getOutMessage;
-//	}
-
 
 	public ArrayList<ChatRoomDto> getChatRoomsListByName(String name, String loginId) {
 		List<ChatRoom> l = chatRoomDao.findAll();
+		String partN = usersService.getById2(loginId).getUsernm();
 		ArrayList<ChatRoomDto> list = new ArrayList<>();
 		for (ChatRoom cr : l) {
-			if (cr.getName().contains(loginId) && cr.getName().contains(name) && cr.isStatus()) {
+			if (cr.getParticipants().contains(partN) && cr.getParticipants().contains(name) && cr.isStatus()) {
 				list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getChatRoomNames(), cr.getRoomType(),
-						cr.getChats(), cr.getRoomUsers(), cr.isStatus(), null, null));
+						cr.getChats(), cr.getRoomUsers(), cr.isStatus(), null, cr.getParticipants()));
 			}
 		}
 		return list;
@@ -162,7 +139,7 @@ public class ChatRoomService {
 		for (ChatRoom cr : l) {
 			if (cr.isStatus() && cr.getName().contains(loginId)) {
 				list.add(new ChatRoomDto(cr.getChatroomid(), cr.getName(), cr.getChatRoomNames(), cr.getRoomType(),
-						cr.getChats(), cr.getRoomUsers(), cr.isStatus(),null, null));
+						cr.getChats(), cr.getRoomUsers(), cr.isStatus(),null, cr.getParticipants()));
 			}
 		}
 		return list;
@@ -171,7 +148,7 @@ public class ChatRoomService {
 	public ChatRoomDto getChatRoomsByChatRoomId(String chatroomid) {
 		ChatRoom c = chatRoomDao.findByChatroomid(chatroomid);
 		ChatRoomDto cr = new ChatRoomDto(c.getChatroomid(), c.getName(), c.getChatRoomNames(), c.getRoomType(),
-				c.getChats(), c.getRoomUsers(), c.isStatus(), null, null);
+				c.getChats(), c.getRoomUsers(), c.isStatus(), null, c.getParticipants());
 		return cr;
 	}
 
