@@ -46,6 +46,7 @@ const home = (type) => {
 </table>
 
 <input type="button" value="직급추가페이지이동버튼" onclick="location.href='/admin/corp/joblvadd'"><br/>
+<input type="button" value="joblv더미 데이터 생성" th:onclick="location.href='/admin/corp/joblvtestadd'"><br/>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
