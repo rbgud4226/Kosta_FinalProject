@@ -32,7 +32,7 @@ public class DocxController {
 		return "docx/addreport";
 	}
 
-		
+	//보고서 작성양식
 	@PostMapping("/addreport")
 	public String addreport(DocxDto d) {
 		System.out.println(d.getSenior());
@@ -109,40 +109,7 @@ public class DocxController {
 		service.approveDocx(docxkey,formtype);
 		return "redirect:/auth/docx/list";
 	}
-//	@RequestMapping("/approve")
-//	public String approveDocx(@RequestParam int docxkey, @RequestParam String formtype, @RequestParam int orderloc) {
-//		System.out.println("데이터 잘 받아오는지 확인:"+orderloc);
-//		List<DocxDto> docxlist = service.findByDocxKeyTypeSenior(docxkey, formtype);
-//		System.out.println("리스트 확인"+docxlist);
-//		if(docxlist != null && !docxlist.isEmpty()) {
-//			for(DocxDto docx : docxlist) {
-//				if(docx.getOrderloc() == orderloc) {
-//					int uploc = orderloc +1;
-//					docx.setOrderloc(uploc);
-//					service.save(docx,formtype,docxkey,uploc);
-//					break;
-//				}
-//			}
-//			  boolean allApproved = true;
-//		        for (DocxDto docx : docxlist) {
-//		            if (docx.getOrderloc() < docxlist.size() - 1) {
-//		                allApproved = false;
-//		                break;
-//		            }
-//		        }
-//		        
-//		        if (allApproved) {
-//		            DocxDto docx = docxlist.get(0);
-//		            docx.setStatus(2);
-//		            service.saveDocx(docx);
-//		        }
-//		}
-//		
-//		return "redirect:/auth/docx/list";
-//	}
 	
-	
-
 	@RequestMapping("/deldocx")
 	public String deldocx(int formnum) {
 		service.delDocx(formnum);

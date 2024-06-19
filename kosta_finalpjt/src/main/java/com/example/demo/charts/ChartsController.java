@@ -44,7 +44,7 @@ public class ChartsController {
   @ResponseBody
   public ArrayList<ChartsDto> data(HttpSession session){
     String loginid = (String) session.getAttribute("loginId");
-    ArrayList<ChartsDto> list = service.getbyUsers(loginid);
+    ArrayList<ChartsDto> list = service.ganttList(loginid);
     return list;
   }
 

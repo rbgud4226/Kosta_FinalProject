@@ -26,20 +26,23 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 
 	//연/월별 (부서)직원 통계
 	//사원번호(user_id) 이름 부서번호 직급레벨 총_출근횟수 지각횟수 총_근무시간
-	@Query(value = "SELECT M.memberid, u.USERNM, m.depts_deptid, m.JOBLVS_JOBLVID, "+
+	@Query(value = "SELECT M.memberid, u.USERNM,d.deptnm, j.joblvnm, "+
 			" COUNT(*) AS total_records, "+
 			"SUM(CASE WHEN W.state = '지각' THEN 1 ELSE 0 END) AS total_late_records, "+
-			"LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) / 60), 2, '0') "+
+			"LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) / 60), 3, '0') "+
 			"|| ':' || "+
 			"LPAD(MOD(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))), 60), 2, '0') AS total_time "+
 			"FROM work_in_out_record W "+
-			"JOIN members M ON W.user_id = M.memberid "+
+			"JOIN members M ON W.user_id = m.memberid "+
 			"JOIN users u ON u.id = m.userid_id "+
+			"JOIN joblvs j ON j.joblvidx = m.joblvs_joblvid "+
+			"JOIN depts d ON d.deptid = m.depts_deptid "+
 			"WHERE "+
 			"EXTRACT(MONTH FROM W.day) = :month "+
 			"AND EXTRACT(YEAR FROM W.day) = :year "+
 			"AND M.depts_deptid = :dept "+
-			"GROUP BY M.memberid, u.USERNM, m.depts_deptid, m.JOBLVS_JOBLVID", nativeQuery = true)
+			"GROUP BY "+
+			"M.memberid, u.USERNM, d.deptnm, j.joblvnm", nativeQuery = true)
     List<Object[]> chartDept(@Param("month") int month, @Param("year") int year, @Param("dept") int dept);
 	
 	
