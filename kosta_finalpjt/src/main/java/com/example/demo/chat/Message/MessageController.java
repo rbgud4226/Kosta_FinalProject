@@ -51,15 +51,7 @@ public class MessageController {
 			ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 	        messagingTemplate.convertAndSend("/room/" + roomId, list);
 	        messagingTemplate.convertAndSend("/recent/update", roomId);
-		}else if (chatMessage.getType().equals("INVITE")) {
-	        String msg = chatRoomService.inviteUserToChatRoom(roomId, chatMessage.getNewuserId());
-	        chatMessage.setContent(msg);
-	        messageService.save(chatMessage, roomId);
-	        ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
-	        list.get(0).setNewuserId(msg);
-	        messagingTemplate.convertAndSend("/room/" + roomId, list);
-	        messagingTemplate.convertAndSend("/recent/update", roomId);
-	    } else if (chatMessage.getType().equals("FILE")) {
+		} else if (chatMessage.getType().equals("FILE")) {
 	        String wpath = "http://localhost:8081/files/" + chatMessage.getFileName();
 	        chatMessage.setFileRoot(wpath);
 	        chatMessage.setFileId(UUID.randomUUID().toString());
