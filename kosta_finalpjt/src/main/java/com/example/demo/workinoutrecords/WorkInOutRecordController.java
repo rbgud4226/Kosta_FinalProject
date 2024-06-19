@@ -229,7 +229,7 @@ public class WorkInOutRecordController {
   //관리자
   @ResponseBody
   @GetMapping("/list")
-  public Map deptRecord(int dept, int cnt) {
+  public ArrayList<ChartDeptMember> deptRecord(int dept, int cnt) {
     // 현재 날짜 가져오기
     LocalDate currentDate = LocalDate.now();
     // 현재 달/년도 가져오기
@@ -243,9 +243,13 @@ public class WorkInOutRecordController {
       previousMonth = 12;
       previousYear--;
     }
-
-    Map map = new HashMap<>();
-    map.put("list", service.chartMonthandDept(previousMonth, previousYear, dept));
-    return map;
+    return service.chartMonthandDept(previousMonth, previousYear, dept);
   }
+  
+  @GetMapping("/admin")
+  public String admin() {
+	  System.out.println("admin 관리 페이지 접속중");
+	  return "record/admin";
+  }
+  
 }
