@@ -28,4 +28,5 @@ public class ChatRoomDto {
 	private boolean status; 
 	private String recentMsg;
 	private String participants;
+	private String img;
 }

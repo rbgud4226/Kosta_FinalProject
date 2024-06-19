@@ -38,7 +38,7 @@ public class ChatRoomController {
 		map.addAttribute("partId", partId);
 		map.addAttribute("roomId", roomId);
 		map.addAttribute("userId1", userId1);
-		return "redirect:/chat/bootchat";
+		return "redirect:chat/bootchat";
 	}
 
 	@GetMapping("/chat/chatroom")
@@ -52,7 +52,7 @@ public class ChatRoomController {
 		map.addAttribute("partId", partId);
 		map.addAttribute("roomId", chatRoomDto.getChatroomid());
 		map.addAttribute("userId1", userId1);
-		return "/chat/bootchat";
+		return "chat/bootchat";
 	}
 
 	@GetMapping("/chat/chatrooms/{userid}")
@@ -63,7 +63,7 @@ public class ChatRoomController {
 		map.addAttribute("partId", partId);
 		map.addAttribute("chatRooms", cr);
 		map.addAttribute("userId1", userId1);
-		return "/chat/bootchat";
+		return "chat/bootchat";
 	}
 
 	@GetMapping("/chat/chatrooms/loadrooms/{userid}")
@@ -108,7 +108,7 @@ public class ChatRoomController {
 	@GetMapping("/chat/chatrooms/loadrooms/searchroom/{chatroomid}/{userId1}")
 	@ResponseBody
 	public ChatRoomDto getChatRooms(@PathVariable String chatroomid, @PathVariable String userId1) {
-		 ChatRoomDto cr = chatRoomService.getChatRoomsByChatRoomId(chatroomid);
+		 ChatRoomDto cr = chatRoomService.getChatRoomsByChatRoomId(chatroomid, userId1);
 		    ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(cr.getChatroomid());
 		    List<ChatRoomName> roomNames = new ArrayList<>();
 		    for (ChatRoomNameDto dto : roomNamesDto) {
@@ -126,18 +126,18 @@ public class ChatRoomController {
 	    map.addAttribute("getOutMessage", mes);
 	    return "redirect:/chat/chatrooms/" + userid;
 	}
-
-	@GetMapping("/chat/chatrooms/invite/{chatroomid}")
-	@ResponseBody
-	public String InviteChatRoom(@PathVariable String chatroomid, String newuserId, ModelMap map) {
-		String mes = chatRoomService.inviteUserToChatRoom(chatroomid, newuserId);
-		map.addAttribute("inviteMessage", mes);
-		return "redirect:/chat/chatroom/" + chatroomid;
+	
+	@GetMapping("/chat/chatrooms/invite/{userid}/{chatroomid}")
+	public String inviteChatRoom(@RequestParam(name = "userid") List<String> userid, String chatroomid, ModelMap map, HttpSession session) {
+	    String loginId = (String) session.getAttribute("loginId");
+	    ArrayList<String> mes = chatRoomService.inviteUserToChatRoom(chatroomid, userid, loginId);
+	    session.setAttribute("inviteMessage", mes);
+	    return "redirect:/chat/chatrooms/" + loginId;
 	}
 
 	@PostMapping("/chat/chatrooms/edit")
 	public String editRoomName(@RequestParam String chatroomid, String newRoomName, String userId1) {
 		chatRoomService.editChatRoomName(chatroomid, newRoomName, userId1);
-		return "redirect:/chat/bootchat";
+		return "chat/bootchat";
 	}
 }
