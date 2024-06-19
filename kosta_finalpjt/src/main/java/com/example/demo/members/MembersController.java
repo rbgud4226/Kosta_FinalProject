@@ -38,10 +38,10 @@ public class MembersController {
 
 	@Autowired
 	private UsersService uservice;
-	
+
 	@Autowired
 	private DeptsService dservice;
-	
+
 	@Autowired
 	private JoblvsService jservice;
 
@@ -49,8 +49,8 @@ public class MembersController {
 	private EduWorkExperienceInfoService eservice;
 
 	@Autowired
-    ResourceLoader resourceLoader;
-	
+	ResourceLoader resourceLoader;
+
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 
@@ -62,17 +62,17 @@ public class MembersController {
 		return map.addAttribute("mlist", mlist);
 //		return "member/memberlist";
 	}
-  
+
 	@GetMapping("/member/test")
 	public void membertest(@RequestParam(name = "userid", required = false) List<String> userids) {
 		System.out.println("===================");
 		System.out.println(userids);
-        for (String userid : userids) {
-            System.out.println(userid);
-        }
-        
+		for (String userid : userids) {
+			System.out.println(userid);
+		}
+
 	}
-  
+
 	@ResponseBody
 	@GetMapping("/member/getdeptby")
 	public Map getmemberby(String val, int type) {
@@ -140,7 +140,8 @@ public class MembersController {
 			}
 		} else {
 			try {
-				InputStream istream = resourceLoader.getResource("classpath:/static/img/common/human.png").getInputStream();
+				InputStream istream = resourceLoader.getResource("classpath:/static/img/common/human.png")
+						.getInputStream();
 				header.setContentType(MediaType.IMAGE_PNG);
 				result = new ResponseEntity<byte[]>(istream.readAllBytes(), header, HttpStatus.OK);
 			} catch (IOException e) {
@@ -198,6 +199,14 @@ public class MembersController {
 
 		}
 		return "redirect:/user/userinfo?id=" + dto.getUserid().getId();
+	}
+
+	//
+	@PostMapping("/admin/member/membertestadd")
+	public String membertestadd(String dummyuserid) {
+		mservice.dummyMembersave(dummyuserid);
+		return "redirect:/admin/user/userlist";
+
 	}
 
 	@PostMapping("/member/eweiadd")

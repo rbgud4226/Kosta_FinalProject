@@ -264,6 +264,13 @@ public class UsersController {
 		return mav;
 	}
 
+	//
+	@GetMapping("/admin/user/usertestadd")
+	public String usertestadd() {
+		uservice.dummyUsersave();
+		return "redirect:/admin/user/userlist";
+	}
+
 	// 채팅 유저 목록
 	@GetMapping("/user/list")
 	public String del(ModelMap map) {
