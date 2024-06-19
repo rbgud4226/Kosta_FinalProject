@@ -102,6 +102,13 @@ a {
 /* *******************************
 message-area
 ******************************** */
+.img-fluid-center{
+	max-width: 100%;
+    height: auto;
+    width: 45px; 
+    height: 45px;
+    border-radius: 25px;
+}
 .chat-content{
     overflow-y: auto;
     flex-direction: column-reverse;

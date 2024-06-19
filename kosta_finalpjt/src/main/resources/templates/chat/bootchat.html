@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-	<link rel="stylesheet" th:href="@{/css/chat/chatdesign.css}">
+		<link rel="stylesheet" th:href="@{/css/chat/chatdesign.css}">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
@@ -21,6 +21,7 @@
         var roomId = null;
         var userId1 = [[${userId1}]];
         var partId = [[${partId}]];
+        var inviteMessage = [[${inviteMessage}]];
 
         function connect(newRoomId) {
         	roomId = newRoomId;
@@ -98,6 +99,10 @@
             centerStyle.empty();
             var chatRoomNames = '';
             var chatMembers = '';
+     		var imgName = chatRoom.img;
+     		if(chatRoom.img === null){
+     			imgName = '';
+     		}
             if (chatRoom.roomType !== 'PRIVATE') {
 	           	if (chatRoom.chatRoomNames.length > 0) {
 	                var name = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
@@ -111,7 +116,7 @@
             var chatRoomList = `
                 <a href="#" class="d-flex align-items-center">
                     <div class="flex-shrink-0">
-                        <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                     <img class="img-fluid-center" src="/member/memberimg?memberimgnm=${imgName}" alt="user img">
                         <span class="active"></span>
                     </div>
                     <div class="flex-grow-1 ms-3">
@@ -182,6 +187,10 @@
             data.forEach(function(chatRoom) {
  		       var chatRoomNames = '';
  	           var chatMembers = '';
+ 	  		   var imgName = chatRoom.img;
+     		   if(chatRoom.img === null){
+     				imgName = '';
+     			  }
  	           if (chatRoom.roomType !== 'PRIVATE') {
  	           		if (chatRoom.chatRoomNames.length > 0) {
  	                	 var name = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
@@ -195,7 +204,7 @@
  			    var chatRoomList = `
 			         <a href="#" class="d-flex align-items-center">
 			             <div class="flex-shrink-0">
-			                 <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+			                 <img class="img-fluid-center" src="/member/memberimg?memberimgnm=${imgName}" alt="user img">
 			                 <span class="active"></span>
 			             </div>
 			             <div class="flex-grow-1 ms-3">
@@ -211,22 +220,7 @@
 			        }
 			    });
 			}
-		
-        function inviteUser(roomId) {
-            var newuserId = document.getElementById('inviteUserId').value;
-            var sender = document.getElementById('sender').value;
-            var message = {
-            		'type': 'INVITE',
-                    'sender' : sender,
-                    'content' : newuserId,
-                    'newuserId' : newuserId,
-                    'sendDate' : sendDay + ' ' + sendTime
-                };  
-                stompClient.send("/send/" + roomId, {}, JSON.stringify(message));
-                document.getElementById('message').value = '';
-        }
-        
-        
+   
         function getOutRoom(roomId){
        	 const date = new Date();
             const yoptions = { 
@@ -407,12 +401,32 @@
             window.location.href = '/chat/chatrooms?user=' + user;
         }
         
+        function resetModal(modalId) {
+            if(modalId === '0') {
+                $('#exampleModal .list_input').val('');
+            } else if(modalId === '1') {
+                $('#exampleModal2 .list_input').val('');
+            }
+        }
+        
         $(document).ready(function () {
+            if (inviteMessage) {
+                showMessage(inviteMessage.map(msg => ({ type: 'INVITE', content: msg, partid: '시스템', sendDate: new Date().toISOString() })));
+            }
         	loadChatRooms(userId1);
             $("#sendButton").click(function() { sendMessage(roomId); });
             $("#inviteButton").click(function() { inviteUser(roomId); });
             $("#searchButton").click(function() { searchChatRooms(); });
-            $("#upLoadButton").click(function() { sendFileMessage(roomId); });          
+            $("#upLoadButton").click(function() { sendFileMessage(roomId); });      
+            
+            $('#exampleModal').on('show.bs.modal', function (e) {
+                resetModal('0');
+            });
+
+            $('#exampleModal2').on('show.bs.modal', function (e) {
+            	 $('#roomIdInput').val(roomId);
+            	resetModal('1');
+            });
         });
     </script>
 <body>
@@ -428,22 +442,11 @@
                             <div class="modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="chat-header">
-                                        <div class="msg-search">
+                                        <div class="msg-search"> 
                                             <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="참여자이름으로 검색" aria-label="search" onkeypress="if(event.keyCode == 13){loadChatRoomsBySearch(this)}">                                       
-                                              <ul class="moreoption">
-        										<li class="navbar nav-item dropdown">
-           									       	 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              									 	  <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add">
-          										 	 </a>
-            								   		<ul class="dropdown-menu">
-                									<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">추가</a></li>
-                									<li><hr class="dropdown-divider"></li>
-                									<li>
-								                     <a class="dropdown-item" href="#" id="outButton" onclick="getOutRoom(roomId)">초대하기</a>
-								               	    </li>
-								                    </ul>
-								          	    </li>
-								      		 </ul>            		 
+           									       	 <a class="add" href="#">
+              									 	  <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          										 	 </a>        								   		        		 
                                         </div>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item" role="presentation">
@@ -508,7 +511,7 @@
                                                     <li class="navbar nav-item dropdown">
                                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
                                                         <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#">채팅참여자</a></li>
+                                                            <li><a class="dropdown-item" href="#"  data-bs-toggle="modal" data-bs-target="#exampleModal2">초대</a></li>
                                                             <li>
                                                                 <hr class="dropdown-divider">
                                                             </li>
@@ -569,7 +572,7 @@
             </div>
         </div>
   </div>
-  <!-- Modal -->
+  <!-- Modal Add-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mem_modal">
             <div class="modal-content">
@@ -590,7 +593,7 @@
                                 </td>
                                 <td class="list_search_wrapper">
                                     <input class="list_input" type="text" name="val">
-                                    <button type="button" class="btn blue_btn list_search" onclick="list_search()">검색</button>
+                                    <button type="button" class="btn blue_btn list_search_chat" onclick="list_search_chat('0')">검색</button>
                                 </td>
                             </tr>
                         </table>
@@ -609,6 +612,54 @@
                         </table>
                         <div class="modal-footer">
                             <input type="submit" value="채팅방열기" class="btn blue_btn">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+      <!-- Modal Invite-->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mem_modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2Label">멤버 선택</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="list_line" method="post">
+                        <table class="m20 table_w100">
+                            <tr>
+                                <td>
+                                    <select class="select_box" name="type">
+                                        <option value="1">부서이름</option>
+                                        <option value="2">직원이름</option>
+                                        <option value="3">직급</option>
+                                    </select>
+                                </td>
+                                <td class="list_search_wrapper">
+                                    <input class="list_input" type="text" name="val">
+                                    <button type="button" class="btn blue_btn list_search_chat" onclick="list_search_chat('1', roomId)">검색</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <form class="modal_list"  action="/chat/chatrooms/invite/${userId}/${roomId}">
+                      <input type="hidden" id="roomIdInput" name="chatroomid">
+                        <table class="table_w100 modal_table">
+                            <thead class="list_line">
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td class="w40 f600">Name</td>
+                                    <td class="f600">E-mail</td>
+                                </tr>
+                            </thead>
+                            <tbody class="modal_body">
+                            </tbody>
+                        </table>
+                        <div class="modal-footer">
+                            <input type="submit" value="초대" class="btn blue_btn">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
