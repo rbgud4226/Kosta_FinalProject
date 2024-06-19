@@ -12,11 +12,13 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChartsDto {
-  private Users id;
+  private Users users;
   private int taskid;
+  private String chartResource;
   private String title;
   private String st;
   private String ed;
   private int percent;
   private String dependencies;
+  private String chartStatus;
 }

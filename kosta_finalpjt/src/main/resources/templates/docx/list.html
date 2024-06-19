@@ -4,6 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
+    <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" th:href="@{/css/record.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script type="text/javascript">
         const home = (type) => {
             if (type == 'admin') {
@@ -18,17 +28,19 @@
 </head>
 
 <body>
+    <div th:replace="~{/common/header :: header}"></div>
+    <div th:replace="~{/common/leftnav :: leftNav}"></div>
+    <div class="main_body">
     <h3>문서리스트</h3>
-
     <form action="/auth/docx/list" method="post">
         <label for="searchType">검색 기준:</label>
         <select id="searchType" name="searchType">
             <option value="title">제목</option>
             <option value="writer">작성자</option>
-            <option value="senior">결재 담당자</option>
+            <!-- <option value="senior">결재 담당자</option> -->
         </select>
         <input type="text" id="searchValue" name="searchValue" placeholder="검색어 입력">
-        <input type="submit" value="검색">
+        <input type="submit" value="검색" >
     </form>
 
     <table border="1">
@@ -56,8 +68,21 @@
         </tr>
     </table>
     <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br />
-    <a href="/auth/docx/addreport">보고서작성</a>
-    <a th:href="@{/auth/docx/mylist(writer=${session.loginId})}">내가 작성한 문서보기</a>
+    <a href="/auth/docx/addreport" class="nav_link">
+        <div class="icon_wrapper">
+            <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+        </div>
+        <span class="nav_link_text">보고서 작성폼</span>
+    </a>
+    <a th:href="@{/auth/docx/mylist(writer=${session.loginId})}" class="nav_link">
+        <div class="icon_wrapper">
+            <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+        </div>
+        <span class="nav_link_text">내가 작성한 문서보기</span>
+    </a>
+    <!-- <a href="/auth/docx/addreport" class="nav_link">보고서작성</a> -->
+    <!-- <a th:href="@{/auth/docx/mylist(writer=${session.loginId})}" class="nav_link">내가 작성한 문서보기</a> -->
+</div>
 </body>
 
 </html>

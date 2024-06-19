@@ -7,7 +7,7 @@
     <div class="menu_wrapper">
         <ul class="nav_ul">
             <li class="nav_li">
-                <div>
+                <div th:if="${session.type == 'emp'}">
                     <p class="nav_main_title">HRM system</p>
                     <ul>
                         <li class="li_link">
@@ -40,6 +40,7 @@
                                     <img th:src="@{/img/common/home.png}" class="nav_link_icon">
                                 </div>
                                 <span class="nav_link_text">부서 근태관리</span>
+                            </a>
                             <a th:href="@{/user/list}" class="nav_link">
                                 <div class="icon_wrapper">
                                     <img th:src="@{/img/common/home.png}" class="nav_link_icon">
@@ -49,50 +50,25 @@
                         </li>
                     </ul>
                 </div>
-            </li>
-            <li class="nav_li" th:if="${session.type != 'admin'}">
-                <div>
-                    <p class="nav_main_title">connect system</p>
+                <div th:if="${session.type == 'admin'}">
+                    <p class="nav_main_title">HRM system</p>
                     <ul>
                         <li class="li_link">
-                            <a href="#" class="nav_link">
+                            <a href="/" class="nav_link">
                                 <div class="icon_wrapper">
                                     <img th:src="@{/img/common/home.png}" class="nav_link_icon">
                                 </div>
-                                <span class="nav_link_text">공지게시판</span>
+                                <span class="nav_link_text">홈</span>
                             </a>
                         </li>
                         <li class="li_link">
-                            <a th:href="@{/chat/chatrooms/{userId1}(userId1=${session.loginId})}" class="nav_link">
+                            <a th:href="@{/auth/record/admin}" class="nav_link">
                                 <div class="icon_wrapper">
                                     <img th:src="@{/img/common/home.png}" class="nav_link_icon">
                                 </div>
-                                <span class="nav_link_text">채팅</span>
+                             <span class="nav_link_text">사원 근태관리</span>
                             </a>
                         </li>
-                        <li class="li_link">
-                            <a href="#" class="nav_link">
-                                <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
-                                </div>
-                                <span class="nav_link_text">문서함</span>
-                            </a>
-                        </li>
-                        <li class="li_link">
-                            <a href="#" class="nav_link">
-                                <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
-                                </div>
-                                <span class="nav_link_text">메일함</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav_li" th:if="${session.type != 'emp'}">
-                <div>
-                    <p class="nav_main_title">connect system</p>
-                    <ul>
                         <li class="li_link">
                             <a th:href="@{/admin/user/userlist}" class="nav_link">
                                 <div class="icon_wrapper">
@@ -120,6 +96,45 @@
                     </ul>
                 </div>
             </li>
+            <li class="nav_li" th:if="${session.type != 'admin'}">
+                <div>
+                    <p class="nav_main_title">connect system</p>
+                    <ul>
+                        <li class="li_link">
+                            <a href="#" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">공지게시판</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/chat/chatrooms/{userId1}(userId1=${session.loginId})}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">채팅</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/auth/docx/list}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">문서함</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a href="#" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">메일함</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </div>
 	<div class="left_footer">
@@ -136,6 +151,6 @@
 	            <span class="nav_link_text">로그아웃</span>
 	        </a>
 	    </div>
-  </nav>  
+  </nav>
 </body>
 </html>

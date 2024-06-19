@@ -82,25 +82,32 @@ const home = (type) => {
 <tr>
 	<th>부서</th>
 	<td>
-		<input type="text" name="deptid" id="deptidid" th:value="${member?.deptid?.deptnm }"  list="deptslist">
-		<datalist id="deptslist">
-			<option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }"></option>
-		</datalist>
+		<!-- <input type="text" name="deptid" id="deptidid" th:value="${member?.deptid?.deptnm }"  list="deptslist"> -->
+		<select id="deptslist" name="deptid">
+			<option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }" 
+			th:selected="${member?.deptid?.deptnm}==${d.deptnm}"
+			th:data-dept = "${d.mgrid?.memberid}"></option>
+		</select>
 	</td>
 </tr>
 <tr>
 	<th>부서장</th>
 	<td>
 		<input type="text" name="mgrid" id="mgrid" th:value="${member?.mgrid?.memberid }">
+		<select id="deptslist" name="deptid">
+			<option th:each="d : ${dlist}" th:text="${d.mgrid.userid.usernm}" th:value="${d.deptid }" 
+			th:selected="${member?.deptid?.deptnm}==${d.deptnm}"
+			th:data-dept = "${d.mgrid?.memberid}"></option>
+		</select>
 	</td>
 </tr>
 <tr>
 	<th>직급</th>
 	<td>
-		<input type="text" name="joblvid" id="joblvidid" th:value="${member?.joblvid?.joblvnm }" list="joblvslist">
-		<datalist id="joblvslist">
-			<option th:each="j : ${jlist}" th:text="${j.joblvnm}" th:value="${j.joblvidx}"></option>
-		</datalist>
+		<!-- <input type="text" name="joblvid" id="joblvidid" th:value="${member?.joblvid?.joblvnm }" list="joblvslist"> -->
+		<select id="joblvslist" name="joblvid">
+			<option th:each="j : ${jlist}" th:text="${j.joblvnm}" th:value="${j.joblvidx}" th:selected="${member?.joblvid?.joblvnm}==${j.joblvnm}"></option>
+		</select>
 	</td>
 </tr>
 </table>

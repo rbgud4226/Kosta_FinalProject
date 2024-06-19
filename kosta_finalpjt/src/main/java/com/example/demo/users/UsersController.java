@@ -109,7 +109,7 @@ public class UsersController {
 		} else if (aprovStr == "퇴직상태") {
 			udto.setAprov(3);
 		}
-		uservice.save(udto);
+		uservice.updatePwd(udto);
 		return "redirect:/user/userinfo?id=" + udto.getId();
 	}
 
@@ -262,6 +262,13 @@ public class UsersController {
 		mav.addObject("val", val);
 		mav.addObject("ulist", ulist);
 		return mav;
+	}
+
+	//
+	@GetMapping("/admin/user/usertestadd")
+	public String usertestadd() {
+		uservice.dummyUsersave();
+		return "redirect:/admin/user/userlist";
 	}
 
 	// 채팅 유저 목록

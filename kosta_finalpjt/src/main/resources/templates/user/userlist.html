@@ -56,5 +56,9 @@ const calaprov = (userid) => {
 </table>
 <input type="button" value="뒤로가기버튼" onclick="history.back()"><br/>
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
+<input type="button" value="user더미 데이터 생성" th:onclick="location.href='/admin/user/usertestadd'"><br/>
+<form action="/admin/member/membertestadd" method="post">
+<input type="text" name="dummyuserid"><input type="submit" value="member더미 데이터 생성">
+</form>
 </body>
 </html>

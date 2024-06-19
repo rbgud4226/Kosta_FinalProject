@@ -43,6 +43,13 @@ public class DeptsController {
 		return "redirect:/corp/deptlist";
 	}
 
+	//
+	@GetMapping("/admin/corp/depttestadd")
+	public String depttestadd() {
+		dservice.dummyDeptsave();
+		return "redirect:/corp/deptlist";
+	}
+
 	@GetMapping("/corp/deptinfo")
 	public String deptinfo(int deptid, ModelMap map) {
 		map.addAttribute("d", dservice.getByDeptId(deptid));
@@ -82,6 +89,13 @@ public class DeptsController {
 	@GetMapping("/admin/corp/joblvadd")
 	public String joblvaddform() {
 		return "corp/joblvadd";
+	}
+
+	//
+	@GetMapping("/admin/corp/joblvtestadd")
+	public String joblvtestadd() {
+		jservice.dummyJoblvsave();
+		return "redirect:/corp/joblvlist";
 	}
 
 	@PostMapping("/admin/corp/joblvadd")

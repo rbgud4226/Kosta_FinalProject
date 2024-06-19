@@ -3,11 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Insert title here</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" th:href="@{/css/common/reset.css}">
   <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
   <link rel="stylesheet" th:href="@{/css/common/header.css}">
+  <link rel="stylesheet" th:href="@{/css/common/modal.css}">
   <link rel="stylesheet" th:href="@{/css/charts/charts.css}">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:src="@{/js/charts.js}"></script>
+  <script th:src="@{/js/memmodal.js}"></script>
 </head>
 <body>
 <div th:replace="~{/common/header :: header}"></div>
@@ -44,113 +53,172 @@
           <div class="chart_menu">
             <button type="button" onclick="location.href='/auth/chart/gantt'">간트차트</button>
             <button type="button" onclick="location.href='/auth/chart/calendar'">달력</button>
-            <button type="button" id="modal_btn">일정추가</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#chartModal" onclick="taskidinit()">
+              일정추가
+            </button>
           </div>
         </div>
-        <table>
-          <tr>
-            <th>번호</th>
-            <th>이름</th>
-            <th>시작일</th>
-            <th>마감일</th>
-            <th>완성률</th>
-            <th>연관 일정</th>
-            <th></th>
-          </tr>
-          <tr th:each="s:${list}">
-            <td th:text="${s.taskid}"></td>
-            <td th:text="${s.title}"></td>
-            <td th:text="${s.st}"></td>
-            <td th:text="${s.ed}"></td>
-            <td th:text="${s.percent}"></td>
-            <td th:text="${s.dependencies}"></td>
-            <td><a th:href="@{/auth/chart/del(id=${s.taskid})}">삭제</a></td>
-          </tr>
-        </table>
+        <div class="chart_area_scroll">
+          <table>
+            <tr>
+              <th>분류</th>
+              <th style="width: 400px">이름</th>
+              <th>시작일</th>
+              <th>마감일</th>
+              <th>완성률</th>
+              <th>간트</th>
+              <th>공유</th>
+              <th>수정</th>
+              <th>삭제</th>
+            </tr>
+            <tr th:each="s:${list}">
+              <td th:text="${s.taskid}" style="display: none"></td>
+              <td th:text="${s.chartResource}"></td>
+              <td th:text="${s.title}" style="width: 400px"></td>
+              <td th:text="${s.st}"></td>
+              <td th:text="${s.ed}"></td>
+              <td th:text="${s.percent}"></td>
+              <td><input type="checkbox" th:checked="${s.chartStatus == 'yes'}" class="chart_edit_btn"></td>
+              <td>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#memberModal" class="taskidshare">
+                  <i class="fa-solid fa-share-nodes"></i>
+                </button>
+              </td>
+              <td>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#chartModal" class="taskidset">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+              </td>
+              <td><a th:href="@{/auth/chart/del(id=${s.taskid})}"><i class="fa-solid fa-eraser"></i></a></td>
+            </tr>
+          </table>
+        </div>
       </div>
-    </div>
-
-    <div class="board_body">
-      <div class="board_body_box">
-        <p>공지 게시판</p>
-      </div>
-      <div class="board_body_box">
-        <p>서류 게시판</p>
+      <div class="board_body">
+        <div class="board_body_box">
+          <p>공지 게시판</p>
+        </div>
+        <div class="board_body_box">
+          <p>서류 게시판</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="modal_section">
-    <div class="modal_wrap">
-      <i class="fa-solid fa-xmark modal_close"></i>
-      <div class="modal_text">
-        <div style="margin-top: 40px; margin-bottom: 10px">
-        <h5>일정 추가</h5>
-        </div>
-        <div>
-          <form action="/auth/chart/add" method="post" name="f">
-            <table style="height: 300px; margin-top: 10px;">
-              <tr>
-                <th>id</th>
-                <td><input type="text" name="id" placeholder="id" th:value="${session.loginId}" readonly></td>
-              </tr>
-              <tr>
-                <th>title</th>
-                <td><input type="text" name="title" placeholder="title"></td>
-              </tr>
-              <tr>
-                <th>start date</th>
-                <td><input type="date" name="st"></td>
-              </tr>
-              <tr>
-                <th>end date</th>
-                <td><input type="date" name="ed"></td>
-              </tr>
-              <tr>
-                <th>percent</th>
-                <td><input type="text" name="percent" placeholder="percent"></td>
-              </tr>
-            </table>
-            <div style="display: flex; justify-content: end; margin-right: 15px;">
-              <input type="submit" value="save">
+  <section id="chart_modal_section">
+    <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="chartModalLabel">일정 추가</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div style="height: 350px; justify-items: center">
+              <form action="/auth/chart/add" method="post" name="chartsavef">
+                <table style="height: 300px; margin-top: 10px; margin-left: auto; margin-right: auto">
+                  <tr>
+                    <td style="display: none"><input type="number" name="taskid" id="modal_taskid"></td>
+                  </tr>
+                  <tr>
+                    <th style="width: 100px">Title</th>
+                    <td><input type="text" name="title" placeholder="title" id="modal_title"></td>
+                  </tr>
+                  <tr>
+                    <th>Resource</th>
+                    <td><input type="text" name="chartResource" placeholder="긴급" id="modal_resource"></td>
+                  </tr>
+                  <tr>
+                    <th>Start Day</th>
+                    <td><input type="date" name="st" id="modal_st"></td>
+                  </tr>
+                  <tr>
+                    <th>End Day</th>
+                    <td><input type="date" name="ed" id="modal_ed"></td>
+                  </tr>
+                  <tr>
+                    <th>Percent (%)</th>
+                    <td><input type="text" name="percent" value="0" id="modal_percent"></td>
+                  </tr>
+                  <tr style="display: none">
+                    <td><input type="text" name="users" th:value="${session.loginId}"></td>
+                  </tr>
+                </table>
+                <div style="display: flex; justify-content: end; margin-right: 15px;">
+                  <input type="submit" value="save">
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <section id="member_modal_section">
+    <div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered mem_modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="list_line" method="post">
+              <table class="m20 table_w100">
+                <tr>
+                  <td>
+                    <select class="select_box" name="type">
+                      <option value="1">부서이름</option>
+                      <option value="2">직원이름</option>
+                      <option value="3">직급</option>
+                    </select>
+                  </td>
+                  <td class="list_search_wrapper">
+                    <input class="list_input" type="text" name="val">
+                    <button type="button" class="btn blue_btn list_search" onclick="list_search()">검색</button>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            <form class="modal_list" action="/auth/chart/share" method="post">
+              <input style="display: none" id="share_taskid" name="taskid">
+              <table class="table_w100 modal_table">
+                <thead class="list_line ">
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td class="w40 f600">Name</td>
+                  <td class="f600">E-mail</td>
+                </tr>
+                </thead>
+                <tbody class="modal_body">
+                <!-- <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
+                  <td>
+                    <input name="userid" type="checkbox" class="list_ch" th:value="${m?.userid?.usernm}">
+                  </td>
+                  <td class="form_td" >
+                    <p class="f600 list_name" th:text="${m?.userid?.usernm }"></p>
+                    <div class="list_pos">
+                      <span class="list_dept" th:text="${m?.deptid?.deptid }"></span>
+                      <span class="list_lv" th:text="${m?.joblvid?.joblvid +'대리 '}"></span>
+                    </div>
+
+                  </td>
+                  <td class="form_td" th:text="${m?.email}"></td>
+                </tr> -->
+                </tbody>
+              </table>
+              <div class="modal-footer">
+                <input type="submit" value="공유" class="btn blue_btn">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 <div class="modal_background"></div>
-<script type="text/javascript">
-    'use strict';
-    const modal_wrap = document.querySelector('.modal_wrap')
-    const modal_background = document.querySelector('.modal_background')
-
-    //Show modal
-    document.querySelector('#modal_btn').addEventListener('click', () => {
-        open()
-    })
-
-    //Hide modal
-    document.querySelector('.modal_close').addEventListener('click', () => {
-        close()
-    })
-
-    //Hide modal
-    window.addEventListener('click', (e) => {
-        e.target === modal_background ? close() : false
-    })
-
-    function close() {
-        modal_wrap.classList.remove('show-modal');
-        modal_background.classList.remove('show-modal');
-    }
-
-    function open() {
-        modal_wrap.classList.add('show-modal')
-        modal_background.classList.add('show-modal')
-    }
-</script>
 </body>
 </html>

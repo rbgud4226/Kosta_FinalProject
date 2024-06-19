@@ -24,15 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.chat.Room.ChatRoomDto;
-import com.example.demo.chat.Room.ChatRoomService;
+import com.example.demo.depts.DeptsDto;
 import com.example.demo.depts.DeptsService;
 import com.example.demo.depts.JoblvsService;
 import com.example.demo.users.Users;
 import com.example.demo.users.UsersDto;
 import com.example.demo.users.UsersService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MembersController {
@@ -42,26 +39,22 @@ public class MembersController {
 
 	@Autowired
 	private UsersService uservice;
-	
+
 	@Autowired
 	private DeptsService dservice;
-	
+
 	@Autowired
 	private JoblvsService jservice;
 
 	@Autowired
 	private EduWorkExperienceInfoService eservice;
-	
-	@Autowired
-	private ChatRoomService chatRoomService;
 
 	@Autowired
-    ResourceLoader resourceLoader;
-	
+	ResourceLoader resourceLoader;
+
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 
-//	private String dirName = "Pictures/kosta/kostafinalpjt_data/kostafinalpjt_img/";
 	private String dirName = "/src/main/resources/static/img/member/";
 
 	@GetMapping("/member/memberlist")
@@ -70,20 +63,17 @@ public class MembersController {
 		return map.addAttribute("mlist", mlist);
 //		return "member/memberlist";
 	}
-  
+
 	@GetMapping("/member/test")
-	public String membertest(@RequestParam(name = "userid", required = false) List<String> userIds, HttpSession session, ModelMap map) {
-		String userId1 = (String) session.getAttribute("loginId");
-		if (!userIds.contains(userId1)) {
-			userIds.add(userId1);
+	public void membertest(@RequestParam(name = "userid", required = false) List<String> userids) {
+		System.out.println("===================");
+		System.out.println(userids);
+		for (String userid : userids) {
+			System.out.println(userid);
 		}
-		ChatRoomDto chatRoomDto = chatRoomService.createChatRoom(userIds);
-		map.addAttribute("roomId", chatRoomDto.getChatroomid());
-		map.addAttribute("userId1", userId1);
-		return "/chat/bootchat";
-        
+
 	}
-  
+
 	@ResponseBody
 	@GetMapping("/member/getdeptby")
 	public Map getmemberby(String val, int type) {
@@ -151,7 +141,8 @@ public class MembersController {
 			}
 		} else {
 			try {
-				InputStream istream = resourceLoader.getResource("classpath:/static/img/common/human.png").getInputStream();
+				InputStream istream = resourceLoader.getResource("classpath:/static/img/common/human.png")
+						.getInputStream();
 				header.setContentType(MediaType.IMAGE_PNG);
 				result = new ResponseEntity<byte[]>(istream.readAllBytes(), header, HttpStatus.OK);
 			} catch (IOException e) {
@@ -168,25 +159,26 @@ public class MembersController {
 		MembersDto mdto = mservice.getByuserId(id);
 		map.addAttribute("member", mdto);
 		map.addAttribute("userid", id);
-		map.addAttribute("dlist", dservice.getAll());
+		ArrayList<DeptsDto> dlistAll = dservice.getAll();
+		ArrayList<DeptsDto> dlist = new ArrayList<DeptsDto>();
+		for (DeptsDto ddto : dlistAll) {
+			if (ddto.getMgrid() != null && ddto.getMgrid().getMemberid() == mservice
+					.getByMemberId(ddto.getMgrid().getMemberid()).getMemberid()) {
+				mdto = mservice.getByMemberId(ddto.getMgrid().getMemberid());
+				ddto.setMgrid(new Members(mdto.getUserid(), mdto.getMemberid(), mdto.getBirthdt(), mdto.getEmail(),
+						mdto.getCpnum(), mdto.getAddress(), mdto.getMemberimgnm(), mdto.getHiredt(), mdto.getLeavedt(),
+						mdto.getDeptid(), mdto.getJoblvid(), mdto.getMgrid(), null));
+				dlist.add(ddto);
+			}
+		}
+		map.addAttribute("dlist", dlist);
 		map.addAttribute("jlist", jservice.getAll());
 		return "member/memberedit";
 	}
 
 	@PostMapping("/member/memberadd")
 	public String memberadd(MembersDto dto) {
-//		System.out.println("memberimgnm:" + dto.getMemberimgnm());
-		System.out.println(dto);
-		System.out.println((dto.getDeptid()));
-		System.out.println((dto.getJoblvid()));
 		MembersDto mdto = mservice.save(dto);
-//		MembersDto mdto = null;
-//		if (dto.getMemberid() == 0) {
-//			mdto = mservice.save(dto);
-//		} else {
-//			mdto = mservice.update(dto);
-//		}
-
 		if (!dto.getMemberimgf().isEmpty()) {
 			String oname = dto.getMemberimgf().getOriginalFilename();
 			String f1 = oname.substring(oname.lastIndexOf("."));
@@ -209,6 +201,14 @@ public class MembersController {
 
 		}
 		return "redirect:/user/userinfo?id=" + dto.getUserid().getId();
+	}
+
+	//
+	@PostMapping("/admin/member/membertestadd")
+	public String membertestadd(String dummyuserid) {
+		mservice.dummyMembersave(dummyuserid);
+		return "redirect:/admin/user/userlist";
+
 	}
 
 	@PostMapping("/member/eweiadd")
