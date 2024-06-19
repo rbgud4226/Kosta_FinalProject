@@ -13,13 +13,14 @@
 	<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 	<link rel="stylesheet" th:href="@{/css/chat/chatreset.css}">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/modal.css}">
     <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
     <link rel="stylesheet" th:href="@{/css/common/header.css}">
 <script th:inline="javascript">
         var stompClient = null;
         var roomId = null;
         var userId1 = [[${userId1}]];
-        var partId = []
+        var partId = [[${partId}]];
 
         function connect(newRoomId) {
         	roomId = newRoomId;
@@ -185,7 +186,6 @@
  	           		if (chatRoom.chatRoomNames.length > 0) {
  	                	 var name = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
  	                 	 chatMembers = chatRoom.recentMsg;
- 	                 	 chatRecentMsg = chatRoom.recentMsg;
  	                 	 chatRoomNames = name;
  	             		}
  	         	} else {
@@ -256,6 +256,8 @@
                 })
                 .then(response => {
                     if (response.redirected) {
+                    	console.log(response.url);
+                    	console.log(response);
                         window.location.href = response.url;
                     }
                 });
@@ -391,7 +393,7 @@
                         p.innerHTML = fileLink;
                         spanTime.textContent = message.sendDate.substring(13, 18);
                     }
-                }
+                } 
                 li.appendChild(spanName);
                 li.appendChild(p);
                 li.appendChild(spanTime);
@@ -427,10 +429,22 @@
                                 <div class="modal-content">
                                     <div class="chat-header">
                                         <div class="msg-search">
-                                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="참여자이름으로 검색" aria-label="search" onkeypress="if(event.keyCode == 13){loadChatRoomsBySearch(this)}">
-                                            <a class="add" href="#"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add"></a>
+                                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="참여자이름으로 검색" aria-label="search" onkeypress="if(event.keyCode == 13){loadChatRoomsBySearch(this)}">                                       
+                                              <ul class="moreoption">
+        										<li class="navbar nav-item dropdown">
+           									       	 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              									 	  <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add">
+          										 	 </a>
+            								   		<ul class="dropdown-menu">
+                									<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">추가</a></li>
+                									<li><hr class="dropdown-divider"></li>
+                									<li>
+								                     <a class="dropdown-item" href="#" id="outButton" onclick="getOutRoom(roomId)">초대하기</a>
+								               	    </li>
+								                    </ul>
+								          	    </li>
+								      		 </ul>            		 
                                         </div>
-
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item" role="presentation">
                                                 <button class="nav-link active" id="Open-tab" data-bs-toggle="tab" data-bs-target="#Open" type="button" role="tab" aria-controls="Open" aria-selected="true">1:1</button>
@@ -555,5 +569,53 @@
             </div>
         </div>
   </div>
+  <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mem_modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="list_line" method="post">
+                        <table class="m20 table_w100">
+                            <tr>
+                                <td>
+                                    <select class="select_box" name="type">
+                                        <option value="1">부서이름</option>
+                                        <option value="2">직원이름</option>
+                                        <option value="3">직급</option>
+                                    </select>
+                                </td>
+                                <td class="list_search_wrapper">
+                                    <input class="list_input" type="text" name="val">
+                                    <button type="button" class="btn blue_btn list_search" onclick="list_search()">검색</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <form class="modal_list" action="/chat/chatroom">
+                        <table class="table_w100 modal_table">
+                            <thead class="list_line">
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td class="w40 f600">Name</td>
+                                    <td class="f600">E-mail</td>
+                                </tr>
+                            </thead>
+                            <tbody class="modal_body">
+                            </tbody>
+                        </table>
+                        <div class="modal-footer">
+                            <input type="submit" value="채팅방열기" class="btn blue_btn">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+<script th:src="@{/js/memmodal.js}"></script>
 </html>
