@@ -18,6 +18,19 @@ public class DeptsService {
 		return new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid());
 	}
 
+	// dept 더미 데이터 생성 용도
+	public DeptsDto dummyDeptsave() {
+		List<Depts> dlist = dao.findAll();
+		int deptidNum = dlist.get(dlist.size() - 1).getDeptid() + 10;
+		String testDept = "dept_test" + deptidNum;
+		if (dao.findByDeptnmLike(testDept) != null) {
+			DeptsDto ddto = new DeptsDto(deptidNum, testDept, null);
+			Depts d = dao.save(new Depts(ddto.getDeptid(), ddto.getDeptnm(), ddto.getMgrid()));
+			return new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid());
+		}
+		return null;
+	}
+
 	public DeptsDto getByDeptId(int deptid) {
 		Depts d = dao.findById(deptid).orElse(null);
 		if (d == null) {
@@ -36,7 +49,8 @@ public class DeptsService {
 	}
 
 	public ArrayList<DeptsDto> getByMgrId(int mgrid) {
-		List<Depts> l = dao.findByMgrid(new Members(null, mgrid, null, null, null, null, null, null, null, null, null, null, null));
+		List<Depts> l = dao.findByMgrid(
+				new Members(null, mgrid, null, null, null, null, null, null, null, null, null, null, null));
 		ArrayList<DeptsDto> list = new ArrayList<DeptsDto>();
 		for (Depts d : l) {
 			list.add(new DeptsDto(d.getDeptid(), d.getDeptnm(), d.getMgrid()));
