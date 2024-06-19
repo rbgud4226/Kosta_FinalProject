@@ -2,9 +2,13 @@ package com.example.demo.auth;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import com.example.demo.members.MembersDto;
+import com.example.demo.members.MembersService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 public class MySuccessHandler implements AuthenticationSuccessHandler {
-
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
@@ -20,7 +24,6 @@ public class MySuccessHandler implements AuthenticationSuccessHandler {
 		HttpSession session = request.getSession();
 		String loginId = (String) session.getAttribute("loginId");
 		String type = "";
-
 		if (loginId == null) {
 			session.setAttribute("loginId", authentication.getName());
 

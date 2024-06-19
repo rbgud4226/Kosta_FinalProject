@@ -84,7 +84,9 @@ const home = (type) => {
 	<td>
 		<!-- <input type="text" name="deptid" id="deptidid" th:value="${member?.deptid?.deptnm }"  list="deptslist"> -->
 		<select id="deptslist" name="deptid">
-			<option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }" th:selected="${member?.deptid?.deptnm}==${d.deptnm}"></option>
+			<option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }" 
+			th:selected="${member?.deptid?.deptnm}==${d.deptnm}"
+			th:data-dept = "${d.mgrid?.memberid}"></option>
 		</select>
 	</td>
 </tr>

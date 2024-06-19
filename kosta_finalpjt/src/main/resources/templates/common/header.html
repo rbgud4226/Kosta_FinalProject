@@ -13,24 +13,12 @@
             </div>
             <ul class="flex_center nav_right">
                 <li >알람</li>
-                <li >사진</li>
-                <li >이름</li>
-                <li ></li>
                 <li th:text="${session.loginId }"></li>
-                <li ></li>
                 <li th:text="${session.usernm }"></li>
-                <li ></li>
                 <li th:text="${session.type }"></li>
-                <li ></li>
-                <li th:text="${session.deptnm }"></li>
-                <li ></li>
+                <li th:text="${session.deptnm +'부서'}"></li>
                 <li th:text="${session.joblvnm }"></li>
-                <li ></li>
                 <li th:text="${session.memberimgnm }"></li>
-                <li ></li>
-                <li ></li>
-                <li ></li>
-                <li ></li>
                 <li >
                     <img style="border-radius: 20px" th:src="@{/member/memberimg(memberimgnm=${session.memberimgnm })}" width="40px" height="40px" />
                 </li>
