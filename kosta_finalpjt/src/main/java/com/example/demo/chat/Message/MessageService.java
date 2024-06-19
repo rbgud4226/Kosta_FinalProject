@@ -45,6 +45,9 @@ public class MessageService {
 		for(int i=0; i<l.size(); i++) {
 			recentMsg = l.get(l.size()-1).getContent();
 		}
+		if(recentMsg == null) {
+			recentMsg = "";
+		}
 		recentMsg = recentMsg.replaceAll("<br>", " ");
 		if(recentMsg.length() >= 13) {
 			recentMsg = recentMsg.substring(0, 12) + "..."; 

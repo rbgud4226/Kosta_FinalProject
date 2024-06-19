@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.chat.Room.ChatRoomService;
+import com.example.demo.users.UsersService;
 
 @Controller
 public class MessageController {
@@ -29,6 +30,9 @@ public class MessageController {
 
 	@Autowired
 	private ChatRoomService chatRoomService;
+	
+	@Autowired
+	private UsersService usersService;
 	
 	@Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -40,7 +44,9 @@ public class MessageController {
 	public void sendMessage(@Payload MessageDto chatMessage, @DestinationVariable String roomId) {
 		if(chatMessage.getType().equals("OUT")) {
 			String osg = chatRoomService.getOutChatRoom(roomId, chatMessage.getSender());
+			String partN = usersService.getById2(chatMessage.getSender()).getUsernm(); 
 			chatMessage.setContent(osg);
+			chatMessage.setPartid(partN);
 			messageService.save(chatMessage, roomId);
 			ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 	        messagingTemplate.convertAndSend("/room/" + roomId, list);
