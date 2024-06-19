@@ -1,11 +1,11 @@
-let list_table = $(".modal_body")[0];
+let list_table = $(".modal_body");
 //테이블 그리기
-const member_table = (arr)=>{	
-	while(list_table.rows.length > 0){
-		list_table.deleteRow(0);
+const member_table = (arr,num)=>{	
+	while(list_table[num].rows.length > 0){
+		list_table[num].deleteRow(0);
 	}
 	for(let a of arr){
-			const tr_row = list_table.insertRow();
+			const tr_row = list_table[num].insertRow();
 			tr_row.classList.add("list_line")
 
 	        cell = tr_row.insertCell(0);
@@ -33,7 +33,7 @@ const member_table = (arr)=>{
 			cell.textContent = a.email;
 	}
 }
-const list_search = ()=>{
+const list_search = (num)=>{
     let list_input = $(".list_input").val();
     let type = $(".select_box").val();
 
@@ -46,7 +46,36 @@ const list_search = ()=>{
 		data:{val:list_input,type:type},
 		success:function(res){		//응답 정상일때
             console.log(res)
-			member_table(res.mlist);
+			member_table(res.mlist,num);
+		},
+		error:function(){			//응답 에러일때
+			console.log('error');
+		}
+	});
+}
+
+const list_search_chat = (num, roomId)=>{
+	let list_input;
+    let type;
+   
+ if (num === '0') {
+        list_input = $('#exampleModal .list_input').val();
+        type = $('#exampleModal .select_box').val();
+    } else if (num === '1') {
+        list_input = $('#exampleModal2 .list_input').val();
+        type = $('#exampleModal2 .select_box').val();
+    }
+
+	console.log("input: "+list_input+ " /type: "+type)
+    console.log("input: " + list_input + " /type: " + type + " /roomId: " + roomId);
+    $.ajax({
+		url:"/member/getdeptby",  //서버주소
+		type:"get",   				//전송방식
+		dataType:'json',			//응답데이터 형태
+		data:{val:list_input,type:type},
+		success:function(res){		//응답 정상일때
+            console.log(res)
+			member_table(res.mlist,num);
 		},
 		error:function(){			//응답 에러일때
 			console.log('error');
