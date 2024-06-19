@@ -16,7 +16,7 @@ public class ChartsService {
   @Autowired
   private ChartsDao dao;
 
-  public ChartsDto save(ChartsDto dto) {
+  public ChartsDto  save(ChartsDto dto) {
     ChartsDto cdto = dto;
     if(cdto.getChartStatus() == null){
       cdto.setChartStatus("yes");
