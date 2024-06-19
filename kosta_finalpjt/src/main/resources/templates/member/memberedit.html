@@ -82,10 +82,10 @@ const home = (type) => {
 <tr>
 	<th>부서</th>
 	<td>
-		<input type="text" name="deptid" id="deptidid" th:value="${member?.deptid?.deptnm }"  list="deptslist">
-		<datalist id="deptslist">
-			<option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }"></option>
-		</datalist>
+		<!-- <input type="text" name="deptid" id="deptidid" th:value="${member?.deptid?.deptnm }"  list="deptslist"> -->
+		<select id="deptslist" name="deptid">
+			<option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }" th:selected="${member?.deptid?.deptnm}==${d.deptnm}"></option>
+		</select>
 	</td>
 </tr>
 <tr>
@@ -97,10 +97,10 @@ const home = (type) => {
 <tr>
 	<th>직급</th>
 	<td>
-		<input type="text" name="joblvid" id="joblvidid" th:value="${member?.joblvid?.joblvnm }" list="joblvslist">
-		<datalist id="joblvslist">
-			<option th:each="j : ${jlist}" th:text="${j.joblvnm}" th:value="${j.joblvidx}"></option>
-		</datalist>
+		<!-- <input type="text" name="joblvid" id="joblvidid" th:value="${member?.joblvid?.joblvnm }" list="joblvslist"> -->
+		<select id="joblvslist" name="joblvid">
+			<option th:each="j : ${jlist}" th:text="${j.joblvnm}" th:value="${j.joblvidx}" th:selected="${member?.joblvid?.joblvnm}==${j.joblvnm}"></option>
+		</select>
 	</td>
 </tr>
 </table>

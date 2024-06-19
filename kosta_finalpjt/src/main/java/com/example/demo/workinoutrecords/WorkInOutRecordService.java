@@ -85,8 +85,8 @@ public class WorkInOutRecordService {
 			ChartDeptMember c = new ChartDeptMember();
 			c.setId(((Number) a[0]).intValue());
 			c.setName((String) a[1]);
-			c.setDeptNum(((Number) a[2]).intValue()); 
-			c.setJoblv(((Number) a[3]).intValue());
+			c.setDeptNum((String) a[2]); 
+			c.setJoblv((String) a[3]);
 			c.setTotalRecords(((Number) a[4]).intValue());
 			c.setLateCount(((Number) a[5]).intValue());
 			c.setWorkTime((String) a[6]);
