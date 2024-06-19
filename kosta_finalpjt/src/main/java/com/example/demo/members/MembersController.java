@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.depts.DeptsDto;
 import com.example.demo.depts.DeptsService;
 import com.example.demo.depts.JoblvsService;
 import com.example.demo.users.Users;
@@ -158,25 +159,26 @@ public class MembersController {
 		MembersDto mdto = mservice.getByuserId(id);
 		map.addAttribute("member", mdto);
 		map.addAttribute("userid", id);
-		map.addAttribute("dlist", dservice.getAll());
+		ArrayList<DeptsDto> dlistAll = dservice.getAll();
+		ArrayList<DeptsDto> dlist = new ArrayList<DeptsDto>();
+		for (DeptsDto ddto : dlistAll) {
+			if (ddto.getMgrid() != null && ddto.getMgrid().getMemberid() == mservice
+					.getByMemberId(ddto.getMgrid().getMemberid()).getMemberid()) {
+				mdto = mservice.getByMemberId(ddto.getMgrid().getMemberid());
+				ddto.setMgrid(new Members(mdto.getUserid(), mdto.getMemberid(), mdto.getBirthdt(), mdto.getEmail(),
+						mdto.getCpnum(), mdto.getAddress(), mdto.getMemberimgnm(), mdto.getHiredt(), mdto.getLeavedt(),
+						mdto.getDeptid(), mdto.getJoblvid(), mdto.getMgrid(), null));
+				dlist.add(ddto);
+			}
+		}
+		map.addAttribute("dlist", dlist);
 		map.addAttribute("jlist", jservice.getAll());
 		return "member/memberedit";
 	}
 
 	@PostMapping("/member/memberadd")
 	public String memberadd(MembersDto dto) {
-//		System.out.println("memberimgnm:" + dto.getMemberimgnm());
-		System.out.println(dto);
-		System.out.println((dto.getDeptid()));
-		System.out.println((dto.getJoblvid()));
 		MembersDto mdto = mservice.save(dto);
-//		MembersDto mdto = null;
-//		if (dto.getMemberid() == 0) {
-//			mdto = mservice.save(dto);
-//		} else {
-//			mdto = mservice.update(dto);
-//		}
-
 		if (!dto.getMemberimgf().isEmpty()) {
 			String oname = dto.getMemberimgf().getOriginalFilename();
 			String f1 = oname.substring(oname.lastIndexOf("."));
