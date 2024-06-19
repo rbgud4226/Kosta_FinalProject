@@ -41,21 +41,23 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 //            "GROUP BY M.memberid, u.USERNM, m.deptid_deptid, m.joblv", nativeQuery = true)
 //	List<Object[]> chartDept(@Param("month") int month, @Param("year") int year, @Param("dept") int dept);
 	
-	@Query(value = "SELECT M.memberid, u.USERNM, m.depts_deptid, m.JOBLVS_JOBLVID, "+
+	@Query(value = "SELECT M.memberid, u.USERNM,d.deptnm, j.joblvnm, "+
 			" COUNT(*) AS total_records, "+
 			"SUM(CASE WHEN W.state = '지각' THEN 1 ELSE 0 END) AS total_late_records, "+
-			"LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) / 60), 2, '0') "+
+			"LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) / 60), 3, '0') "+
 			"|| ':' || "+
 			"LPAD(MOD(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))), 60), 2, '0') AS total_time "+
 			"FROM work_in_out_record W "+
-			"JOIN members M ON W.user_id = M.memberid "+
+			"JOIN members M ON W.user_id = m.memberid "+
 			"JOIN users u ON u.id = m.userid_id "+
+			"JOIN joblvs j ON j.joblvidx = m.joblvs_joblvid "+
+			"JOIN depts d ON d.deptid = m.depts_deptid "+
 			"WHERE "+
 			"EXTRACT(MONTH FROM W.day) = :month "+
 			"AND EXTRACT(YEAR FROM W.day) = :year "+
 			"AND M.depts_deptid = :dept "+
 			"GROUP BY "+
-			"M.memberid, u.USERNM, m.depts_deptid, m.JOBLVS_JOBLVID", nativeQuery = true)
+			"M.memberid, u.USERNM, d.deptnm, j.joblvnm", nativeQuery = true)
     List<Object[]> chartDept(@Param("month") int month, @Param("year") int year, @Param("dept") int dept);
 	
 	
