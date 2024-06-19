@@ -3,8 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script th:src="@{/js/record_dept.js}"> </script>
+<script type="text/javascript">
+    // Load Charts and the corechart package.
+    // google.charts.load('current', {'packages':['corechart']});
+    google.charts.load('current', {
+        'packages': ['line', 'corechart']
+      });
+      
+
+    // Draw the Depts work hours comparison chart by month  
+    google.charts.setOnLoadCallback(drawSarahChart);
+    // Draw the overwork time chart
+    google.charts.setOnLoadCallback(drawAnthonyChart);
+
+    google.charts.setOnLoadCallback(drawChart);
+
+</script>
 </head>
 <body>
 <h3>관리자 페이지용</h3>
+<!--Table and divs that hold the pie charts-->
+<table class="columns">
+    <tr>
+      <td><div id="chart_div" style="border: 1px solid #ccc"></div></td>
+      <td><div id="Sarah_chart_div" style="border: 1px solid #ccc"></div></td>
+      <td><div id="Anthony_chart_div" style="border: 1px solid #ccc"></div></td>
+      
+    </tr>
+  </table>
 </body>
 </html>
