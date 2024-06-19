@@ -52,11 +52,15 @@
     height: 50px;
     overflow-y: scroll;
 }
+.chart_area table button {
+    border: 0;
+    background-color: transparent;
+}
 .chart_area th{
     position: sticky;
     top: 0;
     z-index: 1;
-    background-color: #3A3A3A;
+    background-color: rgba(13, 98, 253, 0.83);
     color: white;
     align-content: center;
     border-bottom: black 1px;
