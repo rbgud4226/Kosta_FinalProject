@@ -109,7 +109,7 @@ public class UsersController {
 		} else if (aprovStr == "퇴직상태") {
 			udto.setAprov(3);
 		}
-		uservice.save(udto);
+		uservice.updatePwd(udto);
 		return "redirect:/user/userinfo?id=" + udto.getId();
 	}
 

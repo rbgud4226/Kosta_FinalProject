@@ -34,5 +34,6 @@ public class Users {
 
 	@OneToMany(mappedBy = "roomuser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JsonIgnore
+	@ToString.Exclude
 	private List<RoomUser> roomUsers = new ArrayList<RoomUser>();
 }
