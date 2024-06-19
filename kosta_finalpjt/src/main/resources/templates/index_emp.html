@@ -8,6 +8,7 @@
   <link rel="stylesheet" th:href="@{/css/common/header.css}">
   <link rel="stylesheet" th:href="@{/css/charts/charts.css}">
   <script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div th:replace="~{/common/header :: header}"></div>
@@ -50,22 +51,26 @@
         <div class="chart_area_scroll">
           <table>
             <tr>
-              <th>번호</th>
-              <th>이름</th>
+              <th>분류</th>
+              <th style="width: 400px">이름</th>
               <th>시작일</th>
               <th>마감일</th>
               <th>완성률</th>
-              <th>연관 일정</th>
-              <th></th>
+              <th>간트</th>
+              <th style="width: 50px">비고</th>
             </tr>
             <tr th:each="s:${list}">
-              <td th:text="${s.taskid}"></td>
-              <td th:text="${s.title}"></td>
+              <td th:text="${s.taskid}" style="display: none"></td>
+              <td th:text="${s.chartResource}"></td>
+              <td th:text="${s.title}" style="width: 400px"></td>
               <td th:text="${s.st}"></td>
               <td th:text="${s.ed}"></td>
               <td th:text="${s.percent}"></td>
-              <td th:text="${s.dependencies}"></td>
-              <td><a th:href="@{/auth/chart/del(id=${s.taskid})}">삭제</a></td>
+              <td><input type="checkbox" th:checked="${s.chartStatus == 'yes'}" class="chart_edit_btn"></td>
+              <td style="width: 50px">
+                <i class="fa-regular fa-pen-to-square"></i>
+                <i class="fa-solid fa-eraser"></i>
+              </td>
             </tr>
           </table>
         </div>
@@ -154,5 +159,6 @@
         modal_background.classList.add('show-modal')
     }
 </script>
+<script th:src="@{/js/charts.js}"></script>
 </body>
 </html>

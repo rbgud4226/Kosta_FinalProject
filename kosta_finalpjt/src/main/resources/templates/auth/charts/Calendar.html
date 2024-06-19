@@ -31,34 +31,5 @@
   </section>
 </div>
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $.ajax({
-            url : "/auth/chart/cdata",
-            dataType : "json",
-            method : "get",
-            success:function (list){
-                console.log(list);
-                var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    headerToolbar:{
-                        left: 'prevYear,prev,next,nextYear today',
-                        center: 'title',
-                        right: 'dayGridMonth,dayGridWeek,dayGridDay'
-                    },
-                    selectable : true,
-                    selectMirror : true,
-                    navLinks : true,
-                    editable : true,
-                    dayMaxEvents: true, // allow "more" link when too many events
-
-                    // 이벤트 객체 필드 document : https://fullcalendar.io/docs/event-object
-                    events: list
-                });
-
-                calendar.render();
-            }
-        });
-    });
-</script>
+<script th:src="@{/js/charts_calendar.js}"></script>
 </html>
