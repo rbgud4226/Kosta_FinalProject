@@ -15,8 +15,8 @@ public class ChartDeptMember {
 	//사원번호 이름 부서번호 직급레벨 총_출근횟수 지각횟수 총_근무시간
 	private int id;
 	private String name;
-	private int deptNum;
-	private int joblv;
+	private String deptNum;
+	private String joblv;
 	private int totalRecords;
 	private int lateCount;
 	private String workTime;

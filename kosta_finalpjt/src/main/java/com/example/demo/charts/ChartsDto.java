@@ -14,11 +14,11 @@ import java.util.Date;
 public class ChartsDto {
   private Users users;
   private int taskid;
-  private String resource;
+  private String chartResource;
   private String title;
   private String st;
   private String ed;
   private int percent;
   private String dependencies;
-  private String status;
+  private String chartStatus;
 }

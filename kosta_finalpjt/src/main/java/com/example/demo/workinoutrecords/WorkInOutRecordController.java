@@ -131,7 +131,7 @@ public class WorkInOutRecordController {
     if (hours >= 9) {
       hours--;
     }
-    String worktime = String.format("%d:%02d", hours, minutes);
+    String worktime = String.format("%02d:%02d", hours, minutes);
 
     w.setState(type);
     w.setWorkHours(worktime);
@@ -160,7 +160,8 @@ public class WorkInOutRecordController {
       currentDate = currentDate.plusDays(1);
     }
     String chartTitle = members + " 의 " + res;
-    cservice.save(new ChartsDto(new Users(members, null, null, null, 0, null), 0, "휴가", chartTitle, date1, date2, 100, null, null));
+    cservice.save(new ChartsDto(new Users(members, null, null, null, 0, null),
+        0, "휴가", chartTitle, date1, date2, 100, null, "no"));
     Map map = new HashMap<>();
     map.put("flag", "success");
     return map;

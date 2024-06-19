@@ -41,6 +41,7 @@ public class Members {
 
 	@OneToOne
 	@JoinColumn(nullable = false)
+	@ToString.Exclude
 	private Users userid;
 
 	@Id
@@ -62,18 +63,21 @@ public class Members {
 	@JoinColumn(name = "depts_deptid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ToString.Exclude
 	private Depts deptid;
 
 	@ManyToOne
 	@JoinColumn(name = "joblvs_joblvid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ToString.Exclude
 	private Joblvs joblvid;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mgrid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ToString.Exclude
 	private Members mgrid;
 
 	@OneToMany(mappedBy = "mgrid", cascade = CascadeType.PERSIST, orphanRemoval = false, fetch = FetchType.LAZY)
