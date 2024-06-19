@@ -44,8 +44,14 @@ public class UsersService {
 				u.getRoomUsers());
 	}
 
+	// 비밀번호 이외 수정
 	public void update(UsersDto dto) {
 		dao.update(dto.getId(), dto.getUsernm(), dto.getType(), dto.getAprov());
+	}
+
+	// 비밀번호 수정
+	public void updatePwd(UsersDto dto) {
+		dao.updatePwd(dto.getId(), passwordEncoder.encode(dto.getPwd()));
 	}
 
 	// user 더미 데이터 생성 용도

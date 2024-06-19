@@ -1,7 +1,5 @@
 package com.example.demo.depts;
 
-import java.util.ArrayList;
-
 import com.example.demo.members.Members;
 
 import lombok.AllArgsConstructor;

@@ -94,6 +94,11 @@ const home = (type) => {
 	<th>부서장</th>
 	<td>
 		<input type="text" name="mgrid" id="mgrid" th:value="${member?.mgrid?.memberid }">
+		<select id="deptslist" name="deptid">
+			<option th:each="d : ${dlist}" th:text="${d.mgrid.userid.usernm}" th:value="${d.deptid }" 
+			th:selected="${member?.deptid?.deptnm}==${d.deptnm}"
+			th:data-dept = "${d.mgrid?.memberid}"></option>
+		</select>
 	</td>
 </tr>
 <tr>

@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.charts.ChartsService;
+import com.example.demo.depts.DeptsService;
 import com.example.demo.members.MembersDto;
 import com.example.demo.members.MembersService;
+import com.example.demo.users.UsersDto;
 import com.example.demo.users.UsersService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +26,9 @@ public class HomeController {
 	private MembersService mservice;
 
 	@Autowired
+	private DeptsService dservice;
+
+	@Autowired
 	private ChartsService chartsService;
 
 	@RequestMapping("/")
@@ -31,18 +36,17 @@ public class HomeController {
 		String loginId = (String) session.getAttribute("loginId");
 		String type = (String) session.getAttribute("type");
 		String indexPath = "";
-		if(loginId == null) {
+		if (loginId == null) {
 			indexPath = "user/userlogin";
-		}
-		else{
-			if(type == "admin"){
+		} else {
+			if (type == "admin") {
 				indexPath = "/index_admin";
-			}else if (type == "emp") {
+			} else if (type == "emp") {
 				indexPath = "/index_emp";
 			} else {
 				indexPath = "/index";
 			}
-		} 
+		}
 		return indexPath;
 	}
 
@@ -94,7 +98,8 @@ public class HomeController {
 	public void empHome(HttpSession session, ModelMap map) {
 		String loginid = (String) session.getAttribute("loginId");
 		map.addAttribute("usernm", uservice.getById(loginid));
-		MembersDto mdto = mservice.getByuserId((String) session.getAttribute("loginId"));
+		UsersDto udto = uservice.getById((String) session.getAttribute("loginId"));
+		MembersDto mdto = mservice.getByuserId(udto.getId());
 		if (mdto != null) {
 			if (mdto.getMemberimgnm() == "") {
 				session.setAttribute("memberimgnm", "");
@@ -105,6 +110,11 @@ public class HomeController {
 				session.setAttribute("deptnm", "미등록 상태");
 			} else {
 				session.setAttribute("deptnm", mdto.getDeptid().getDeptnm());
+				if (mdto.getDeptid().getMgrid() != null
+						&& mdto.getDeptid().getMgrid().getMemberid() == mdto.getMemberid()) {
+					session.setAttribute("deptnm_mgrnm",
+							(mdto.getDeptid().getDeptnm() + "_" + mdto.getUserid().getUsernm()));
+				}
 			}
 			if (mdto.getJoblvid() == null) {
 				session.setAttribute("joblvnm", "미등록 상태");
