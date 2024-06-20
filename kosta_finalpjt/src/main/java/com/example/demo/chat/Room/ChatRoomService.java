@@ -243,7 +243,7 @@ public class ChatRoomService {
 				ArrayList<String> userIdList = new ArrayList<>(Arrays.asList(userIds));
 				List<String> partisList = new ArrayList<>(Arrays.asList(partis));
 				if (userIdList.contains(s)) {
-					inviteMessage.add(partN + "는 이미 방에 있습니다");
+					inviteMessage.add(partN + "은 이미 방에 있습니다");
 				} else if (!userIdList.contains(s)) {
 					userIdList.add(s);	
 					partisList.add(partN);
