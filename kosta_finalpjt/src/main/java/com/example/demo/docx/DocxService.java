@@ -22,7 +22,7 @@ public class DocxService {
 	private MembersDao mdao;
 
 	// 문서 작성 , 수정
-	public DocxDto save(DocxDto dto, String senior, int i, int dkey) {
+	public DocxDto save(DocxDto dto, String senior,String participant  ,int i, int dkey) {
 		Docx d = dao.save(
 				new Docx(dto.getFormnum(), dto.getWriter(), senior, dto.getStartdt(), dto.getEnddt(), dto.getTitle(),
 						dto.getContent(), dto.getNote(), dto.getTaskclasf(), dto.getTaskplan(), dto.getTaskprocs(),
@@ -31,7 +31,7 @@ public class DocxService {
 
 		return new DocxDto(d.getFormnum(), d.getWriter(), d.getSenior(), d.getStartdt(), d.getEnddt(), d.getTitle(),
 				d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(), d.getTaskprocsres(),
-				d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(), d.getAprovdoc(),
+				d.getDeptandmeetloc(), d.getDayoffclasf(), participant, d.getFormtype(), d.getAprovdoc(),
 				d.getDocxorder(), d.getStatus(), d.getDocxkey(), d.getOrderloc());
 	}
 
@@ -197,7 +197,7 @@ public class DocxService {
 
 	}
 
-	// senior 출력 문서 ,11일 미완료
+	// senior 출력 문서
 	public List<DocxDto> findByDocxKeyTypeSenior(int docxkey, String formtype) {
 		List<Docx> l = dao.findByDocxkeyAndFormtype(docxkey, formtype);
 		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
@@ -212,16 +212,8 @@ public class DocxService {
 	}
 
 	// 문서 삭제
-	public void delDocx(int formnum) {
-		dao.deleteById(formnum);
-	}
-
-	// 회의록 수정
-	public void editDocx(int num, DocxDto dto) {
-		Docx d = dao.findById(num).orElse(null);
-		if (d != null) {
-
-		}
+	public void delDocx(int docxkey) {
+		dao.deleteByDocxkey(docxkey);
 	}
 
 	public ArrayList<DocxDto> SelectedList(String id) {

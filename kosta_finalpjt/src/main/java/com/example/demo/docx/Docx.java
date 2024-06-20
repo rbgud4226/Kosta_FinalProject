@@ -2,7 +2,6 @@ package com.example.demo.docx;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
@@ -52,7 +51,7 @@ public class Docx {
 	private String taskprocsres; // 업무 진행 결과, 회의장소
 	private String deptandmeetloc; //회의 진행 장소
 	private String	dayoffclasf; //휴가 구분
-	ArrayList<String> participant; //참석자
+	private String participant; //참석자
 	private String formtype; //문서 타입 구분
 	private int aprovdoc; // 결재서류 승인 여부 : 거절 보류 승인
 	private int docxorder; //결재 순서

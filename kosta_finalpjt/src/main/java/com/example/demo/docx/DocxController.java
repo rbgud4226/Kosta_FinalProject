@@ -41,10 +41,39 @@ public class DocxController {
 		System.out.println("key값 있는지 확인 ::" +dkey);
 		String[] s = d.getSenior().split(",");
 		for(int j=0; j<s.length; j++) {
-			service.save(d,s[j],j,dkey);
+			service.save(d,s[j],null,j,dkey);
 		}
 		return "redirect:/auth/docx/list";
 	}
+	
+	//휴가서류 작성양식
+		@PostMapping("/addvacation")
+		public String addvacation(DocxDto d) {
+			System.out.println(d.getSenior());
+			int dkey = service.findByFormtypeDesc(d.getFormtype());
+			dkey += 1;
+			System.out.println("key값 있는지 확인 ::" +dkey);
+			String[] s = d.getSenior().split(",");
+			for(int j=0; j<s.length; j++) {
+				service.save(d,s[j],null,j,dkey);
+			}
+			return "redirect:/auth/docx/list";
+		}
+		
+		//회의록 작성양식
+		@PostMapping("/addmeeting")
+		public String addmeeting(DocxDto d) {
+			System.out.println(d.getSenior());
+			int dkey = service.findByFormtypeDesc(d.getFormtype());
+			dkey += 1;
+			System.out.println("key값 있는지 확인 ::" +dkey);
+			String[] s = d.getSenior().split(",");
+			String[] p = d.getParticipant().split(",");
+			for(int j=0; j<s.length; j++) {
+				service.save(d,s[j],p[j],j,dkey);
+			}
+			return "redirect:/auth/docx/list";
+		}
 
 
 	//전체문서 리스트 출력
@@ -111,8 +140,8 @@ public class DocxController {
 	}
 	
 	@RequestMapping("/deldocx")
-	public String deldocx(int formnum) {
-		service.delDocx(formnum);
+	public String deldocx(int docxkey) {
+		service.delDocx(docxkey);
 		return "redirect:/auth/docx/list";
 	}
 	
