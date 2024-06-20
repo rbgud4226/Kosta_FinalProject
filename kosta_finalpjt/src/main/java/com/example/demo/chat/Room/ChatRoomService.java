@@ -181,7 +181,6 @@ public class ChatRoomService {
 			for (String l : c.getName().split("_")) {
 				nameL.add(l);
 			}
-			System.out.println("nameL" + nameL);
 			for (String l : nameL) {
 				if (l.equals(userId1)) {
 					String userid = usersService.getById2(userId1).getId();

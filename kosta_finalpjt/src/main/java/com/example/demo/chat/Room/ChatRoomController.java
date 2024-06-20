@@ -38,7 +38,7 @@ public class ChatRoomController {
 		map.addAttribute("partId", partId);
 		map.addAttribute("roomId", roomId);
 		map.addAttribute("userId1", userId1);
-		return "redirect:chat/bootchat";
+		return "/chat/bootchat";
 	}
 
 	@GetMapping("/chat/chatroom")
@@ -128,11 +128,11 @@ public class ChatRoomController {
 	}
 	
 	@GetMapping("/chat/chatrooms/invite/{userid}/{chatroomid}")
-	public String inviteChatRoom(@RequestParam(name = "userid") List<String> userid, String chatroomid, ModelMap map, HttpSession session) {
+	public String inviteChatRoom(@RequestParam List<String> userid, String chatroomid, ModelMap map, HttpSession session) {
 	    String loginId = (String) session.getAttribute("loginId");
 	    ArrayList<String> mes = chatRoomService.inviteUserToChatRoom(chatroomid, userid, loginId);
 	    session.setAttribute("inviteMessage", mes);
-	    return "redirect:/chat/chatrooms/" + loginId;
+	    return "redirect:/chat/chatroom/" + chatroomid;
 	}
 
 	@PostMapping("/chat/chatrooms/edit")
