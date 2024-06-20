@@ -39,5 +39,6 @@ public class ChatRoomName {
 	private String host;
 
 	private String roomName;
+	private String editableName;
 
 }

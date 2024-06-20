@@ -11,4 +11,5 @@ public interface ChatRoomDao extends JpaRepository<ChatRoom, String> {
 	ChatRoom findByName(String name);
 	ChatRoom findByChatroomid(String chatroomid);
 	List<ChatRoom> findByRoomUsers(List<RoomUser> roomUsers);
+	List<ChatRoom> findByParticipants(String participants);
 }

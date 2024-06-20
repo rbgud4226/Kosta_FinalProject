@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.chat.Room.ChatRoomService;
+import com.example.demo.users.UsersService;
 
 @Controller
 public class MessageController {
@@ -29,31 +30,49 @@ public class MessageController {
 
 	@Autowired
 	private ChatRoomService chatRoomService;
+	
+	@Autowired
+	private UsersService usersService;
+	
+	@Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
-
+	
 	@MessageMapping("/chat/message/{roomId}")
-	@SendTo("/room/{roomId}")
-	public ArrayList<MessageDto> sendMessage(@Payload MessageDto chatMessage, @DestinationVariable String roomId) {
-		if (chatMessage.getType().equals("INVITE")) {
-			String msg = chatRoomService.inviteUserToChatRoom(roomId, chatMessage.getNewuserId());
-			chatMessage.setContent(msg);
+	public void sendMessage(@Payload MessageDto chatMessage, @DestinationVariable String roomId) {
+		if(chatMessage.getType().equals("OUT")) {
+			String osg = chatRoomService.getOutChatRoom(roomId, chatMessage.getSender());
+			String partN = usersService.getById2(chatMessage.getSender()).getUsernm(); 
+			chatMessage.setContent(osg);
+			chatMessage.setPartid(partN);
 			messageService.save(chatMessage, roomId);
 			ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
-			list.get(0).setNewuserId(msg);
-			return list;
+	        messagingTemplate.convertAndSend("/room/" + roomId, list);
+	        messagingTemplate.convertAndSend("/recent/update", roomId);
 		} else if (chatMessage.getType().equals("FILE")) {
-			String wpath = "http://localhost:8081/files/" + chatMessage.getFileName();
-			chatMessage.setFileRoot(wpath);
-			chatMessage.setFileId(UUID.randomUUID().toString());
-			chatMessage.setContent("FILE");
-		}
-		messageService.save(chatMessage, roomId);
-		ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
-		return list;
+	        String wpath = "http://localhost:8081/files/" + chatMessage.getFileName();
+	        chatMessage.setFileRoot(wpath);
+	        chatMessage.setFileId(UUID.randomUUID().toString());
+	        chatMessage.setContent("FILE");
+	        messageService.save(chatMessage, roomId);
+	        ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
+	        messagingTemplate.convertAndSend("/room/" + roomId, list);
+	        messagingTemplate.convertAndSend("/recent/update", roomId);
+	    } else if (chatMessage.getType().equals("INVITE")) {
+	        messageService.save(chatMessage, roomId);
+	        ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
+	        messagingTemplate.convertAndSend("/room/" + roomId, list);
+	        messagingTemplate.convertAndSend("/recent/update", roomId);
+	    } else {
+	        messageService.save(chatMessage, roomId);
+	        ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
+	        messagingTemplate.convertAndSend("/room/" + roomId, list);
+	        messagingTemplate.convertAndSend("/recent/update", roomId);
+	    }
 	}
-
+	
 	@GetMapping("/chat/message/room/{roomId}")
 	@ResponseBody
 	public ArrayList<MessageDto> getMessages(@PathVariable String roomId) {

@@ -1,96 +1,3 @@
-/* **********************************
-Reset CSS
-************************************** */
-
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-}
-
 
 /* HTML5 display-role reset for older browsers */
 
@@ -195,6 +102,13 @@ a {
 /* *******************************
 message-area
 ******************************** */
+.img-fluid-center{
+	max-width: 100%;
+    height: auto;
+    width: 45px; 
+    height: 45px;
+    border-radius: 25px;
+}
 .chat-content{
     overflow-y: auto;
     flex-direction: column-reverse;
@@ -329,7 +243,6 @@ a.add img {
     font-size: 16px;
     font-weight: 500;
     line-height: 1.5;
-/*     text-transform: capitalize; */
     margin-bottom: 0;
 }
 
@@ -338,8 +251,9 @@ a.add img {
     font-size: 14px;
     font-weight: 400;
     line-height: 1.5;
-/*     text-transform: capitalize; */
     margin-bottom: 0;
+/*     max-width: 210px; */
+/*     text-overflow: ellipsis; */
 }
 
 .chat-list a.d-flex {
@@ -379,6 +293,7 @@ a.add img {
 	align-items: center;
     color: #222;
     width: 100px;
+    text-overflow: ellipsis;
     font-size: 18px;
     font-weight: 600;
     line-height: 1.5;
@@ -450,7 +365,8 @@ a.add img {
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 0 12px 15px 12px;
+    margin-top: 18px;
+    border-width: 0 12px 20px 12px;
     border-color: transparent transparent #f5f5f5 transparent;
     -webkit-transform: rotate(-37deg);
     -ms-transform: rotate(-37deg);
@@ -536,6 +452,15 @@ a.add img {
     display: block;
     color: #000;
     font-size: 12px;
+    line-height: 1.5;
+    margin-right: 10px;
+    font-weight: 400;
+}
+
+.sendN {
+    display: block;
+    color: #000;
+    font-size: 15px;
     line-height: 1.5;
     margin-right: 10px;
     font-weight: 400;
