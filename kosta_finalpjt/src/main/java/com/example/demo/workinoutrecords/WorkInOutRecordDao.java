@@ -45,9 +45,30 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			"M.memberid, u.USERNM, d.deptnm, j.joblvnm", nativeQuery = true)
     List<Object[]> chartDept(@Param("month") int month, @Param("year") int year, @Param("dept") int dept);
 	
-	
-	
 	//개인의 월(연) 근태기록 조회
 	@Query(value="SELECT *	FROM work_in_out_record	WHERE EXTRACT(MONTH FROM day) = :month AND EXTRACT(YEAR FROM day) = :year and user_id =:user_id ORDER by day",nativeQuery = true)
 	ArrayList<WorkInOutRecord> selectMonthByUser(@Param("month")int month,@Param("year")int year,@Param("user_id")int user);
+
+	//관리자용
+	//월별 부서간 근무시간 통계
+	@Query(value = "WITH 근무시간계산 AS (\r\n"
+			+ "    SELECT\r\n"
+			+ "        m.depts_deptid AS 부서번호,\r\n"
+			+ "        TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY') AS 연도,\r\n"
+			+ "        TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'MM') AS 월,\r\n"
+			+ "        SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) AS 총근무분,\r\n"
+			+ "        COUNT(DISTINCT w.user_id) AS 근무자수\r\n"
+			+ "    FROM work_in_out_record w\r\n"
+			+ "    JOIN members m ON w.user_id = m.memberid\r\n"
+			+ "    WHERE TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY') = :year"
+			+ "    GROUP BY m.depts_deptid, TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY'), TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'MM')\r\n"
+			+ ")\r\n"
+			+ "SELECT\r\n"
+			+ "    월,\r\n"
+			+ "    부서번호,\r\n"
+			+ "    TRUNC(총근무분 / 60) AS 평균근무시간_시간\r\n"
+			+ "FROM 근무시간계산\r\n"
+			+ "ORDER BY 연도, 월, 부서번호", nativeQuery = true)
+    List<Object[]> deptMonthWork(@Param("year") int year);
+
 }

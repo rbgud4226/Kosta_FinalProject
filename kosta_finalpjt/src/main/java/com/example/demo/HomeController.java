@@ -73,7 +73,8 @@ public class HomeController {
 
 	@RequestMapping("/index_admin")
 	public void adminHome(HttpSession session, ModelMap map) {
-		map.addAttribute("usernm", uservice.getById((String) session.getAttribute("loginId")));
+		String loginid = (String) session.getAttribute("loginId");
+		session.setAttribute("usernm", uservice.getById(loginid).getUsernm());
 		MembersDto mdto = mservice.getByuserId((String) session.getAttribute("loginId"));
 		if (mdto != null) {
 			if (mdto.getMemberimgnm() == "") {
@@ -85,6 +86,10 @@ public class HomeController {
 				session.setAttribute("deptnm", "미등록 상태");
 			} else {
 				session.setAttribute("deptnm", mdto.getDeptid().getDeptnm());
+				if (mdto.getDeptid().getMgrid() != null
+						&& mdto.getDeptid().getMgrid().getMemberid() == mdto.getMemberid()) {
+					session.setAttribute("mgr_deptid", mdto.getDeptid().getDeptid());
+				}
 			}
 			if (mdto.getJoblvid() == null) {
 				session.setAttribute("joblvnm", "미등록 상태");
@@ -97,7 +102,7 @@ public class HomeController {
 	@RequestMapping("/index_emp")
 	public void empHome(HttpSession session, ModelMap map) {
 		String loginid = (String) session.getAttribute("loginId");
-		map.addAttribute("usernm", uservice.getById(loginid));
+		session.setAttribute("usernm", uservice.getById(loginid).getUsernm());
 		UsersDto udto = uservice.getById((String) session.getAttribute("loginId"));
 		MembersDto mdto = mservice.getByuserId(udto.getId());
 		if (mdto != null) {
@@ -112,8 +117,7 @@ public class HomeController {
 				session.setAttribute("deptnm", mdto.getDeptid().getDeptnm());
 				if (mdto.getDeptid().getMgrid() != null
 						&& mdto.getDeptid().getMgrid().getMemberid() == mdto.getMemberid()) {
-					session.setAttribute("deptnm_mgrnm",
-							(mdto.getDeptid().getDeptnm() + "_" + mdto.getUserid().getUsernm()));
+					session.setAttribute("mgr_deptid", mdto.getDeptid().getDeptid());
 				}
 			}
 			if (mdto.getJoblvid() == null) {
