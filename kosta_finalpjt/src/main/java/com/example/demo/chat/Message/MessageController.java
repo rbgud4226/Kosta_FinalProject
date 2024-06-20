@@ -60,6 +60,11 @@ public class MessageController {
 	        ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 	        messagingTemplate.convertAndSend("/room/" + roomId, list);
 	        messagingTemplate.convertAndSend("/recent/update", roomId);
+	    } else if (chatMessage.getType().equals("INVITE")) {
+	        messageService.save(chatMessage, roomId);
+	        ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
+	        messagingTemplate.convertAndSend("/room/" + roomId, list);
+	        messagingTemplate.convertAndSend("/recent/update", roomId);
 	    } else {
 	        messageService.save(chatMessage, roomId);
 	        ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);

@@ -1,14 +1,18 @@
 package com.example.demo.chat.Room;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.chat.Message.MessageDto;
 import com.example.demo.chat.RoomUser.RoomUserService;
 import com.example.demo.members.MembersService;
 import com.example.demo.users.Users;
@@ -241,7 +245,7 @@ public class ChatRoomService {
 				if (userIdList.contains(s)) {
 					inviteMessage.add(partN + "는 이미 방에 있습니다");
 				} else if (!userIdList.contains(s)) {
-					userIdList.add(s);
+					userIdList.add(s);	
 					partisList.add(partN);
 					chatRoom.setRoomType("GROUP");
 					inviteMessage.add(partN + "님이 초대완료 되었습니다");
@@ -271,10 +275,29 @@ public class ChatRoomService {
 		}
 		return inviteMessage;
 	}
+	
+	public MessageDto createInviteMessage(List<String> userid, String chatroomid, String loginId, String inviteContent) {
+	    MessageDto inviteMessage = new MessageDto();
+	    inviteMessage.setType("INVITE");
+	    inviteMessage.setContent(inviteContent);
+	    inviteMessage.setPartid(usersService.getById2(loginId).getUsernm());
+	    inviteMessage.setSender(loginId);
+	    inviteMessage.setSendDate(createSendDate());
+	    return inviteMessage;
+	}
 
 	public String createChatRoomName(List<String> userIds) {
 		Collections.sort(userIds);
 		return String.join("_", userIds);
+	}
+	
+	public String createSendDate() {
+		LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MMMM dd일", Locale.KOREAN);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.KOREAN);
+        String sendDay = now.format(dateFormatter);
+        String sendTime = now.format(timeFormatter);
+        return sendDay + " " + sendTime;
 	}
 
 }

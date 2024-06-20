@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import com.example.demo.chat.Message.MessageController;
+import com.example.demo.chat.Message.MessageDto;
 import com.example.demo.chat.Message.MessageService;
 import com.example.demo.users.UsersService;
 
@@ -30,6 +31,9 @@ public class ChatRoomController {
 	
 	@Autowired
 	private UsersService usersService;
+	
+	@Autowired
+	private MessageController messageController;
 
 	@GetMapping("/chat/chatroom/{roomId}")
 	public String getChatRoomByRoomId(@PathVariable String roomId, HttpSession session, ModelMap map) {
@@ -38,7 +42,7 @@ public class ChatRoomController {
 		map.addAttribute("partId", partId);
 		map.addAttribute("roomId", roomId);
 		map.addAttribute("userId1", userId1);
-		return "/chat/bootchat";
+		return "chat/bootchat";
 	}
 
 	@GetMapping("/chat/chatroom")
@@ -121,20 +125,21 @@ public class ChatRoomController {
 	}
 
 	@GetMapping("/chat/chatrooms/out/{roomId}/{userid}")
+	@ResponseBody
 	public String getOutRooms(@PathVariable String roomId, @PathVariable String userid, ModelMap map) {
-	    String mes = chatRoomService.getOutChatRoom(roomId, userid);
-	    map.addAttribute("getOutMessage", mes);
-	    return "redirect:/chat/chatrooms/" + userid;
+		 return "http://localhost:8081/chat/chatrooms/" + userid;
 	}
 	
 	@GetMapping("/chat/chatrooms/invite/{userid}/{chatroomid}")
 	public String inviteChatRoom(@RequestParam List<String> userid, String chatroomid, ModelMap map, HttpSession session) {
 	    String loginId = (String) session.getAttribute("loginId");
 	    ArrayList<String> mes = chatRoomService.inviteUserToChatRoom(chatroomid, userid, loginId);
-	    session.setAttribute("inviteMessage", mes);
+	    String inviteContent = String.join("<br/>", mes);
+	    MessageDto inviteMessage = chatRoomService.createInviteMessage(userid, chatroomid, loginId, inviteContent);
+	    messageController.sendMessage(inviteMessage, chatroomid);
 	    return "redirect:/chat/chatroom/" + chatroomid;
 	}
-
+	
 	@PostMapping("/chat/chatrooms/edit")
 	public String editRoomName(@RequestParam String chatroomid, String newRoomName, String userId1) {
 		chatRoomService.editChatRoomName(chatroomid, newRoomName, userId1);
