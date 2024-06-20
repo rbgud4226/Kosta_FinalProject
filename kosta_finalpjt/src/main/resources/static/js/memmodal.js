@@ -1,6 +1,10 @@
-let list_table = $(".modal_body")[0];
 //테이블 그리기
-const member_table = (arr)=>{	
+let list_table;
+// let list_table = $(".modal_body")[0];
+$(document).ready(function (){
+	list_table = $(".modal_body")[0];
+});
+const member_table = (arr)=>{
 	while(list_table.rows.length > 0){
 		list_table.deleteRow(0);
 	}

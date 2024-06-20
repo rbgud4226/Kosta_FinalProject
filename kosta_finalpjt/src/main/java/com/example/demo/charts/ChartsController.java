@@ -1,16 +1,16 @@
 package com.example.demo.charts;
 
+import com.example.demo.users.Users;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -22,12 +22,23 @@ public class ChartsController {
   @PostMapping("/add")
   public String addChart(ChartsDto dto){
     ChartsDto cd = dto;
-    System.out.println("테스트출력 : "+cd);
     if(cd.getEd().isEmpty()){
+      cd.setEd(cd.getSt());
+    }
+    if(cd.getSt().compareTo(cd.getEd())>0){
       cd.setEd(cd.getSt());
     }
     service.save(cd);
     return "redirect:/index_emp";
+  }
+
+  @ResponseBody
+  @PostMapping("/checkbox")
+  @Transactional
+  public void editChart(@RequestParam String taskid, @RequestParam String charstatus){
+    ChartsDto cdto = service.get(Integer.parseInt(taskid));
+    cdto.setChartStatus(charstatus);
+    service.save(cdto);
   }
 
   @GetMapping("/gantt")
@@ -67,6 +78,16 @@ public class ChartsController {
   @RequestMapping("/del")
   public String delbyid(int id){
     service.del(id);
+    return "redirect:/index_emp";
+  }
+
+  @PostMapping("/share")
+  public String ShareChart(@RequestParam(name = "userid", required = false) List<String> userids, @RequestParam(name="taskid")int taskid){
+    ChartsDto dto = service.get(taskid);
+    for (String userid : userids) {
+      service.save(new ChartsDto(new Users(userid, null, null, null, 0, null), 0, dto.getChartResource(), dto.getTitle(),
+          dto.getSt(), dto.getEd(), dto.getPercent(), dto.getDependencies(), dto.getChartStatus()));
+    }
     return "redirect:/index_emp";
   }
 }

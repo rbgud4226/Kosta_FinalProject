@@ -23,14 +23,17 @@
     justify-content: end;
     margin-top: 5px;
     margin-bottom: 5px;
+    margin-right: 15px;
 }
 .chart_menu button {
     margin-left: 5px;
 }
 .chart_area {
-    border: 1px black solid;
     padding: 5px;
     height: 400px;
+}
+.chart_area_gantt{
+    padding: 5px;
 }
 .chart_area_head {
     display: flex;
@@ -39,7 +42,6 @@
 .chart_area_scroll{
     height: 350px;
     overflow-y: scroll;
-    overflow-x: scroll;
 }
 .chart_area table {
     width: 100%;
@@ -50,15 +52,26 @@
     height: 50px;
     overflow-y: scroll;
 }
+.chart_area table button {
+    border: 0;
+    background-color: transparent;
+}
 .chart_area th{
     position: sticky;
     top: 0;
     z-index: 1;
+    background-color: rgba(13, 98, 253, 0.83);
+    color: white;
+    align-content: center;
+    border-bottom: black 1px;
 }
 .chart_area tr{
     border-bottom: black 1px solid;
     margin: auto;
     height: 30px;
+}
+.chart_area td{
+    align-content: center;
 }
 .chart_area tr:last-child{
     border-bottom: none;
@@ -118,8 +131,10 @@
 /********************** calendar **********************/
 
 .calendar_style {
-    width: 60%;
+    width: 100%;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
 }
+
+/********************** gantt **********************/

@@ -19,6 +19,7 @@
                 <li th:text="${session.deptnm +'부서'}"></li>
                 <li th:text="${session.joblvnm }"></li>
                 <li th:text="${session.memberimgnm }"></li>
+                <li th:if="${session.deptnm_mgrnm != null }" th:text="${session.deptnm_mgrnm }"></li>
                 <li >
                     <img style="border-radius: 20px" th:src="@{/member/memberimg(memberimgnm=${session.memberimgnm })}" width="40px" height="40px" />
                 </li>
