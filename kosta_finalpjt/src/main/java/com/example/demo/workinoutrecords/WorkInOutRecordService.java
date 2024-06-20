@@ -49,34 +49,7 @@ public class WorkInOutRecordService {
 		}
 		return list;
 	}
-	
-	//부서별 직원 월별 기록 조회하기
-//	public ArrayList<DeptMonthRecord> selectDept(int month,int year,int dept){
-//		List<Object[]> deptArray = dao.selectMonth(month, year, dept);
-//		ArrayList<DeptMonthRecord> list = new ArrayList<DeptMonthRecord>();
-//
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
-//	        
-//		for(Object[] a: deptArray) {
-//			DeptMonthRecord d = new DeptMonthRecord();
-//			d.setUsernm((String)a[0]);
-//
-//			Timestamp timestamp = (Timestamp) a[1];
-//			LocalDateTime localDateTime = timestamp.toLocalDateTime();
-//			LocalDate localDate = localDateTime.toLocalDate();
-//			d.setDay(localDate);
-//
-//			d.setDay_of_week((String)a[2]);
-//			d.setWorkinTime((String)a[3]);
-//			d.setWorkOutTime((String)a[4]);
-//			d.setWorkHours((String)a[5]);
-//			d.setState((String)a[6]);
-//			list.add(d);
-//		}
-//	
-//		return list;
-//	}
-	
+		
 	//부서 직원 통계기록
 	public ArrayList<ChartDeptMember> chartMonthandDept(int month,int year,int dept){
 		List<Object[]> deptlist = dao.chartDept(month, year, dept);

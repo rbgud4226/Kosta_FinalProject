@@ -59,6 +59,13 @@ const home = (type) => {
 	}
 }
 
+const deptselect = ()=>{
+	var selectElement = document.getElementById('deptslist');
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    var dataDeptValue = selectedOption.getAttribute('data-dept');
+    
+	document.querySelector("#mgr").innerText = dataDeptValue;
+}
 </script>
 </head>
 <body>
@@ -83,22 +90,17 @@ const home = (type) => {
 	<th>부서</th>
 	<td>
 		<!-- <input type="text" name="deptid" id="deptidid" th:value="${member?.deptid?.deptnm }"  list="deptslist"> -->
-		<select id="deptslist" name="deptid">
+		<select id="deptslist" name="deptid" onchange="deptselect()">
 			<option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }" 
 			th:selected="${member?.deptid?.deptnm}==${d.deptnm}"
-			th:data-dept = "${d.mgrid?.memberid}"></option>
+			th:data-dept = "${d.mgrid.userid.usernm}"></option>
 		</select>
 	</td>
 </tr>
 <tr>
 	<th>부서장</th>
 	<td>
-		<input type="text" name="mgrid" id="mgrid" th:value="${member?.mgrid?.memberid }">
-		<select id="deptslist" name="deptid">
-			<option th:each="d : ${dlist}" th:text="${d.mgrid.userid.usernm}" th:value="${d.deptid }" 
-			th:selected="${member?.deptid?.deptnm}==${d.deptnm}"
-			th:data-dept = "${d.mgrid?.memberid}"></option>
-		</select>
+		<span id="mgr"></span>
 	</td>
 </tr>
 <tr>
