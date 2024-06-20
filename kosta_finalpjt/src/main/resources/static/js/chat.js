@@ -227,8 +227,8 @@ function getOutRoom(roomId) {
 		success: function(response) {
 			window.location.href = response;
 		},
-		error: function(xhr, status, error) {
-			console.error('Error leaving the chat room:', status, error);
+		error: function(error) {
+			console.error(error);
 		}
 	});
 }
