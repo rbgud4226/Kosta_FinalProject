@@ -410,9 +410,6 @@
         }
         
         $(document).ready(function () {
-            if (inviteMessage) {
-                showMessage(inviteMessage.map(msg => ({ type: 'INVITE', content: msg, partid: '시스템', sendDate: new Date().toISOString() })));
-            }
         	loadChatRooms(userId1);
             $("#sendButton").click(function() { sendMessage(roomId); });
             $("#inviteButton").click(function() { inviteUser(roomId); });
@@ -424,7 +421,7 @@
             });
 
             $('#exampleModal2').on('show.bs.modal', function (e) {
-            	 $('#roomIdInput').val(roomId);
+            	$('#roomIdInput').val(roomId);
             	resetModal('1');
             });
         });
@@ -668,5 +665,5 @@
         </div>
     </div>
 </body>
-<script th:src="@{/js/memmodal.js}"></script>
+<script th:src="@{/js/chat_modal.js}"></script>
 </html>
