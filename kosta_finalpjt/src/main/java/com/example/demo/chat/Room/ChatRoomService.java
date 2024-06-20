@@ -127,6 +127,8 @@ public class ChatRoomService {
 				getOutMessage = part + "님이 나갔습니다";
 			}
 			chatRoomDao.save(chatRoom);
+		}else {
+			getOutMessage = "PRIVATE 방은 나갈수 없습니다";
 		}
 		return getOutMessage;
 	}
