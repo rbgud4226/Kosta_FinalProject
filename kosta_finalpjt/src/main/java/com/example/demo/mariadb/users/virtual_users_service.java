@@ -17,8 +17,8 @@ public class virtual_users_service {
     for(int i=0; i<16; i++){
       password += "" + r.nextInt(10);
     }
-    virtual_users user = dao.save(new virtual_users(0, 1, password, mail, id));
-    System.out.println("메일생성확인 : " + user);
+//    virtual_users user = dao.save(new virtual_users(0, 1, password, mail, id));
+//    System.out.println("메일생성확인 : " + user);
   }
 
   public virtual_users_dto get (String box){

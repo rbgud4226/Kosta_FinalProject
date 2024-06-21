@@ -48,7 +48,7 @@ public class oracleDBConfig {
 
     HashMap<String, Object> properties = new HashMap<>();
     properties.put("hibernate.dialect","org.hibernate.dialect.OracleDialect");
-    properties.put("hibernate.bm2ddl.auto","update");
+    properties.put("hibernate.hbm2ddl.auto","validate");
     properties.put("hibernate.format_sql",true);
 
     em.setJpaPropertyMap(properties);
@@ -62,6 +62,7 @@ public class oracleDBConfig {
     return DataSourceBuilder.create()
         .driverClassName("oracle.jdbc.driver.OracleDriver")
         .url("jdbc:oracle:thin:@192.168.0.36:1521/xe")
+//        .url("jdbc:oracle:thin:@localhost:1521/xe")
         .username("hr")
         .password("hr")
         .build();

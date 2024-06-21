@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +47,7 @@ public class mariaDBConfig {
 
     HashMap<String, Object> properties = new HashMap<>();
     properties.put("hibernate.dialect","org.hibernate.dialect.MariaDBDialect");
-    properties.put("hibernate.bm2ddl.auto","update");
+    properties.put("hibernate.hbm2ddl.auto","update");
     properties.put("hibernate.format_sql",true);
 
     em.setJpaPropertyMap(properties);

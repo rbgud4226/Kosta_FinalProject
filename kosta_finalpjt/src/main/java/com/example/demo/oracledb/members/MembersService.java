@@ -129,6 +129,9 @@ public class MembersService {
 
 	public MembersDto getByuserId(String userid) {
 		Members m = mdao.findByUserid(new Users(userid, "", "", "", 0, null));
+		System.out.println("**************************************");
+		System.out.println("memberservice : " + m);
+		System.out.println("**************************************");
 		if (m == null) {
 			return null;
 		}

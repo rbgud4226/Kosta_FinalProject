@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,8 +49,12 @@ public class WorkInOutRecordController {
   //개인
   //출퇴근 기록 페이지로 이동하기
   @GetMapping("/my")
-  public String myrecord(String Members, ModelMap map) {
-    MembersDto md = mservice.getByuserId(Members);
+  public String myrecord(HttpSession session, ModelMap map) {
+    String loginid = (String) session.getAttribute("loginId");
+    System.out.println("***************************************************************");
+    System.out.println("에러확인용"+loginid);
+    System.out.println("***************************************************************");
+    MembersDto md = mservice.getByuserId(loginid);
     Members m = new Members(md.getUserid(), md.getMemberid(), md.getBirthdt(), md.getEmail(), md.getCpnum(), md.getAddress(), md.getMemberimgnm(), md.getHiredt(), md.getLeavedt(), md.getDeptid(), md.getJoblvid(), md.getMgrid(), null);
     if (m == null) {
       return "error";
