@@ -57,7 +57,6 @@
                 <select id="searchType" name="searchType">
                     <option value="title">제목</option>
                     <option value="writer">작성자</option>
-                    <!-- <option value="senior">결재 담당자</option> -->
                 </select>
                 <input type="text" id="searchValue" name="searchValue" placeholder="검색 내용 입력..">
                 <input type="submit" value="검색" class="btn btn-secondary">
@@ -70,6 +69,7 @@
                         <th>서류종류</th>
                         <th>작성일</th>
                         <th>결재현황</th>
+                        <th>문서삭제</th>
                     </thead>
                     <tbody class="record_list">
                         <tr th:each="s:${list}">
@@ -105,8 +105,6 @@
                 </a>
             </div>
         </div>
-        <!-- <a href="/auth/docx/addreport" class="nav_link">보고서작성</a> -->
-        <!-- <a th:href="@{/auth/docx/mylist(writer=${session.loginId})}" class="nav_link">내가 작성한 문서보기</a> -->
     </div>
 </body>
 
