@@ -2,13 +2,9 @@ package com.example.demo.oracledb.auth;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import com.example.demo.members.MembersDto;
-import com.example.demo.members.MembersService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

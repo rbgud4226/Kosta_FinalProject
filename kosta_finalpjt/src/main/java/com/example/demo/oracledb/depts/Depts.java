@@ -1,7 +1,6 @@
-package com.example.demo.depts;
+package com.example.demo.oracledb.depts;
 
-import com.example.demo.members.Members;
-
+import com.example.demo.oracledb.members.Members;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

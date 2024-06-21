@@ -1,4 +1,4 @@
-package com.example.demo.workinoutrecords;
+package com.example.demo.oracledb.workinoutrecords;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.demo.charts.ChartsDto;
-import com.example.demo.charts.ChartsService;
-import com.example.demo.depts.DeptsDao;
-import com.example.demo.depts.DeptsDto;
-import com.example.demo.depts.DeptsService;
-import com.example.demo.members.Members;
-import com.example.demo.members.MembersDto;
-import com.example.demo.members.MembersService;
-import com.example.demo.users.Users;
+import com.example.demo.oracledb.charts.ChartsDto;
+import com.example.demo.oracledb.charts.ChartsService;
+import com.example.demo.oracledb.depts.DeptsDao;
+import com.example.demo.oracledb.depts.DeptsDto;
+import com.example.demo.oracledb.depts.DeptsService;
+import com.example.demo.oracledb.members.Members;
+import com.example.demo.oracledb.members.MembersDto;
+import com.example.demo.oracledb.members.MembersService;
+import com.example.demo.oracledb.users.Users;
 
 
 @Controller

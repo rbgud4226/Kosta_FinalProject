@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.depts.DeptsDto;
+import com.example.demo.oracledb.depts.DeptsDto;
 import com.example.demo.oracledb.depts.DeptsService;
 import com.example.demo.oracledb.depts.JoblvsService;
 import com.example.demo.oracledb.users.Users;

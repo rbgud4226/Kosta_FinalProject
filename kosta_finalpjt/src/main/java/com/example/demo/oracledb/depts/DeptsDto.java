@@ -1,7 +1,6 @@
-package com.example.demo.depts;
+package com.example.demo.oracledb.depts;
 
-import com.example.demo.members.Members;
-
+import com.example.demo.oracledb.members.Members;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

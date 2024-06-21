@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.example.demo.chat.Message.MessageController;
-import com.example.demo.chat.Message.MessageDto;
-import com.example.demo.chat.Message.MessageService;
-import com.example.demo.users.UsersService;
+import com.example.demo.oracledb.chat.Message.MessageController;
+import com.example.demo.oracledb.chat.Message.MessageDto;
+import com.example.demo.oracledb.chat.Message.MessageService;
+import com.example.demo.oracledb.users.UsersService;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ChatRoomController {
 	@Autowired
-	private ChatRoomService chatRoomService;
+	private com.example.demo.chat.Room.ChatRoomService chatRoomService;
 
 	@Autowired
 	private ChatRoomNameService chatRoomNameService;

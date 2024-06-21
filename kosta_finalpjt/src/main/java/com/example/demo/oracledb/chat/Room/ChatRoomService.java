@@ -9,15 +9,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import com.example.demo.oracledb.chat.Room.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.chat.Message.MessageDto;
-import com.example.demo.chat.RoomUser.RoomUserService;
-import com.example.demo.members.MembersService;
-import com.example.demo.users.Users;
-import com.example.demo.users.UsersDao;
-import com.example.demo.users.UsersService;
+import com.example.demo.oracledb.chat.Message.MessageDto;
+import com.example.demo.oracledb.chat.RoomUser.RoomUserService;
+import com.example.demo.oracledb.members.MembersService;
+import com.example.demo.oracledb.users.Users;
+import com.example.demo.oracledb.users.UsersDao;
+import com.example.demo.oracledb.users.UsersService;
 
 import jakarta.transaction.Transactional;
 

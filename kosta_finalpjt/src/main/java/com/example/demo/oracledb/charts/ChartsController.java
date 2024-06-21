@@ -1,11 +1,10 @@
 package com.example.demo.oracledb.charts;
 
-import com.example.demo.users.Users;
+import com.example.demo.oracledb.users.Users;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

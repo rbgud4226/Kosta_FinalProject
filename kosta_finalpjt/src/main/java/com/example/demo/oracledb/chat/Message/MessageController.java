@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.example.demo.oracledb.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -20,16 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.oracledb.chat.Room.ChatRoomService;
-import com.example.demo.users.UsersService;
-
 @Controller
 public class MessageController {
 	@Autowired
 	private MessageService messageService;
 
 	@Autowired
-	private ChatRoomService chatRoomService;
+	private com.example.demo.chat.Room.ChatRoomService chatRoomService;
 	
 	@Autowired
 	private UsersService usersService;
