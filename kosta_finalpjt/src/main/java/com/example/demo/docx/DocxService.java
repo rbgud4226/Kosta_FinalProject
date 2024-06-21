@@ -49,8 +49,10 @@ public class DocxService {
 
 	// 결재과정 처리 메서드
 	public void approveDocx(int docxkey, String formtype) {
+		int test = docxkey;
 		System.out.println("docx키 확인 : : " + docxkey);
 		System.out.println("formtype 확인 : :-" + formtype);
+		System.out.println("docxkey 타입 확인 : :-" + test);
 		List<Docx> docxlist = dao.findByDocxkeyAndFormtype(docxkey, formtype);
 		System.out.println("문서 가져오는지 확인 : : : " + docxlist);
 		int cnt = docxlist.get(0).getOrderloc() + 1;

@@ -35,13 +35,16 @@ public class DocxController {
 	//보고서 작성양식
 	@PostMapping("/addreport")
 	public String addreport(DocxDto d) {
-		System.out.println(d.getSenior());
-		int dkey = service.findByFormtypeDesc(d.getFormtype());
-		dkey += 1;
-		System.out.println("key값 있는지 확인 ::" +dkey);
-		String[] s = d.getSenior().split(",");
-		for(int j=0; j<s.length; j++) {
-			service.save(d,s[j],null,j,dkey);
+		System.out.println("시니어값 테스트22 : " + d.getSenior());
+		String senior = d.getSenior();
+		System.out.println("시니어값 테스트 : " + senior);
+		if(senior != null) {
+			int dkey = service.findByFormtypeDesc(d.getFormtype());
+			dkey += 1;
+			String[] s = d.getSenior().split(",");
+			for(int j=0; j<s.length; j++) {
+				service.save(d,s[j],null,j,dkey);
+			}
 		}
 		return "redirect:/auth/docx/list";
 	}
@@ -63,14 +66,14 @@ public class DocxController {
 		//회의록 작성양식
 		@PostMapping("/addmeeting")
 		public String addmeeting(DocxDto d) {
-			System.out.println(d.getSenior());
+			String senior = d.getSenior();
 			int dkey = service.findByFormtypeDesc(d.getFormtype());
 			dkey += 1;
-			System.out.println("key값 있는지 확인 ::" +dkey);
-			String[] s = d.getSenior().split(",");
-			String[] p = d.getParticipant().split(",");
-			for(int j=0; j<s.length; j++) {
-				service.save(d,s[j],p[j],j,dkey);
+			if(senior != null) {
+				String[] s = d.getSenior().split(",");
+				for(int j=0; j<s.length; j++) {
+					service.save(d,null,d.getParticipant(),j,dkey);
+				}
 			}
 			return "redirect:/auth/docx/list";
 		}
