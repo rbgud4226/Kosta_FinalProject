@@ -4,10 +4,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script th:src="@{/js/record_dept.js}"> </script>
+<script>
+  let lineChartData = '[[${LineData}]]';
+  lineChartData = lineChartData.replace(/&quot;/g, '"')
+  let chartObj = JSON.parse(lineChartData);
+  console.log(chartObj)
+</script>
+<script th:src="@{/js/record/record_admin.js}"> </script>
 <script type="text/javascript">
-    // Load Charts and the corechart package.
-    // google.charts.load('current', {'packages':['corechart']});
     google.charts.load('current', {
         'packages': ['line', 'corechart']
       });
