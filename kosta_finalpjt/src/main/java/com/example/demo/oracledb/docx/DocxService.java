@@ -5,8 +5,13 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.oracledb.members.Members;
@@ -72,18 +77,33 @@ public class DocxService {
 	}
 
 	// 문서 전체 검색
-	public ArrayList<DocxDto> getAll() {
-		List<Docx> l = dao.findByDocxorder(0);
-		// 작성일 기준 내림차순 정렬
-		l.sort(Comparator.comparingInt(Docx::getFormnum).reversed());
-		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
-		for (Docx d : l) {
-			list.add(new DocxDto(d.getFormnum(), d.getWriter(), null, d.getStartdt(), d.getEnddt(), d.getTitle(),
-					d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(),
-					d.getTaskprocsres(), d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(),
-					d.getAprovdoc(), d.getDocxorder(), d.getStatus(), d.getDocxkey(), d.getOrderloc()));
-		}
-		return list;
+	public Page<DocxDto> getAll(int page, int size) {
+		PageRequest pageable = PageRequest.of(page,size);
+		Page<Docx> docxPage = dao.findByDocxorder(0,pageable);
+		// Docx 객체를 DocxDto로 변환
+		return docxPage.map(docx -> new DocxDto(
+				docx.getFormnum(),
+				docx.getWriter(),
+	            null,
+	            docx.getStartdt(),
+	            docx.getEnddt(),
+	            docx.getTitle(),
+	            docx.getContent(),
+	            docx.getNote(),
+	            docx.getTaskclasf(),
+	            docx.getTaskplan(),
+	            docx.getTaskprocs(),
+	            docx.getTaskprocsres(),
+	            docx.getDeptandmeetloc(),
+	            docx.getDayoffclasf(),
+	            docx.getParticipant(),
+	            docx.getFormtype(),
+	            docx.getAprovdoc(),
+	            docx.getDocxorder(),
+	            docx.getStatus(),
+	            docx.getDocxkey(),
+	            docx.getOrderloc()
+				));
 	}
 
 	// 멤버리스트 뽑기
