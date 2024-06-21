@@ -1,12 +1,12 @@
 package com.example.demo.docx;
 
-import java.util.ArrayList;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.example.demo.members.Members;
 import com.example.demo.users.Users;
 
 import jakarta.persistence.Entity;
@@ -39,13 +39,9 @@ public class Docx {
 	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Users writer;
-	
-//	@ManyToOne
-//	@JoinColumn(nullable = false)
-//	@OnDelete(action = OnDeleteAction.CASCADE)
-//	private Members senior;
-	private Date startdt;
-	private Date enddt;
+	private String senior;
+	private String startdt;
+	private String enddt;
 	private String title;
 	private String content;
 	private String note; // 비고 작성
@@ -55,15 +51,23 @@ public class Docx {
 	private String taskprocsres; // 업무 진행 결과, 회의장소
 	private String deptandmeetloc; //회의 진행 장소
 	private String	dayoffclasf; //휴가 구분
-	ArrayList<String> participant; //참석자
+	private String participant; //참석자
 	private String formtype; //문서 타입 구분
-	private int aprovdoc; // 결제서류 승인 여부 : 거절 보류 승인
+	private int aprovdoc; // 결재서류 승인 여부 : 거절 보류 승인
+	private int docxorder; //결재 순서
+	private int status; // 결재 현황
+	private int docxkey; //유니크 값
+	private int orderloc; // 현재 결재위치
+	
+	
+	
 	
 	@PrePersist
 	public void setDate() {
-		startdt = new Date();
-		enddt = new Date();
+		Date now = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy년MM월dd일 a HH시"); 
+		String strNowDate = simpleDateFormat.format(now); 
+		startdt = strNowDate;
 	}
-	
-	
+
 }

@@ -1,90 +1,132 @@
 package com.example.demo;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.example.demo.charts.ChartsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.charts.ChartsService;
+import com.example.demo.depts.DeptsService;
+import com.example.demo.members.MembersDto;
+import com.example.demo.members.MembersService;
 import com.example.demo.users.UsersDto;
 import com.example.demo.users.UsersService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
 	@Autowired
-	private UsersService service;
+	private UsersService uservice;
+
+	@Autowired
+	private MembersService mservice;
+
+	@Autowired
+	private DeptsService dservice;
+
 	@Autowired
 	private ChartsService chartsService;
 
 	@RequestMapping("/")
-	public String home() {
-		return "index";
-	}
-
-	@GetMapping("/join")
-	public String joinform() {
-		return "user/join";
-	}
-
-	@PostMapping("/join")
-	public String join(UsersDto dto) {
-		dto.setAprov(0);
-		service.save(dto);
-		return "redirect:/";
+	public String home(HttpSession session) {
+		String loginId = (String) session.getAttribute("loginId");
+		String type = (String) session.getAttribute("type");
+		String indexPath = "";
+		if (loginId == null) {
+			indexPath = "user/userlogin";
+		} else {
+			if (type == "admin") {
+				indexPath = "/index_admin";
+			} else if (type == "emp") {
+				indexPath = "/index_emp";
+			} else {
+				indexPath = "/index";
+			}
+		}
+		return indexPath;
 	}
 
 	@GetMapping("/loginform")
 	public String loginform() {
-		return "user/login";
+		return "user/userlogin";
 	}
 
-//	@GetMapping("/auth/login")
-//	public void authlogin() {
-//
-//	}
-	
+	@PostMapping("/loginerror")
+	public String loginerror(HttpServletRequest request, String loginFailMsg) {
+		return "user/userlogin";
+	}
+
+	@GetMapping("/auth/login")
+	public String authlogin() {
+		return "/loginform";
+	}
+
 	@GetMapping("/auth/logout")
 	public String authlogout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
-	@GetMapping("/auth/info")
-	public String myinfo(HttpSession session, ModelMap map) {
-		String loginId = (String) session.getAttribute("loginId");
-		map.addAttribute("users", service.getById(loginId));
-		return "user/info";
-	}
 
 	@RequestMapping("/index_admin")
-	public void adminHome() {
-
+	public void adminHome(HttpSession session, ModelMap map) {
+		String loginid = (String) session.getAttribute("loginId");
+		session.setAttribute("usernm", uservice.getById(loginid).getUsernm());
+		MembersDto mdto = mservice.getByuserId((String) session.getAttribute("loginId"));
+		if (mdto != null) {
+			if (mdto.getMemberimgnm() == "") {
+				session.setAttribute("memberimgnm", "");
+			} else {
+				session.setAttribute("memberimgnm", mdto.getMemberimgnm());
+			}
+			if (mdto.getDeptid() == null) {
+				session.setAttribute("deptnm", "미등록 상태");
+			} else {
+				session.setAttribute("deptnm", mdto.getDeptid().getDeptnm());
+				if (mdto.getDeptid().getMgrid() != null
+						&& mdto.getDeptid().getMgrid().getMemberid() == mdto.getMemberid()) {
+					session.setAttribute("mgr_deptid", mdto.getDeptid().getDeptid());
+				}
+			}
+			if (mdto.getJoblvid() == null) {
+				session.setAttribute("joblvnm", "미등록 상태");
+			} else {
+				session.setAttribute("joblvnm", mdto.getJoblvid().getJoblvnm());
+			}
+		}
 	}
 
 	@RequestMapping("/index_emp")
-	public void empHome(ModelMap map) {
-		map.addAttribute("list", chartsService.getAll());
-	}
-
-	@ResponseBody
-	@GetMapping("/idcheck")
-	public Map idcheck(String id) {
-		Map map = new HashMap();
-		UsersDto udto = service.getById(id);
-		boolean flag = false;
-		if (udto == null) {
-			flag = true;
+	public void empHome(HttpSession session, ModelMap map) {
+		String loginid = (String) session.getAttribute("loginId");
+		session.setAttribute("usernm", uservice.getById(loginid).getUsernm());
+		UsersDto udto = uservice.getById((String) session.getAttribute("loginId"));
+		MembersDto mdto = mservice.getByuserId(udto.getId());
+		if (mdto != null) {
+			if (mdto.getMemberimgnm() == "") {
+				session.setAttribute("memberimgnm", "");
+			} else {
+				session.setAttribute("memberimgnm", mdto.getMemberimgnm());
+			}
+			if (mdto.getDeptid() == null) {
+				session.setAttribute("deptnm", "미등록 상태");
+			} else {
+				session.setAttribute("deptnm", mdto.getDeptid().getDeptnm());
+				if (mdto.getDeptid().getMgrid() != null
+						&& mdto.getDeptid().getMgrid().getMemberid() == mdto.getMemberid()) {
+					session.setAttribute("mgr_deptid", mdto.getDeptid().getDeptid());
+				}
+			}
+			if (mdto.getJoblvid() == null) {
+				session.setAttribute("joblvnm", "미등록 상태");
+			} else {
+				session.setAttribute("joblvnm", mdto.getJoblvid().getJoblvnm());
+			}
 		}
-		map.put("flag", flag);
-		return map;
+		map.addAttribute("list", chartsService.getbyUsers(loginid));
 	}
 
 }

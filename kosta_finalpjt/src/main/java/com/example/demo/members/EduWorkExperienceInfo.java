@@ -1,9 +1,11 @@
 package com.example.demo.members;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,9 +45,11 @@ public class EduWorkExperienceInfo {
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Members members;
-	private Date startdt;
-	private Date enddt;
+	private Members memberid;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate startdt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate enddt;
 	private String ewenm1;
 	private String ewenm2;
 	private int state;

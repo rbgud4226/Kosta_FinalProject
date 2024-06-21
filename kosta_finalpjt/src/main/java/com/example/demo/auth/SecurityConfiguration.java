@@ -12,6 +12,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.example.demo.users.UsersEqualPwdValidator;
+
 import jakarta.servlet.DispatcherType;
 
 @Configuration
@@ -20,7 +22,7 @@ public class SecurityConfiguration {
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
-
+	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
 			throws Exception {
@@ -35,17 +37,24 @@ public class SecurityConfiguration {
 		.authorizeHttpRequests((authz) -> authz
 						.requestMatchers("/index_admin").hasRole("ADMIN")
 						.requestMatchers("/index_emp").hasRole("EMP")
+						.requestMatchers("/css/**","/img/**","/js/**").permitAll()
 						.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-						.requestMatchers("/auth/**", "/index_**").authenticated()
-						.requestMatchers("/", "/join", "/error", "/login", "/idcheck").permitAll())
+						.requestMatchers("/auth/**", "/index_**", "/admin/**").authenticated()
+						.requestMatchers("/", "/error", "/login", "/idcheck", "/user/**", "/member/**", "/corp/**", "/files/**", "/chat/**").permitAll())
 				.formLogin((login) -> login.loginPage("/loginform")
 						.loginProcessingUrl("/login")
+						.failureForwardUrl("/loginerror")
 						.usernameParameter("id")
 						.passwordParameter("pwd")
 						.defaultSuccessUrl("/", true).permitAll()
 						.successHandler(new MySuccessHandler())
 						.failureHandler(new MyFailureHandler())
 						);
+//				.and()
+//						.logout()
+//						.logoutUrl("/logout")
+//						.logoutSuccessUrl("/")
 		return http.build();
 	}
+	
 }

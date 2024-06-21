@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+  <nav class="w_bg nav_vertical left_wrapper" th:fragment="leftNav">
+    <div class="menu_wrapper">
+        <ul class="nav_ul">
+            <li class="nav_li">
+                <div th:if="${session.type == 'emp'}">
+                    <p class="nav_main_title">HRM system</p>
+                    <ul>
+                        <li class="li_link">
+                            <a href="#" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">홈</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/user/userinfo(id=${session.loginId })}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">내 인사카드 관리</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/auth/record/my(Members=${session.loginId})}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">출퇴근 관리</span>
+                            </a>
+                        </li>
+                        <li  th:if="${session.mgr_deptid != null }" class="li_link">
+                            <a th:href="@{/auth/record/dept(dept=${session.mgr_deptid})}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">부서 근태관리</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${session.type == 'admin'}">
+                    <p class="nav_main_title">HRM system</p>
+                    <ul>
+                        <li class="li_link">
+                            <a href="/" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">홈</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/auth/record/admin}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                             <span class="nav_link_text">사원 근태관리</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/admin/user/userlist}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">사용자목록</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/corp/deptlist}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">부서목록</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/corp/joblvlist}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">직급목록</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav_li" th:if="${session.type != 'admin'}">
+                <div>
+                    <p class="nav_main_title">connect system</p>
+                    <ul>
+                        <li class="li_link">
+                            <a href="#" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">공지게시판</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/chat/chatrooms/{userId1}(userId1=${session.loginId})}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">채팅</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a th:href="@{/auth/docx/list}" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">문서함</span>
+                            </a>
+                        </li>
+                        <li class="li_link">
+                            <a href="#" class="nav_link">
+                                <div class="icon_wrapper">
+                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                </div>
+                                <span class="nav_link_text">메일함</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+	<div class="left_footer">
+			<a th:href="@{/user/userinfo(id=${session.loginId })}" class="out_link">
+	            <div class="icon_wrapper">
+	                <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+	            </div>
+	            <span class="nav_link_text">설정</span>
+	        </a>
+	        <a href="/auth/logout" class="out_link">
+	            <div class="icon_wrapper">
+	                <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+	            </div>
+	            <span class="nav_link_text">로그아웃</span>
+	        </a>
+	    </div>
+  </nav>
+</body>
+</html>

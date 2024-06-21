@@ -5,7 +5,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a href="/auth/info">내정보확인</a>
-<a href="/auth/logout">로그아웃</a>
+<a href="user/userinfo.html" th:href="@{/user/userinfo(id=${session.loginId })}">내정보확인</a><br/>
 </body>
 </html>
