@@ -2,6 +2,9 @@ package com.example.demo.oracledb.docx;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,15 +27,17 @@ public interface DocxDao extends JpaRepository<Docx, Integer> {
 	//docxkey값을 기준으로 중복되는 문서 정리해주는 메서드
 	List<Docx> findDistinctByDocxkey(int docxkey);
 	//중복제거 해서 전체 리스트 가져오기
-	List<Docx> findByDocxorder(int num);
+//	Page<Docx> findByDocxorder(int num,Pageable pageable);
 	//Senior이름으로 검색
 	List<Docx> findBySenior(String senior);
-	
+	Page<Docx> findByDocxorder(int num, PageRequest pageable);
 	// docxkey 값이 같은 문서를 전부 삭제하는 메서드
     @Modifying
     @Transactional
     @Query("DELETE FROM Docx d WHERE d.docxkey = :docxkey")
     void deleteByDocxkey(int docxkey);
+    
+	
 	
 	
 }

@@ -3,7 +3,9 @@ package com.example.demo.oracledb.docx;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,8 +83,11 @@ public class DocxController {
 
 	//전체문서 리스트 출력
 	@GetMapping("/list")
-	public String list(ModelMap map) {
-		map.addAttribute("list", service.getAll());
+	public String list(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
+		 Page<DocxDto> docxPage = service.getAll(page, size);
+	        model.addAttribute("list", docxPage);
 		return "docx/list";
 	}
 	
