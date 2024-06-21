@@ -159,7 +159,7 @@ public class MembersService {
 	}
 
 	public ArrayList<MembersDto> getByDeptNm(String deptnm) {
-		List<Members> l = mdao.findByDeptid(new Depts(Integer.parseInt(deptnm), null, null));
+		List<Members> l = mdao.findByDeptid(new Depts(0, deptnm, null));
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
@@ -169,8 +169,8 @@ public class MembersService {
 		return list;
 	}
 
-	public ArrayList<MembersDto> getByJobLv(int joblvid) {
-		List<Members> l = mdao.findByJoblvid(new Joblvs(0, joblvid, ""));
+	public ArrayList<MembersDto> getByJobLv(String joblvnm) {
+		List<Members> l = mdao.findByJoblvid(new Joblvs(0, 0, joblvnm));
 		ArrayList<MembersDto> list = new ArrayList<>();
 		for (Members m : l) {
 			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
