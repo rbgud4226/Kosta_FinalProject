@@ -39,3 +39,17 @@ const home = (type) => {
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>
+
+
+<table border="1">
+	<tr>
+	<th>부서ID</th><td th:text="${d.deptid }"></td>
+	</tr>
+	<tr>
+	<th>부서이름</th><td th:text="${d.deptnm }"></td>
+	</tr>
+	<tr>
+	<th>부서장</th><td th:text="${d.mgrid?.memberid }"></td>
+	</tr>
+	</tr>
+</table>
