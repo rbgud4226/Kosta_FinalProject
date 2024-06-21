@@ -25,6 +25,16 @@
 <body>
 <h3>관리자 페이지용</h3>
 <!--Table and divs that hold the pie charts-->
+<span th:text="${LineData}"></span>
+<hr>
+<div th:each="entry : ${LineData}">
+  <h2 th:text="${entry.key}"></h2>
+  <!-- <ul>
+      <li th:each="data : ${entry.value}">
+          <span th:text="${data.year}"></span>: <span th:text="${data.workData}"></span>
+      </li>
+  </ul> -->
+</div>
 <table class="columns">
     <tr>
       <td><div id="chart_div" style="border: 1px solid #ccc"></div></td>

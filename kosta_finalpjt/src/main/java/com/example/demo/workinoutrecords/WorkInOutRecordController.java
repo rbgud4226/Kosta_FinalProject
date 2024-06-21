@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.example.demo.charts.ChartsDto;
-import com.example.demo.charts.ChartsService;
-import com.example.demo.users.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,9 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.charts.ChartsDto;
+import com.example.demo.charts.ChartsService;
+import com.example.demo.depts.DeptsDao;
+import com.example.demo.depts.DeptsDto;
+import com.example.demo.depts.DeptsService;
 import com.example.demo.members.Members;
 import com.example.demo.members.MembersDto;
 import com.example.demo.members.MembersService;
+import com.example.demo.users.Users;
 
 
 @Controller
@@ -38,6 +41,9 @@ public class WorkInOutRecordController {
 
   @Autowired
   private ChartsService cservice;
+  
+  @Autowired
+  private DeptsService dservice;
 
   //개인
   //출퇴근 기록 페이지로 이동하기
@@ -196,37 +202,16 @@ public class WorkInOutRecordController {
     return map;
   }
 
-
-  //관리자(직원기록 확인하기)
-//	@ResponseBody
-//	@GetMapping("/deptRecord")
-//	public void list(int dept,int cnt) {
-//		// 현재 날짜 가져오기
-//        LocalDate currentDate = LocalDate.now();
-//        // 현재 달/년도 가져오기
-//        int currentMonth = currentDate.getMonthValue();
-//        int currentYear = currentDate.getYear();
-//       
-//        // 이전 달로 이동
-//        int previousMonth = currentMonth + cnt;
-//        int previousYear = currentYear;
-//        if (previousMonth == 0) { 
-//            previousMonth = 12; 
-//            previousYear--;
-//        }
-//        ArrayList<DeptMonthRecord> list = service.selectDept(previousMonth, previousYear, dept);
-//	}
-
   //부서 근태 부서장 페이지 이동
   @GetMapping("/dept")
   public ModelAndView deptList(int dept) {
     ModelAndView mav = new ModelAndView("record/dept");
-    System.out.println(deptRecord(dept, -1));
-    mav.addObject("list", deptRecord(dept, -1));
+    mav.addObject("record",test(deptRecord(dept, 0)));
+    mav.addObject("list", deptRecord(dept, 0));
     return mav;
   }
 
-  //관리자
+  //관리자(부서별 데이터 가져오기)
   @ResponseBody
   @GetMapping("/list")
   public ArrayList<ChartDeptMember> deptRecord(int dept, int cnt) {
@@ -237,19 +222,83 @@ public class WorkInOutRecordController {
     int currentYear = currentDate.getYear();
 
     // 이전 달로 이동
-    int previousMonth = currentMonth + cnt;
+    int previousMonth = currentMonth + cnt -1;
     int previousYear = currentYear;
     if (previousMonth == 0) {
       previousMonth = 12;
       previousYear--;
     }
-    return service.chartMonthandDept(previousMonth, previousYear, dept);
+    ArrayList<ChartDeptMember> data = service.chartMonthandDept(previousMonth, previousYear, dept);
+    return data;
   }
   
+  //부서 통계용
+  public Map test(ArrayList<ChartDeptMember> data) {
+	 int overWork = 0;
+	 int worktime = 0;
+	 ArrayList<String> latemem = new ArrayList<String>();
+	 ArrayList<String> danmem = new ArrayList<String>();
+	 
+     for(ChartDeptMember n : data) {
+    	 //오버 워크 시간 합하기
+    	 overWork += change(n.getOverWork());
+    	 //근무시간 합하기
+    	 worktime += change(n.getWorkTime());
+    	 //지각자 통계내기
+    	 if(n.getLateCount()>0) {
+    		 latemem.add(n.getName());
+    		 if(n.getLateCount()>4) {
+    			 danmem.add(n.getName());
+    		 }
+    	 }
+     }
+     overWork /= data.size();
+     worktime /= data.size();
+     
+     int overavgHours = overWork / 60;
+     int overavgMin = overWork % 60;
+
+     int workavgHours = worktime / 60;
+     int workavgMin = worktime % 60;
+     
+     // 시간 형식 변환
+     String overAvgTime = String.format("%02d:%02d", overavgHours, overavgMin);
+     String workAvgTime = String.format("%02d:%02d", workavgHours, workavgMin);
+     
+     Map map = new HashMap<>();
+     map.put("overAvgTime", overAvgTime);
+     map.put("workAvgTime", workAvgTime);
+     map.put("latemem", latemem);
+     map.put("danmem", danmem);
+     
+     return map;
+  }
+  
+  // 시간 문자열을 분 단위로 변환
+  public static int change(String time) {
+      String[] parts = time.split(":");
+      int hours = Integer.parseInt(parts[0]);
+      int minutes = Integer.parseInt(parts[1]);
+      return hours * 60 + minutes;
+  }
+  
+  
   @GetMapping("/admin")
-  public String admin() {
-	  System.out.println("admin 관리 페이지 접속중");
-	  return "record/admin";
+  public ModelAndView admin() {
+	 ModelAndView mav = new ModelAndView("record/admin");
+	 // 현재 날짜 가져오기
+	 LocalDate currentDate = LocalDate.now();
+	 int currentYear = currentDate.getYear();
+	 
+	 ArrayList<DeptsDto> deptlist = dservice.getAll();
+	 
+	 Map<String, ArrayList<DeptsYearWorkData>> adminLineData = new HashMap<>();
+	 for(DeptsDto d : deptlist) {
+		 ArrayList<DeptsYearWorkData> deptList = service.deptYearData(currentYear, d.getDeptid());
+		 adminLineData.put(d.getDeptnm(), deptList);
+	 }
+	 mav.addObject("LineData", adminLineData);
+	 return mav;
   }
   
 }

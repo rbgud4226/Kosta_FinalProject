@@ -13,11 +13,10 @@
             <ul class="flex_center nav_right">
                 <!-- <li >알람</li> -->
                 <!-- <li th:text="${session.loginId }"></li> -->
-                <li th:text="${session.usernm +' '}"></li>
+                <li th:text="${session.usernm }"></li>
                 <!-- <li th:text="${session.type }"></li> -->
-                <!-- <li th:text="${session.deptnm +'부서'}"></li> -->
+                <!-- <li th:text="${session.deptnm }"></li> -->
                 <li th:text="${session.joblvnm }"></li>
-                <li th:if="${session.deptnm_mgrnm != null }" th:text="${session.deptnm_mgrnm }"></li>
                 <li >
                     <img style="border-radius: 20px" th:src="@{/member/memberimg(memberimgnm=${session.memberimgnm })}" width="40px" height="40px" />
                 </li>
