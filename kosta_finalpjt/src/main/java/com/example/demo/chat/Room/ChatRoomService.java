@@ -127,6 +127,8 @@ public class ChatRoomService {
 				getOutMessage = part + "님이 나갔습니다";
 			}
 			chatRoomDao.save(chatRoom);
+		}else {
+			getOutMessage = "PRIVATE 방은 나갈수 없습니다";
 		}
 		return getOutMessage;
 	}
@@ -243,7 +245,7 @@ public class ChatRoomService {
 				ArrayList<String> userIdList = new ArrayList<>(Arrays.asList(userIds));
 				List<String> partisList = new ArrayList<>(Arrays.asList(partis));
 				if (userIdList.contains(s)) {
-					inviteMessage.add(partN + "는 이미 방에 있습니다");
+					inviteMessage.add(partN + "은 이미 방에 있습니다");
 				} else if (!userIdList.contains(s)) {
 					userIdList.add(s);	
 					partisList.add(partN);
