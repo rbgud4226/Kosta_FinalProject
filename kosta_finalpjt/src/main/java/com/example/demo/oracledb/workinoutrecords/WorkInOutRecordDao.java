@@ -73,5 +73,20 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			+ "FROM 근무시간계산 "
 			+ "ORDER BY 연도, 월", nativeQuery = true)
     List<Object[]> deptMonthWork(@Param("year") int year,@Param("dept")int dept);
+    
+    
+	//전체 직원 추가 근무 시간 통계용
+	@Query(value = "SELECT"
+			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '17:00' AND WORK_OUT_TIME <= '18:30' THEN 1 END) AS less_than_30min,\n"
+			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '18:30' AND WORK_OUT_TIME <= '19:00' THEN 1 END) AS between_30min_and_1hour,\n"
+			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '19:00' AND WORK_OUT_TIME <= '21:00' THEN 1 END) AS between_1hour_and_2hours,\n"
+			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '21:00' THEN 1 END) AS over_2hours\n"
+			+ "FROM\n"
+			+ "    Work_In_Out_Record W\n"
+			+ "WHERE EXTRACT(year FROM W.day) = :year"
+			+ "AND EXTRACT(MONTH FROM W.day) = :month"
+			+ "GROUP BY\n"
+			+ "    EXTRACT(MONTH FROM day)", nativeQuery = true)
+    List<Object[]> overWorkData(@Param("year") int year,@Param("month")int month);
 
 }

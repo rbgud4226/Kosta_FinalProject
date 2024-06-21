@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +22,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.oracledb.charts.ChartsDto;
 import com.example.demo.oracledb.charts.ChartsService;
-import com.example.demo.oracledb.depts.DeptsDao;
 import com.example.demo.oracledb.depts.DeptsDto;
 import com.example.demo.oracledb.depts.DeptsService;
 import com.example.demo.oracledb.members.Members;
 import com.example.demo.oracledb.members.MembersDto;
 import com.example.demo.oracledb.members.MembersService;
 import com.example.demo.oracledb.users.Users;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Controller
@@ -56,7 +58,9 @@ public class WorkInOutRecordController {
     }
     //출근기록x
     boolean flag = false;
+    System.out.println("dto 받기 전");
     ArrayList<WorkInOutRecordDto> list = service.selectByDate(m.getMemberid());
+    System.out.println("dto 반환");
     //출근기록O
     if (!list.isEmpty()) {
       flag = true;
@@ -284,21 +288,30 @@ public class WorkInOutRecordController {
   
   
   @GetMapping("/admin")
-  public ModelAndView admin() {
-	 ModelAndView mav = new ModelAndView("record/admin");
-	 // 현재 날짜 가져오기
-	 LocalDate currentDate = LocalDate.now();
-	 int currentYear = currentDate.getYear();
-	 
-	 ArrayList<DeptsDto> deptlist = dservice.getAll();
-	 
-	 Map<String, ArrayList<DeptsYearWorkData>> adminLineData = new HashMap<>();
-	 for(DeptsDto d : deptlist) {
-		 ArrayList<DeptsYearWorkData> deptList = service.deptYearData(currentYear, d.getDeptid());
-		 adminLineData.put(d.getDeptnm(), deptList);
-	 }
-	 mav.addObject("LineData", adminLineData);
-	 return mav;
+  public String admin(Model model) {
+      LocalDate currentDate = LocalDate.now();
+      int currentYear = currentDate.getYear();
+      
+      ArrayList<DeptsDto> deptlist = dservice.getAll();
+      
+      Map<String, ArrayList<DeptsYearWorkData>> adminLineData = new HashMap<>();
+      ObjectMapper mapper = new ObjectMapper();
+      
+      //부서별 데이터 삽입
+      for (DeptsDto d : deptlist) {
+          ArrayList<DeptsYearWorkData> deptList = service.deptYearData(currentYear, d.getDeptid());
+          adminLineData.put(d.getDeptnm(), deptList);
+      }
+      
+      // JSON 데이터를 문자열로 변환
+      try {
+          String jsonData = mapper.writeValueAsString(adminLineData);
+          model.addAttribute("LineData", jsonData);
+      } catch (JsonProcessingException e) {
+          e.printStackTrace();
+      }
+      
+      return "record/admin";
   }
   
 }
