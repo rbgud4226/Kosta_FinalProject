@@ -13,6 +13,7 @@
 	<link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
 	<link rel="stylesheet" th:href="@{/css/common/header.css}">
 	<link rel="stylesheet" th:href="@{/css/record.css}">
+	<script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 		const home = (type) => {
 			if (type == 'admin') {
@@ -24,9 +25,7 @@
 			}
 		}
 
-		const deleteDocument = (docxKey) => {
-            location.href = `/auth/docx/deldocx?docxkey=${docxKey}`;
-        }
+		
 	</script>
 	<style>
 		/* 문서 제목 text color */
@@ -74,7 +73,7 @@
 								<span th:case="*">알 수 없음</span>
 							</td>
 							<td th:if="${s.writer.id} == ${session.loginId} and ${s.status} == 1">
-								<input type="button" class="btn btn-outline-secondary" th:onclick="deleteDocument([[${s.docxkey}]])" value="삭제">
+								<a th:href="@{/auth/docx/deldocx(docxkey=${s.docxkey})}"><i class="fa-sharp fa-solid fa-trash"></i></a>
 							</td>
 						</tr>
 					</tbody>

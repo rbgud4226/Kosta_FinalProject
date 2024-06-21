@@ -12,8 +12,13 @@
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
     <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common/modal.css}">
+    <link rel="stylesheet" th:href="@{/css/charts/charts.css}">
     <link rel="stylesheet" th:href="@{/css/record.css}">
+    <script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script th:src="@{/js/charts.js}"></script>
+    <script th:src="@{/js/memmodal.js}"></script>
     <script type="text/javascript">
         const home = (type) => {
             if (type == 'admin') {
@@ -43,14 +48,37 @@
             evt.currentTarget.className += " active";
         }
 
-        
+        function addSelectedMembers() {
+            // 선택된 멤버들을 가져오기
+            var selectedMembers = document.querySelectorAll('.list_ch:checked');
+
+            // 현재 활성화된 탭의 결재권한 select 요소 가져오기
+            var activeTab = document.querySelector('.tabcontent[style*="display: block"]');
+            var seniorSelect = activeTab.querySelector('.form-select.senior-select');
+
+            // 결재권한 태그에 선택된 멤버들 추가
+            selectedMembers.forEach(function(member) {
+                var username = member.closest('tr').querySelector('.list_name').textContent;
+                var jobLevel = member.closest('tr').querySelector('.list_lv').textContent;
+                var option = document.createElement('option');
+                option.text = username + ' / ' + jobLevel;
+                option.value = username; // 실제 값으로 설정
+                option.selected = true;
+                seniorSelect.appendChild(option);
+            });
+
+            // 모달 닫기 (Bootstrap의 경우)
+            var memberModal = new bootstrap.Modal(document.getElementById('memberModal'));
+            memberModal.hide();
+        }
     </script>
     <style>
         select[readonly] {
             background-color: #ddd;
             pointer-events: none;
         }
-         /* Style the tab */
+
+        /* Style the tab */
         .tab {
             overflow: hidden;
             border-bottom: 1px solid #ccc;
@@ -98,8 +126,10 @@
                 <h3 class="font_b24 m_b2">문서 작성폼</h3>
                 <!-- Tab 링크들 -->
                 <div class="tab">
-                    <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'report')" id="defaultOpen">보고서</button>
-                    <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'vacation')">휴가 신청서</button>
+                    <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'report')"
+                        id="defaultOpen">보고서</button>
+                    <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'vacation')">휴가
+                        신청서</button>
                     <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'meeting')">회의록</button>
                 </div>
             </div>
@@ -115,7 +145,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="writer" class="form-label">작성자</label>
-                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}" readonly>
+                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
+                        readonly>
                 </div>
                 <div class="mb-3">
                     <label for="enddt" class="form-label">기한</label>
@@ -127,19 +158,29 @@
                 </div>
                 <div class="mb-3">
                     <label for="taskprocs" class="form-label">업무진행과정</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" name="taskprocs" rows="4"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" name="taskprocs"
+                        rows="4"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="senior" class="form-label">결제권한</label>
-                    <select class="form-select" id="senior" name="senior" multiple>
-                        <option th:each="m : ${mlist}" th:value="${m.userid.id}" th:text="${m.userid.usernm + ' / ' + m.joblvid}"></option>
+                    <select class="form-select senior-select" id="senior" name="senior" multiple>
                     </select>
+                    <!-- <option th:each="m : ${mlist}" th:value="${m.userid.id}"
+                        th:text="${m.userid.usernm + ' / ' + m.joblvid.joblvnm}"></option> -->
+                    <!-- <textarea class="form-control" id="exampleFormControlTextarea1" name="senior"
+                        rows="4"></textarea> -->
                 </div>
-                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;" onChange="this.selectedIndex = this.initialSelect;" readonly>
+                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                    onChange="this.selectedIndex = this.initialSelect;" readonly>
                     <option value="1" selected>미승인</option>
                     <option value="2">승인</option>
                     <option value="3">보류</option>
                 </select>
+                <td>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#memberModal" class="taskidshare">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </button>
+                </td>
                 <input type="hidden" name="formtype" value="보고서">
                 <button type="submit" class="btn btn-primary">등록</button>
             </form>
@@ -155,7 +196,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="writer" class="form-label">작성자</label>
-                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}" readonly>
+                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
+                        readonly>
                 </div>
                 <div class="mb-3">
                     <label for="enddt" class="form-label">종료일</label>
@@ -175,11 +217,16 @@
                 </div>
                 <div class="mb-3">
                     <label for="senior" class="form-label">결제권한</label>
-                    <select class="form-select" id="senior" name="senior" multiple>
-                        <option th:each="m : ${mlist}" th:value="${m.userid.id}" th:text="${m.userid.usernm + ' / ' + m.joblvid}"></option>
+                    <select class="form-select senior-select" id="senior" name="senior" multiple>
                     </select>
+                    <td>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#memberModal" class="taskidshare">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </button>
+                    </td>
                 </div>
-                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;" onChange="this.selectedIndex = this.initialSelect;" readonly>
+                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                    onChange="this.selectedIndex = this.initialSelect;" readonly>
                     <option value="1" selected>미승인</option>
                     <option value="2">승인</option>
                     <option value="3">보류</option>
@@ -199,7 +246,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="writer" class="form-label">작성자</label>
-                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}" readonly>
+                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
+                        readonly>
                 </div>
                 <div class="mb-3">
                     <label for="startdt" class="form-label">회의일시</label>
@@ -217,13 +265,8 @@
                     <label for="taskprocsres" class="form-label">회의내용</label>
                     <textarea class="form-control" id="taskprocsres" name="taskprocsres" rows="4"></textarea>
                 </div>
-                <div class="mb-3">
-                    <label for="senior" class="form-label">결제권한</label>
-                    <select class="form-select" id="senior" name="senior" multiple>
-                        <option th:each="m : ${mlist}" th:value="${m.userid.id}" th:text="${m.userid.usernm + ' / ' + m.joblvid}"></option>
-                    </select>
-                </div>
-                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;" onChange="this.selectedIndex = this.initialSelect;" readonly>
+                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                    onChange="this.selectedIndex = this.initialSelect;" readonly>
                     <option value="1" selected>미승인</option>
                     <option value="2">승인</option>
                     <option value="3">보류</option>
@@ -239,6 +282,75 @@
             <button class="btn btn-secondary" th:onclick="home([[${session.type}]])">홈버튼</button>
             <a href="/auth/docx/list" class="btn btn-secondary">리스트 페이지</a>
         </div>
+
+        <section id="member_modal_section">
+            <div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered mem_modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="list_line" method="post">
+                                <table class="m20 table_w100">
+                                    <tr>
+                                        <td>
+                                            <select class="select_box" name="type">
+                                                <option value="1">부서이름</option>
+                                                <option value="2">직원이름</option>
+                                                <option value="3">직급</option>
+                                            </select>
+                                        </td>
+                                        <td class="list_search_wrapper">
+                                            <input class="list_input" type="text" name="val">
+                                            <button type="button" class="btn blue_btn list_search"
+                                                onclick="list_search()">검색</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                            <form class="modal_list" action="" method="post" id="memberForm">
+                                <input style="display: none" id="share_taskid" name="taskid">
+                                <table class="table_w100 modal_table">
+                                    <thead class="list_line ">
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td class="w40 f600">Name</td>
+                                            <td class="f600">E-mail</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="modal_body">
+                                        <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
+                                            <td>
+                                                <input name="userid" type="checkbox" class="list_ch"
+                                                    th:value="${m?.userid.id}">
+                                            </td>
+                                            <td class="form_td">
+                                                <p class="f600 list_name" th:text="${m?.userid.id }"></p>
+                                                <div class="list_pos">
+                                                    <span class="list_dept" th:text="${m?.deptid?.deptid }"></span>
+                                                    <span class="list_lv"
+                                                        th:text="${m?.joblvid?.joblvnm}"></span>
+                                                </div>
+
+                                            </td>
+                                            <td class="form_td" th:text="${m?.email}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="modal-footer">
+                                    <input type="button" value="선택" class="btn blue_btn" onclick="addSelectedMembers()">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 
