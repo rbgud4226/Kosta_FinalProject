@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ChatRoomController {
 	@Autowired
-	private com.example.demo.chat.Room.ChatRoomService chatRoomService;
+	private ChatRoomService chatRoomService;
 
 	@Autowired
 	private ChatRoomNameService chatRoomNameService;

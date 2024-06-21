@@ -1,4 +1,4 @@
-package com.example.demo.chat.Room;
+package com.example.demo.oracledb.chat.Room;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

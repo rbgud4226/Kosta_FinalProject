@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.example.demo.oracledb.chat.Room.ChatRoomService;
 import com.example.demo.oracledb.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +28,7 @@ public class MessageController {
 	private MessageService messageService;
 
 	@Autowired
-	private com.example.demo.chat.Room.ChatRoomService chatRoomService;
+	private ChatRoomService chatRoomService;
 	
 	@Autowired
 	private UsersService usersService;
