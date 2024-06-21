@@ -26,23 +26,27 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 
 	//연/월별 (부서)직원 통계
 	//사원번호(user_id) 이름 부서번호 직급레벨 총_출근횟수 지각횟수 총_근무시간
-	@Query(value = "SELECT M.memberid, u.USERNM,d.deptnm, j.joblvnm, "+
-			" COUNT(*) AS total_records, "+
-			"SUM(CASE WHEN W.state = '지각' THEN 1 ELSE 0 END) AS total_late_records, "+
-			"LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) / 60), 3, '0') "+
-			"|| ':' || "+
-			"LPAD(MOD(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))), 60), 2, '0') AS total_time "+
-			"FROM work_in_out_record W "+
-			"JOIN members M ON W.user_id = m.memberid "+
-			"JOIN users u ON u.id = m.userid_id "+
-			"JOIN joblvs j ON j.joblvidx = m.joblvs_joblvid "+
-			"JOIN depts d ON d.deptid = m.depts_deptid "+
-			"WHERE "+
-			"EXTRACT(MONTH FROM W.day) = :month "+
-			"AND EXTRACT(YEAR FROM W.day) = :year "+
-			"AND M.depts_deptid = :dept "+
-			"GROUP BY "+
-			"M.memberid, u.USERNM, d.deptnm, j.joblvnm", nativeQuery = true)
+	@Query(value = "SELECT \r\n"
+			+ "    M.memberid, u.USERNM, d.deptnm, j.joblvnm, \r\n"
+			+ "    COUNT(*) AS total_records,\r\n"
+			+ "    SUM(CASE WHEN W.state = '지각' THEN 1 ELSE 0 END) AS total_late_records,\r\n"
+			+ "    LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) / 60), 3, '0')\r\n"
+			+ "    || ':' || \r\n"
+			+ "    LPAD(MOD(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))), 60), 2, '0') AS total_time,\r\n"
+			+ "    LPAD(FLOOR(SUM(CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
+			+ "                    + CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 4, 2)) ELSE 0 END) / 60), 2, '0')\r\n"
+			+ "    || ':' || \r\n"
+			+ "    LPAD(MOD(SUM(CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
+			+ "                 + CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 4, 2)) ELSE 0 END), 60), 2, '0') AS additional_work_time\r\n"
+			+ "FROM work_in_out_record W\r\n"
+			+ "JOIN members M ON W.user_id = M.memberid\r\n"
+			+ "JOIN users u ON u.id = M.userid_id\r\n"
+			+ "JOIN joblvs j ON j.joblvidx = M.joblvs_joblvid\r\n"
+			+ "JOIN depts d ON d.deptid = M.depts_deptid\r\n"
+			+ "WHERE EXTRACT(MONTH FROM W.day) = :month\r\n"
+			+ "AND EXTRACT(YEAR FROM W.day) = :year\r\n"
+			+ "AND M.depts_deptid = :dept\r\n"
+			+ "GROUP BY M.memberid, u.USERNM, d.deptnm, j.joblvnm", nativeQuery = true)
     List<Object[]> chartDept(@Param("month") int month, @Param("year") int year, @Param("dept") int dept);
 	
 	//개인의 월(연) 근태기록 조회
@@ -53,22 +57,21 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 	//월별 부서간 근무시간 통계
 	@Query(value = "WITH 근무시간계산 AS (\r\n"
 			+ "    SELECT\r\n"
-			+ "        m.depts_deptid AS 부서번호,\r\n"
 			+ "        TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY') AS 연도,\r\n"
 			+ "        TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'MM') AS 월,\r\n"
 			+ "        SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) AS 총근무분,\r\n"
 			+ "        COUNT(DISTINCT w.user_id) AS 근무자수\r\n"
 			+ "    FROM work_in_out_record w\r\n"
 			+ "    JOIN members m ON w.user_id = m.memberid\r\n"
-			+ "    WHERE TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY') = :year"
+			+ "    WHERE TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY') = :year "
+			+ "    and m.depts_deptid = :dept \r\n"
 			+ "    GROUP BY m.depts_deptid, TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY'), TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'MM')\r\n"
 			+ ")\r\n"
-			+ "SELECT\r\n"
-			+ "    월,\r\n"
-			+ "    부서번호,\r\n"
-			+ "    TRUNC(총근무분 / 60) AS 평균근무시간_시간\r\n"
-			+ "FROM 근무시간계산\r\n"
-			+ "ORDER BY 연도, 월, 부서번호", nativeQuery = true)
-    List<Object[]> deptMonthWork(@Param("year") int year);
+			+ "SELECT "
+			+ "    월,"
+			+ "     NVL(TRUNC(총근무분 / 60), 0) AS 평균근무시간_시간 "
+			+ "FROM 근무시간계산 "
+			+ "ORDER BY 연도, 월", nativeQuery = true)
+    List<Object[]> deptMonthWork(@Param("year") int year,@Param("dept")int dept);
 
 }

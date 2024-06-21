@@ -6,20 +6,17 @@
     <nav class="w_bg nav_top fix_top" th:fragment="header">
         <div class="header_wrapper">
             <div class="flex_center header_logo">
-                <a class="logo_right" href="#">
-                    <img>img</img>
-                    <p>사이트 이름</p>
+                <a class="logo_right" href="/">
+                    <div class="loginBoxTitle header_text">HRD SYSTEM</div>
                 </a>
             </div>
             <ul class="flex_center nav_right">
-                <li >알람</li>
-                <li th:text="${session.loginId }"></li>
+                <!-- <li >알람</li> -->
+                <!-- <li th:text="${session.loginId }"></li> -->
                 <li th:text="${session.usernm }"></li>
-                <li th:text="${session.type }"></li>
-                <li th:text="${session.deptnm +'부서'}"></li>
+                <!-- <li th:text="${session.type }"></li> -->
+                <!-- <li th:text="${session.deptnm }"></li> -->
                 <li th:text="${session.joblvnm }"></li>
-                <li th:text="${session.memberimgnm }"></li>
-                <li th:if="${session.deptnm_mgrnm != null }" th:text="${session.deptnm_mgrnm }"></li>
                 <li >
                     <img style="border-radius: 20px" th:src="@{/member/memberimg(memberimgnm=${session.memberimgnm })}" width="40px" height="40px" />
                 </li>

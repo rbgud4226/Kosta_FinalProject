@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MessageDao extends JpaRepository<Message, Long> {
-	  List<Message> findByRoom_Chatroomid(String chatroomid);
+	  List<Message> findByRoom_ChatroomidOrderByIdAsc(String chatroomid);
 }

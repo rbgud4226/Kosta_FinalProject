@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketTransportRegist
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/room");
+		config.enableSimpleBroker("/room" , "/recent");
 		config.setApplicationDestinationPrefixes("/send");
 	}
 

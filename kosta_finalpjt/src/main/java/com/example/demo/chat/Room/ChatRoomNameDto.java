@@ -14,4 +14,5 @@ public class ChatRoomNameDto {
 	private ChatRoom room;
 	private String host;
 	private String roomName;
+	private String editableName;
 }
