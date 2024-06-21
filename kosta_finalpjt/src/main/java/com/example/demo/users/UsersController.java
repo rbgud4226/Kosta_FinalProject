@@ -217,12 +217,21 @@ public class UsersController {
 				}
 			}
 		} else if (type == 3) {
-			ulist = uservice.getByUsernmLike(val);
+			ulist = new ArrayList<UsersDto>();
+			for (UsersDto udto : uservice.getByUsernmLike(val)) {
+				if (val != "") {
+					MembersDto mdto = mservice.getByuserId(udto.getId());
+					udto.setMemberdto(mdto);
+					ulist.add(udto);
+				} else {
+					ulist = null;
+				}
+			}
 		} else if (type == 4) {
 			ulist = new ArrayList<UsersDto>();
 			for (UsersDto udto : uservice.getAll()) {
 				if (val != "") {
-					ArrayList<MembersDto> mlist = mservice.getByJobLv(Integer.parseInt(val));
+					ArrayList<MembersDto> mlist = mservice.getByJobLv(val);
 					for (MembersDto mdto : mlist) {
 						if (udto.getMemberdto() != null && udto.getId() == mdto.getUserid().getId()) {
 							udto.setMemberdto(mdto);
@@ -234,8 +243,21 @@ public class UsersController {
 				}
 			}
 		} else if (type == 5) {
+			int valInt = 4;
 			if (val != "") {
-				ulist = uservice.getByAprov(Integer.parseInt(val));
+				if (val.contains("미") || val.contains("대") || val.contains("미승인")) {
+					valInt = 0;
+				} else if (val.contains("재") || val.contains("승인")) {
+					valInt = 1;
+				} else if (val.contains("휴")) {
+					valInt = 2;
+				} else if (val.contains("퇴")) {
+					valInt = 3;
+				} else {
+					valInt = 5;
+				}
+				System.out.println(valInt);
+				ulist = uservice.getByAprov(valInt);
 				for (UsersDto udto : ulist) {
 					MembersDto mdto = mservice.getByuserId(udto.getId());
 					try {
