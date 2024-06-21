@@ -39,3 +39,16 @@ const home = (type) => {
 <input type="button" value="홈버튼" th:onclick="home([[${session.type }]])"><br/>
 </body>
 </html>
+
+<table border="1">
+	<tr>
+	<th>직급인덱스</th><td th:text="${j.joblvidx }"></td>
+	</tr>
+	<tr>
+	<th>직급ID</th><td th:text="${j.joblvid }"></td>
+	</tr>
+	<tr>
+	<th>직급이름</th><td th:text="${j.joblvnm }"></td>
+	</tr>
+	</tr>
+</table>

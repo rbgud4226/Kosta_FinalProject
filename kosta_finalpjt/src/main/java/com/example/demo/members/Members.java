@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -60,21 +59,21 @@ public class Members {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate leavedt;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "depts_deptid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ToString.Exclude
 	private Depts deptid;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "joblvs_joblvid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ToString.Exclude
 	private Joblvs joblvid;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "mgrid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -90,14 +89,5 @@ public class Members {
 	public void setDate() {
 		hiredt = LocalDate.from(LocalDateTime.now());
 	}
-	
-	public void addmgrinmembers(List<Members> mgrinmembers) {
-        this.mgrinmembers.addAll(mgrinmembers);
-    }
 
-    public void putmgrinmembers(List<Members> mgrinmembers) {
-    	this.mgrinmembers.clear();
-        addmgrinmembers(mgrinmembers);
-    }
-	
 }

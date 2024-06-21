@@ -33,7 +33,7 @@ public class JoblvsService {
 		return null;
 	}
 
-	public JoblvsDto getByJoblvId(int joblvidx) {
+	public JoblvsDto getByJoblvIdx(int joblvidx) {
 		Joblvs j = dao.findById(joblvidx).orElse(null);
 		if (j == null) {
 			return null;
@@ -41,7 +41,7 @@ public class JoblvsService {
 		return new JoblvsDto(j.getJoblvidx(), j.getJoblvid(), j.getJoblvnm());
 	}
 
-	public ArrayList<JoblvsDto> getByJoblvIdx(int joblvid) {
+	public ArrayList<JoblvsDto> getByJoblvId(int joblvid) {
 		List<Joblvs> l = dao.findByJoblvid(joblvid);
 		ArrayList<JoblvsDto> list = new ArrayList<JoblvsDto>();
 		for (Joblvs j : l) {
@@ -51,7 +51,7 @@ public class JoblvsService {
 	}
 
 	public ArrayList<JoblvsDto> getByjoblvnmLike(String joblvnm) {
-		List<Joblvs> l = dao.findByJoblvnmLike(joblvnm);
+		List<Joblvs> l = dao.findByJoblvnmLike("%" + joblvnm + "%");
 		ArrayList<JoblvsDto> list = new ArrayList<JoblvsDto>();
 		for (Joblvs j : l) {
 			list.add(new JoblvsDto(j.getJoblvidx(), j.getJoblvid(), j.getJoblvnm()));
