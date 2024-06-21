@@ -13,6 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
     <link rel="stylesheet" th:href="@{/css/common/header.css}">
     <link rel="stylesheet" th:href="@{/css/record.css}">
+    <script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script type="text/javascript">
         const approveDocx = (docxkey, formtype) => {
@@ -43,7 +44,7 @@
 
                     const docxkey = parseInt(this.getAttribute('data-docxkey'), 10);
                     const formtype = this.getAttribute('data-formtype');
-                    if (!isNaN(formnum) && !isNaN(docxkey)) {
+                    if (!isNaN(docxkey)) {
                         approveDocx(docxkey, formtype);
                     } else {
                         console.error('Invalid data attributes:', { docxkey, formtype });
@@ -85,7 +86,7 @@
                     <div class="mb-3">
                         <strong>결재 권한:</strong>
                         <ul class="list-unstyled">
-                            <li th:each="senior : ${docx[0].senior}" th:text="${senior}"></li>
+                            <li th:each="senior : ${docx}" th:text="${senior.senior}"></li>
                         </ul>
                     </div>
                     <div class="mb-3">
@@ -96,8 +97,7 @@
                     </div>
                     <div>
                         <button type="button" class="btn btn-primary" th:if="${flag}" data-docxkey="${docx[0].docxkey}"
-                            data-formtype="${docx[0].formtype}"
-                            onclick="approveDocx([[${docx[0].docxkey}]], [[${docx[0].formtype}]])">결재</button>
+                            data-formtype="${docx[0].formtype}" th:onclick="approveDocx([[${docx[0].docxkey}]], [[${docx[0].formtype}]])">결재</button>
                     </div>
                 </div>
             </div>
