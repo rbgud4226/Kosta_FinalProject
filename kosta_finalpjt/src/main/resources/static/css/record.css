@@ -77,3 +77,41 @@
     line-height: 3rem;
     border-bottom: 2px solid #E2E4EC;
 }
+
+/* 부서장용 */
+.title{
+    font-size: 30px;
+    font-weight: 600;
+    padding-bottom: 15px;
+}
+.record_dept_wrapper{
+    padding: 50px 0;
+}
+.record_box_wrapper{
+    display: flex;
+    justify-content: space-between;
+
+}
+.record_data{
+    width: calc(100% / 4 - 10px);
+    height: 200px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.record_icon{
+    width: 30%;
+}
+.record_text_wrapper{
+    width: 60%;
+}
+.record_text_title{
+    font-size: 20px;
+    font-weight: 600;
+    color: #2e2f31;
+    padding-bottom: 5px;
+}
+.record_text_content{
+    font-size: 20px;
+}

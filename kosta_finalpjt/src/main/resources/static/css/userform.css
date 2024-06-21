@@ -12,18 +12,7 @@
     background: white;
     border-radius: 15px;
 }
-#loginBoxTitle {
-    text-align: center;
-    color:#000000;
-    font-weight: bold;
-    font-size: 32px;
 
-    padding: 5px;
-    margin-bottom: 60px;
-    background: linear-gradient(to right, #a3a3de, #5030a1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
 body{
     position: relative;
     height: 100vh;

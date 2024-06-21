@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class WorkInOutRecordService {
 	@Autowired
 	private WorkInOutRecordDao dao;
-	
+		
 	//당일 출퇴근 기록 여부 조회
 	public ArrayList<WorkInOutRecordDto> selectByDate(int user) {
 		ArrayList<WorkInOutRecord> wo = dao.selectDay(user);
@@ -63,11 +63,26 @@ public class WorkInOutRecordService {
 			c.setTotalRecords(((Number) a[4]).intValue());
 			c.setLateCount(((Number) a[5]).intValue());
 			c.setWorkTime((String) a[6]);
+			c.setOverWork(((String) a[7]));
 			list.add(c);
 		}
 		return list;
 	}
 	
+	//관리자 부서 월별 근무시간 조회
+	public ArrayList<DeptsYearWorkData> deptYearData (int year,int dept) {
+		List<Object[]> deptlist = dao.deptMonthWork(year,dept);
+		ArrayList<DeptsYearWorkData> list = new ArrayList<DeptsYearWorkData>();
+		
+		for(Object[] a: deptlist) {
+			DeptsYearWorkData d = new DeptsYearWorkData();
+		    d.setDeptnum(dept);
+		    d.setMonth((String) a[0]);
+		    d.setWorkhours(((Number) a[1]).intValue());
+		    list.add(d);
+		}
+		return list;
+	}
 	
 	
 	
