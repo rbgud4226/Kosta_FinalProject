@@ -57,7 +57,7 @@
             var seniorSelect = activeTab.querySelector('.form-select.senior-select');
 
             // 결재권한 태그에 선택된 멤버들 추가
-            selectedMembers.forEach(function(member) {
+            selectedMembers.forEach(function (member) {
                 var username = member.closest('tr').querySelector('.list_name').textContent;
                 var jobLevel = member.closest('tr').querySelector('.list_lv').textContent;
                 var option = document.createElement('option');
@@ -68,9 +68,22 @@
             });
 
             // 모달 닫기 (Bootstrap의 경우)
-            var memberModal = new bootstrap.Modal(document.getElementById('memberModal'));
+            var memberModalElement = document.getElementById('memberModal');
+            var memberModal = bootstrap.Modal.getInstance(memberModalElement);
             memberModal.hide();
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var memberModalElement = document.getElementById('memberModal');
+
+            memberModalElement.addEventListener('hidden.bs.modal', function () {
+                // 체크박스 선택 해제
+                var checkboxes = memberModalElement.querySelectorAll('.list_ch');
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+            });
+        });
     </script>
     <style>
         select[readonly] {
@@ -116,241 +129,247 @@
             background-color: #ddd;
             pointer-events: none;
         }
+
+        option:checked {
+            background-color: #fff !important; /* 선택된 옵션 배경색 기본값으로 설정 */
+            color: #000 !important; /* 선택된 옵션 텍스트 색상 기본값으로 설정 */
+        }
     </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-12">
-                <h3 class="font_b24 m_b2">문서 작성폼</h3>
-                <!-- Tab 링크들 -->
-                <div class="tab">
-                    <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'report')"
-                        id="defaultOpen">보고서</button>
-                    <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'vacation')">휴가
-                        신청서</button>
-                    <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'meeting')">회의록</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab 보고서 양식 시작 -->
-        <div id="report" class="tabcontent">
-            <h3 class="mt-3">보고서 작성 양식</h3>
-            <form action="/auth/docx/addreport" method="post">
-                <div class="mb-3">
-                    <label for="title" class="form-label">작성글제목</label>
-                    <input type="text" class="form-control" id="title" name="title">
-                </div>
-                <div class="mb-3">
-                    <label for="writer" class="form-label">작성자</label>
-                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
-                        readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="enddt" class="form-label">기한</label>
-                    <input type="date" class="form-control" id="enddt" name="enddt">
-                </div>
-                <div class="mb-3">
-                    <label for="taskplan" class="form-label">업무계획</label>
-                    <textarea class="form-control" id="taskplan" name="taskplan" rows="4"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="taskprocs" class="form-label">업무진행과정</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" name="taskprocs"
-                        rows="4"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="senior" class="form-label">결제권한</label>
-                    <select class="form-select senior-select" id="senior" name="senior" multiple>
-                    </select>
-                    <!-- <option th:each="m : ${mlist}" th:value="${m.userid.id}"
-                        th:text="${m.userid.usernm + ' / ' + m.joblvid.joblvnm}"></option> -->
-                    <!-- <textarea class="form-control" id="exampleFormControlTextarea1" name="senior"
-                        rows="4"></textarea> -->
-                </div>
-                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
-                    onChange="this.selectedIndex = this.initialSelect;" readonly>
-                    <option value="1" selected>미승인</option>
-                    <option value="2">승인</option>
-                    <option value="3">보류</option>
-                </select>
-                <td>
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#memberModal" class="taskidshare">
-                        <i class="fa-solid fa-share-nodes"></i>
-                    </button>
-                </td>
-                <input type="hidden" name="formtype" value="보고서">
-                <button type="submit" class="btn btn-primary">등록</button>
-            </form>
-        </div>
-
-        <!-- 휴가서 작성 양식 -->
-        <div id="vacation" class="tabcontent">
-            <h3 class="mt-3">휴가 신청서 작성폼</h3>
-            <form action="/auth/docx/addvacation" method="post">
-                <div class="mb-3">
-                    <label for="title" class="form-label">작성글제목</label>
-                    <input type="text" class="form-control" id="title" name="title">
-                </div>
-                <div class="mb-3">
-                    <label for="writer" class="form-label">작성자</label>
-                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
-                        readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="enddt" class="form-label">종료일</label>
-                    <input type="date" class="form-control" id="enddt" name="enddt">
-                </div>
-                <div class="mb-3">
-                    <label for="dayoffclasf" class="form-label">휴가구분</label>
-                    <select class="form-select" id="dayoffclasf" name="dayoffclasf">
-                        <option value="연차">연차</option>
-                        <option value="병가">병가</option>
-                        <option value="기타">기타</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="note" class="form-label">비고</label>
-                    <textarea class="form-control" id="note" name="note" rows="4"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="senior" class="form-label">결제권한</label>
-                    <select class="form-select senior-select" id="senior" name="senior" multiple>
-                    </select>
-                    <td>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#memberModal" class="taskidshare">
-                            <i class="fa-solid fa-share-nodes"></i>
-                        </button>
-                    </td>
-                </div>
-                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
-                    onChange="this.selectedIndex = this.initialSelect;" readonly>
-                    <option value="1" selected>미승인</option>
-                    <option value="2">승인</option>
-                    <option value="3">보류</option>
-                </select>
-                <input type="hidden" name="formtype" value="휴가 신청서">
-                <button type="submit" class="btn btn-primary">등록</button>
-            </form>
-        </div>
-
-        <!-- 회의록 작성 양식 -->
-        <div id="meeting" class="tabcontent">
-            <h3 class="mt-3">회의록 작성폼</h3>
-            <form action="/auth/docx/addmeeting" method="post">
-                <div class="mb-3">
-                    <label for="title" class="form-label">작성글제목</label>
-                    <input type="text" class="form-control" id="title" name="title">
-                </div>
-                <div class="mb-3">
-                    <label for="writer" class="form-label">작성자</label>
-                    <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
-                        readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="startdt" class="form-label">회의일시</label>
-                    <input type="datetime-local" class="form-control" id="startdt" name="startdt">
-                </div>
-                <div class="mb-3">
-                    <label for="deptandmeetloc" class="form-label">회의장소</label>
-                    <input type="text" class="form-control" id="deptandmeetloc" name="deptandmeetloc">
-                </div>
-                <div class="mb-3">
-                    <label for="participant" class="form-label">참석자</label>
-                    <textarea class="form-control" id="participant" name="participant" rows="4"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="taskprocsres" class="form-label">회의내용</label>
-                    <textarea class="form-control" id="taskprocsres" name="taskprocsres" rows="4"></textarea>
-                </div>
-                <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
-                    onChange="this.selectedIndex = this.initialSelect;" readonly>
-                    <option value="1" selected>미승인</option>
-                    <option value="2">승인</option>
-                    <option value="3">보류</option>
-                </select>
-                <input type="hidden" name="formtype" value="회의록">
-                <button type="submit" class="btn btn-primary">등록</button>
-            </form>
-        </div>
-        <script>
-            document.getElementById("defaultOpen").click();
-        </script>
-        <div class="mt-4">
-            <button class="btn btn-secondary" th:onclick="home([[${session.type}]])">홈버튼</button>
-            <a href="/auth/docx/list" class="btn btn-secondary">리스트 페이지</a>
-        </div>
-
-        <section id="member_modal_section">
-            <div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered mem_modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form class="list_line" method="post">
-                                <table class="m20 table_w100">
-                                    <tr>
-                                        <td>
-                                            <select class="select_box" name="type">
-                                                <option value="1">부서이름</option>
-                                                <option value="2">직원이름</option>
-                                                <option value="3">직급</option>
-                                            </select>
-                                        </td>
-                                        <td class="list_search_wrapper">
-                                            <input class="list_input" type="text" name="val">
-                                            <button type="button" class="btn blue_btn list_search"
-                                                onclick="list_search()">검색</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-                            <form class="modal_list" action="" method="post" id="memberForm">
-                                <input style="display: none" id="share_taskid" name="taskid">
-                                <table class="table_w100 modal_table">
-                                    <thead class="list_line ">
-                                        <tr>
-                                            <td><input type="checkbox"></td>
-                                            <td class="w40 f600">Name</td>
-                                            <td class="f600">E-mail</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="modal_body">
-                                        <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
-                                            <td>
-                                                <input name="userid" type="checkbox" class="list_ch"
-                                                    th:value="${m?.userid.id}">
-                                            </td>
-                                            <td class="form_td">
-                                                <p class="f600 list_name" th:text="${m?.userid.id }"></p>
-                                                <div class="list_pos">
-                                                    <span class="list_dept" th:text="${m?.deptid?.deptid }"></span>
-                                                    <span class="list_lv"
-                                                        th:text="${m?.joblvid?.joblvnm}"></span>
-                                                </div>
-
-                                            </td>
-                                            <td class="form_td" th:text="${m?.email}"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="modal-footer">
-                                    <input type="button" value="선택" class="btn blue_btn" onclick="addSelectedMembers()">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </form>
-                        </div>
+    <div th:replace="~{/common/header :: header}"></div>
+    <div th:replace="~{/common/leftnav :: leftNav}"></div>
+    <div class="main_body">
+        <div class="record_table w_bg">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="font_b24 m_b2">문서 작성폼</h3>
+                    <!-- Tab 링크들 -->
+                    <div class="tab">
+                        <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'report')"
+                            id="defaultOpen">보고서</button>
+                        <button class="tablinks btn btn-outline-primary" onclick="openTab(event, 'vacation')">휴가
+                            신청서</button>
+                        <button class="tablinks btn btn-outline-primary"
+                            onclick="openTab(event, 'meeting')">회의록</button>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Tab 보고서 양식 시작 -->
+            <div id="report" class="tabcontent">
+                <form action="/auth/docx/addreport" method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">작성글제목</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="writer" class="form-label">작성자</label>
+                        <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="enddt" class="form-label">기한</label>
+                        <input type="date" class="form-control" id="enddt" name="enddt">
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskplan" class="form-label">업무계획</label>
+                        <textarea class="form-control" id="taskplan" name="taskplan" rows="4"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskprocs" class="form-label">업무진행과정</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" name="taskprocs"
+                            rows="4"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senior" class="form-label">결제권한</label>
+                        <select class="form-select senior-select" id="senior" name="senior" multiple>
+                        </select>
+                        <td>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#memberModal"
+                                class="taskidshare">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </button>
+                        </td>
+                    </div>
+                    <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                        onChange="this.selectedIndex = this.initialSelect;" readonly>
+                        <option value="1" selected>미승인</option>
+                        <option value="2">승인</option>
+                        <option value="3">보류</option>
+                    </select>
+                    <input type="hidden" name="formtype" value="보고서">
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </form>
+            </div>
+
+            <!-- 휴가서 작성 양식 -->
+            <div id="vacation" class="tabcontent">
+                <form action="/auth/docx/addvacation" method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">작성글제목</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="writer" class="form-label">작성자</label>
+                        <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="enddt" class="form-label">종료일</label>
+                        <input type="date" class="form-control" id="enddt" name="enddt">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dayoffclasf" class="form-label">휴가구분</label>
+                        <select class="form-select" id="dayoffclasf" name="dayoffclasf">
+                            <option value="연차">연차</option>
+                            <option value="병가">병가</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="note" class="form-label">비고</label>
+                        <textarea class="form-control" id="note" name="note" rows="4"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senior" class="form-label">결제권한</label>
+                        <select class="form-select senior-select" id="senior" name="senior" multiple>
+                        </select>
+                        <td>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#memberModal"
+                                class="taskidshare">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </button>
+                        </td>
+                    </div>
+                    <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                        onChange="this.selectedIndex = this.initialSelect;" readonly>
+                        <option value="1" selected>미승인</option>
+                        <option value="2">승인</option>
+                        <option value="3">보류</option>
+                    </select>
+                    <input type="hidden" name="formtype" value="휴가 신청서">
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </form>
+            </div>
+
+            <!-- 회의록 작성 양식 -->
+            <div id="meeting" class="tabcontent">
+                <form action="/auth/docx/addmeeting" method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">작성글제목</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="writer" class="form-label">작성자</label>
+                        <input type="text" class="form-control" id="writer" name="writer" th:value="${session.loginId}"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="startdt" class="form-label">회의일시</label>
+                        <input type="datetime-local" class="form-control" id="startdt" name="startdt">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deptandmeetloc" class="form-label">회의장소</label>
+                        <input type="text" class="form-control" id="deptandmeetloc" name="deptandmeetloc">
+                    </div>
+                    <div class="mb-3">
+                        <label for="participant" class="form-label">참석자</label>
+                        <textarea class="form-control" id="participant" name="participant" rows="4"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskprocsres" class="form-label">회의내용</label>
+                        <textarea class="form-control" id="taskprocsres" name="taskprocsres" rows="4"></textarea>
+                    </div>
+                    <select style="display: none;" name="status" onFocus="this.initialSelect = this.selectedIndex;"
+                        onChange="this.selectedIndex = this.initialSelect;" readonly>
+                        <option value="1" selected>미승인</option>
+                        <option value="2">승인</option>
+                        <option value="3">보류</option>
+                    </select>
+                    <input type="hidden" name="formtype" value="회의록">
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </form>
+            </div>
+            <script>
+                document.getElementById("defaultOpen").click();
+            </script>
+            <div class="mt-4">
+                <button class="btn btn-secondary" th:onclick="home([[${session.type}]])">홈버튼</button>
+                <a href="/auth/docx/list" class="btn btn-secondary">리스트 페이지</a>
+            </div>
+
+            <section id="member_modal_section">
+                <div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered mem_modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="list_line" method="post">
+                                    <table class="m20 table_w100">
+                                        <tr>
+                                            <td>
+                                                <select class="select_box" name="type">
+                                                    <option value="1">부서이름</option>
+                                                    <option value="2">직원이름</option>
+                                                    <option value="3">직급</option>
+                                                </select>
+                                            </td>
+                                            <td class="list_search_wrapper">
+                                                <input class="list_input" type="text" name="val">
+                                                <button type="button" class="btn blue_btn list_search"
+                                                    onclick="list_search()">검색</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                                <form class="modal_list" action="" method="post" id="memberForm">
+                                    <input style="display: none" id="share_taskid" name="taskid">
+                                    <table class="table_w100 modal_table">
+                                        <thead class="list_line ">
+                                            <tr>
+                                                <td><input type="checkbox"></td>
+                                                <td class="w40 f600">Name</td>
+                                                <td class="f600">E-mail</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="modal_body">
+                                            <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
+                                                <td>
+                                                    <input name="userid" type="checkbox" class="list_ch"
+                                                        th:value="${m?.userid.id}">
+                                                </td>
+                                                <td class="form_td">
+                                                    <p class="f600 list_name" th:text="${m?.userid.id }"></p>
+                                                    <div class="list_pos">
+                                                        <span class="list_dept" th:text="${m?.deptid?.deptid }"></span>
+                                                        <span class="list_lv" th:text="${m?.joblvid?.joblvnm}"></span>
+                                                    </div>
+
+                                                </td>
+                                                <td class="form_td" th:text="${m?.email}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="modal-footer">
+                                        <input type="button" value="선택" class="btn blue_btn"
+                                            onclick="addSelectedMembers()">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 </body>
 
