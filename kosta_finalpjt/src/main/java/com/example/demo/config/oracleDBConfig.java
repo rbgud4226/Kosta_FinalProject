@@ -1,5 +1,8 @@
 package com.example.demo.config;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
 import javax.sql.DataSource;
@@ -60,7 +63,7 @@ public class oracleDBConfig {
     HashMap<String, Object> properties = new HashMap<>();
     properties.put("hibernate.dialect","org.hibernate.dialect.Oracle12cDialect");
     properties.put("hibernate.hbm2ddl.auto","update");
-
+    properties.put("spring.batch.jdbc.initialize-schema", "always");
     em.setJpaPropertyMap(properties);
 
     return em;
@@ -71,13 +74,31 @@ public class oracleDBConfig {
   public DataSource oracleDataSource(){
     return DataSourceBuilder.create()
         .driverClassName("oracle.jdbc.driver.OracleDriver")
-//        .url("jdbc:oracle:thin:@192.168.0.36:1521/xe")
-        .url("jdbc:oracle:thin:@localhost:1521/xe")
+        .url("jdbc:oracle:thin:@192.168.0.36:1521/xe")
+//        .url("jdbc:oracle:thin:@localhost:1521/xe")
         .username("hr")
         .password("hr")
         .build();
   }
   
+  //spring.batch.jdbc.initialize-schema=always 용도
+  @Bean
+  public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
+    DataSourceInitializer initializer = new DataSourceInitializer();
+    initializer.setDataSource(dataSource);
+    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+    populator.addScript(new ClassPathResource("org/springframework/batch/core/schema-oracle.sql"));
+    initializer.setDatabasePopulator(populator);
+    try (Connection connection = dataSource.getConnection();
+         Statement statement = connection.createStatement()) {
+        statement.execute("SELECT 1 FROM BATCH_JOB_INSTANCE WHERE 1=0");
+        initializer.setEnabled(false);
+    } catch (SQLException e) {
+        initializer.setEnabled(true);
+    }
+
+    return initializer;
+  }
   
   @Configuration
   public static class SchedulerConfig {
