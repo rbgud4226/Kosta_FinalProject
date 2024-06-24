@@ -132,6 +132,11 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>6.2.0.Final</version>
 		</dependency>
+		  <!-- SPRING BATCH -->
+   	   <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-batch</artifactId>
+       </dependency>
 	</dependencies>
 
 	<build>

@@ -1,8 +1,5 @@
 package com.example.demo.oracledb.chat.Room;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
@@ -32,7 +29,6 @@ public class ChatRoomName {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonBackReference
 	private ChatRoom room;
 	

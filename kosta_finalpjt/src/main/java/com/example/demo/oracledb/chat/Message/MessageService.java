@@ -1,5 +1,4 @@
 package com.example.demo.oracledb.chat.Message;
-
 import java.util.ArrayList;
 import java.util.List;
 
