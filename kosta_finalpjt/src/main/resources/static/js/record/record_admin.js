@@ -1,33 +1,5 @@
-
-
-
-// 부서별 월별 근무 평균 통계
-function drawSarahChart() {
-    // Create the data table for Sarah's pizza.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Topping');
-    data.addColumn('number', 'Slices');
-    data.addRows([
-      ['Mushrooms', 1],
-      ['Onions', 1],
-      ['Olives', 2],
-      ['Zucchini', 2],
-      ['Pepperoni', 1]
-    ]);
-
-    // Set options for Sarah's pie chart.
-    var options = {title:'How Much Pizza Sarah Ate Last Night',
-                   width:400,
-                   height:300};
-
-    // Instantiate and draw the chart for Sarah's pizza.
-    var chart = new google.visualization.PieChart(document.getElementById('Sarah_chart_div'));
-    chart.draw(data, options);
-  }
-
-  // Callback that draws the pie chart for Anthony's pizza.
-  function drawAnthonyChart() {
-
+// 사내 전체 추가 근무 통계
+function drawOverChart() {
     // Create the data table for Anthony's pizza.
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Topping');
@@ -41,21 +13,26 @@ function drawSarahChart() {
     ]);
 
     // Set options for Anthony's pie chart.
-    var options = {title:'How Much Pizza Anthony Ate Last Night',
-                   width:400,
+    var options = { width:600,
                    height:300};
 
     // Instantiate and draw the chart for Anthony's pizza.
-    var chart = new google.visualization.BarChart(document.getElementById('Anthony_chart_div'));
+    var chart = new google.visualization.BarChart(document.getElementById('over_chart_div'));
     chart.draw(data, options);
   }
 
 
-  function drawChart() {
+console.log(chartObj)
+//부서별 근무 시간 월별 비교 통계
+function drawChart() {
     var chartDiv = document.getElementById('chart_div');
 
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Month');
+    for(let dept in chartObj){
+      console.log(dept);
+      data.addColumn("number",dept)
+    }
     data.addColumn('number', "1차 확인 선");
     data.addColumn('number', "2차 확인 선");
     data.addColumn('number', "3차 확인 선");
@@ -76,7 +53,7 @@ function drawSarahChart() {
     ]);
 
     var materialOptions = {
-      width: 900,
+      width: 600,
       height: 500,
       colors: ['#a4d4ff', '#dc3912', '#ff9900'],
     };

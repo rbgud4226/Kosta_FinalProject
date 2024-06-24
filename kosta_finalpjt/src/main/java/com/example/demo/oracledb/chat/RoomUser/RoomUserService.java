@@ -29,5 +29,9 @@ public class RoomUserService {
 		}
 		return list;
 	}
+	
+	public void deleteRoomUsersByChatroomid(String chatroomid) {
+		roomuserdao.deleteByRoom_chatroomid(chatroomid);
+	}
 
 }

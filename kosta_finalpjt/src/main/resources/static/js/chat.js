@@ -2,7 +2,7 @@ function connect(newRoomId) {
 	roomId = newRoomId;
 	var socket = new SockJS('/auth/ws');
 	stompClient = Stomp.over(socket);
-	stompClient.connect({}, function(frame) {
+	stompClient.connect({}, function() {
 		var subscriptionId = 'sub-' + userId1;
 		stompClient.subscribe('/room/' + roomId, function(messageOutput) {
 			var message = JSON.parse(messageOutput.body);
@@ -19,7 +19,6 @@ function connect(newRoomId) {
 		loadChatRoomsConnect(roomId, userId1);
 	});
 }
-
 
 function loadMessages(roomId) {
 	var URL = 'http://localhost:8081/chat/message/room/';
@@ -81,8 +80,16 @@ function loadChatRoomsConnectView(chatRoom, userId1) {
 	if (chatRoom.roomType !== 'PRIVATE') {
 		if (chatRoom.chatRoomNames.length > 0) {
 			var name = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
-			chatMembers = name;
-			chatRoomNames = name;
+			chatRoomNames = name;	
+			var ids = chatRoom.name.replace(/_/g, ' ').trim().split(' ');
+			var names = chatRoom.participants.replace(/_/g, ' ').trim().split(' ');
+            chatMembers = '';
+            for (var i = 0; i < names.length; i++) {
+                if (ids[i] !== userId1) {
+                    chatMembers += '<a href="#" class="chat-member" data-id="' + ids[i] + '" onclick="handleNameClick(\'' + ids[i] + '\')">' + names[i] + '</a> ';
+                }
+            }
+            chatMembers = chatMembers.trim();
 		}
 	} else {
 		chatRoomNames = chatRoom.chatRoomNames[0].roomName;
@@ -102,6 +109,10 @@ function loadChatRoomsConnectView(chatRoom, userId1) {
                 </a>
             `;
 	centerStyle.append(chatRoomList);
+}
+
+function handleNameClick(memberId) {
+    event.preventDefault();
 }
 
 function editRoomName(chatRoomId, userId1) {
@@ -180,7 +191,6 @@ function loadChatRoomsView(data, userId1) {
 			         <a href="#" class="d-flex align-items-center">
 			             <div class="flex-shrink-0">
 			                 <img class="img-fluid-center" src="/member/memberimg?memberimgnm=${imgName}" alt="user img">
-			                 <span class="active"></span>
 			             </div>
 			             <div class="flex-grow-1 ms-3">
 			                 <h3 onclick="connect('${chatRoom.chatroomid}')">${chatRoomNames}</h3>
@@ -196,6 +206,13 @@ function loadChatRoomsView(data, userId1) {
 	});
 }
 
+
+function checkGetOutRoom(roomId) {
+        if (confirm("정말로 채팅방을 나가시겠습니까?")) {
+            getOutRoom(roomId);
+        }
+    }
+    
 function getOutRoom(roomId) {
 	const date = new Date();
 	const yoptions = {

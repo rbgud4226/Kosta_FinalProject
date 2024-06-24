@@ -15,7 +15,7 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 	ArrayList<WorkInOutRecord> selectDay(@Param("user_id")int user);
 	
 	//연/월별 (부서)전체 직원 조회
-	@Query(value="SELECT usernm, day, day_of_week, workin_Time, work_Out_Time, work_hours, state " +
+	@Query(value="SELECT usernm, day, dayofweek, workinTime, workOutTime, workhours, state " +
 			"from workinoutrecord W join members M on W.user_id = M.memberid " + 
 			"join users u on u.id = m.userid_id " + 
 			"WHERE EXTRACT(MONTH FROM W.day) = :month " + 
@@ -30,14 +30,14 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			+ "    M.memberid, u.USERNM, d.deptnm, j.joblvnm, \r\n"
 			+ "    COUNT(*) AS total_records,\r\n"
 			+ "    SUM(CASE WHEN W.state = '지각' THEN 1 ELSE 0 END) AS total_late_records,\r\n"
-			+ "    LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) / 60), 3, '0')\r\n"
+			+ "    LPAD(FLOOR(SUM(TO_NUMBER(SUBSTR(workhours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(workhours, 4, 2))) / 60), 3, '0')\r\n"
 			+ "    || ':' || \r\n"
-			+ "    LPAD(MOD(SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))), 60), 2, '0') AS total_time,\r\n"
-			+ "    LPAD(FLOOR(SUM(CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
-			+ "                    + CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 4, 2)) ELSE 0 END) / 60), 2, '0')\r\n"
+			+ "    LPAD(MOD(SUM(TO_NUMBER(SUBSTR(workhours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(workhours, 4, 2))), 60), 2, '0') AS total_time,\r\n"
+			+ "    LPAD(FLOOR(SUM(CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
+			+ "                    + CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 4, 2)) ELSE 0 END) / 60), 2, '0')\r\n"
 			+ "    || ':' || \r\n"
-			+ "    LPAD(MOD(SUM(CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
-			+ "                 + CASE WHEN TO_NUMBER(SUBSTR(work_hours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(work_hours, 4, 2)) ELSE 0 END), 60), 2, '0') AS additional_work_time\r\n"
+			+ "    LPAD(MOD(SUM(CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
+			+ "                 + CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 4, 2)) ELSE 0 END), 60), 2, '0') AS additional_work_time\r\n"
 			+ "FROM workinoutrecord W\r\n"
 			+ "JOIN members M ON W.user_id = M.memberid\r\n"
 			+ "JOIN users u ON u.id = M.userid_id\r\n"
@@ -50,7 +50,7 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
     List<Object[]> chartDept(@Param("month") int month, @Param("year") int year, @Param("dept") int dept);
 	
 	//개인의 월(연) 근태기록 조회
-	@Query(value="SELECT *	FROM workinoutrecord	WHERE EXTRACT(MONTH FROM day) = :month AND EXTRACT(YEAR FROM day) = :year and user_id =:user_id ORDER by day",nativeQuery = true)
+	@Query(value="SELECT *	FROM workinoutrecord WHERE EXTRACT(MONTH FROM day) = :month AND EXTRACT(YEAR FROM day) = :year and user_id =:user_id ORDER by day",nativeQuery = true)
 	ArrayList<WorkInOutRecord> selectMonthByUser(@Param("month")int month,@Param("year")int year,@Param("user_id")int user);
 
 	//관리자용
@@ -59,7 +59,7 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			+ "    SELECT\r\n"
 			+ "        TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'YYYY') AS 연도,\r\n"
 			+ "        TO_CHAR(TO_DATE(SUBSTR(day, 1, 8), 'YY/MM/DD'), 'MM') AS 월,\r\n"
-			+ "        SUM(TO_NUMBER(SUBSTR(work_hours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(work_hours, 4, 2))) AS 총근무분,\r\n"
+			+ "        SUM(TO_NUMBER(SUBSTR(workhours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(workhours, 4, 2))) AS 총근무분,\r\n"
 			+ "        COUNT(DISTINCT w.user_id) AS 근무자수\r\n"
 			+ "    FROM workinoutrecord w\r\n"
 			+ "    JOIN members m ON w.user_id = m.memberid\r\n"
@@ -77,12 +77,12 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
     
 	//전체 직원 추가 근무 시간 통계용
 	@Query(value = "SELECT"
-			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '17:00' AND WORK_OUT_TIME <= '18:30' THEN 1 END) AS less_than_30min,\n"
-			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '18:30' AND WORK_OUT_TIME <= '19:00' THEN 1 END) AS between_30min_and_1hour,\n"
-			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '19:00' AND WORK_OUT_TIME <= '21:00' THEN 1 END) AS between_1hour_and_2hours,\n"
-			+ "    COUNT(CASE WHEN WORK_OUT_TIME > '21:00' THEN 1 END) AS over_2hours\n"
+			+ "    COUNT(CASE WHEN WORKOUTTIME > '18:10' AND WORKOUTTIME <= '18:30' THEN 1 END) ,\n"
+			+ "    COUNT(CASE WHEN WORKOUTTIME > '18:30' AND WORKOUTTIME <= '19:00' THEN 1 END) ,\n"
+			+ "    COUNT(CASE WHEN WORKOUTTIME > '19:00' AND WORKOUTTIME <= '21:00' THEN 1 END) ,\n"
+			+ "    COUNT(CASE WHEN WORKOUTTIME > '21:00' THEN 1 END) \n"
 			+ "FROM\n"
-			+ "    Work_In_Out_Record W\n"
+			+ "    workinoutrecord W\n"
 			+ "WHERE EXTRACT(year FROM W.day) = :year"
 			+ "AND EXTRACT(MONTH FROM W.day) = :month"
 			+ "GROUP BY\n"

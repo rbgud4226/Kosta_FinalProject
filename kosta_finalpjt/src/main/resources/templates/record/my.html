@@ -20,6 +20,13 @@
 <div th:replace="~{/common/header :: header}"></div>
 <div th:replace="~{/common/leftnav :: leftNav}"></div>
   <div class="main_body">
+    <form action="/auth/record/member" method="post" id="ttt" style="background-color: azure;">
+
+        <input name="members" th:value="${session.loginId}">
+        시작: <input type="date" name="date1" >
+        끝: <input type="date" name="date2" >
+        <input type="submit" value="제출">
+      </form>
     <div class="record_top">
         <div class="record_top_wrapper">
             <div class="record_msg">
@@ -110,6 +117,7 @@
 
       </div>
     </div>
+   
   </div>
 
 </body>
