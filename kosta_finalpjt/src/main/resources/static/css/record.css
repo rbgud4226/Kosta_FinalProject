@@ -115,3 +115,29 @@
 .record_text_content{
     font-size: 20px;
 }
+/* admin chart */
+.chart_wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+.chart_title{
+    font-size: 20px;
+    font-weight: 600;
+    color: #2e2f31;
+    padding-bottom: 30px;
+}
+.chart{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.chart:first-child{
+    padding-right: 20px;
+}
+.chart_can{
+    padding: 30px 10px;
+    background: white;
+}

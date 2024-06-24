@@ -50,6 +50,8 @@ public class WorkInOutRecordController {
   
   @Autowired
   private DeptsService dservice;
+  
+  
 
   //개인
   //출퇴근 기록 페이지로 이동하기
@@ -321,12 +323,19 @@ public class WorkInOutRecordController {
       return "record/admin";
   }
   
+  @ResponseBody
   @GetMapping("/over")
-  public void over() {
+  public Map over() {
 	  LocalDate currentDate = LocalDate.now();
-      int currentYear = currentDate.getYear();
-      
-      
+	// 현재 달/년도 가져오기
+	    int currentMonth = currentDate.getMonthValue() - 1;
+	    int currentYear = currentDate.getYear();
+	    
+	    ArrayList<OverWorkData> list = service.overStatistics(currentYear, currentMonth);
+	    
+	    Map map = new HashMap<>();
+	    map.put("overAvgTime", list);
+	    return map;
   }
   
   

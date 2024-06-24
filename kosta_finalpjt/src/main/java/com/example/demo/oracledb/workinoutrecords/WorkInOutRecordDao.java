@@ -83,8 +83,8 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			+ "    COUNT(CASE WHEN WORKOUTTIME > '21:00' THEN 1 END) \n"
 			+ "FROM\n"
 			+ "    workinoutrecord W\n"
-			+ "WHERE EXTRACT(year FROM W.day) = :year"
-			+ "AND EXTRACT(MONTH FROM W.day) = :month"
+			+ "WHERE EXTRACT(year FROM W.day) = :year \n"
+			+ "AND EXTRACT(MONTH FROM W.day) = :month \n"
 			+ "GROUP BY\n"
 			+ "    EXTRACT(MONTH FROM day)", nativeQuery = true)
     List<Object[]> overWorkData(@Param("year") int year,@Param("month")int month);

@@ -1,20 +1,41 @@
+let less30 = 0;
+let less1 = 0;
+let less2 = 0;
+let over2 =0
+
+$(document).ready(function(){
+  $.ajax({
+      url: "/auth/record/over",
+      type:"get",   
+		  dataType:'json',
+      success: function(res){
+         less30 = res.overAvgTime[0].less30;
+         less1 = res.overAvgTime[0].less1hour;
+         less2 = res.overAvgTime[0].less2hours;
+         over2 = res.overAvgTime[0].over2hours;
+      },
+      error:function(){			//응답 에러일때
+        console.log('error');
+      }
+  });
+});
+
 // 사내 전체 추가 근무 통계
 function drawOverChart() {
     // Create the data table for Anthony's pizza.
     var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Topping');
-    data.addColumn('number', 'Slices');
+    data.addColumn('string', '횟수');
+    data.addColumn('number', '번');
     data.addRows([
-      ['Mushrooms', 2],
-      ['Onions', 2],
-      ['Olives', 2],
-      ['Zucchini', 0],
-      ['Pepperoni', 3]
+      ['30분 미만', less30],
+      ['30분 이상 1시간 미만', less1],
+      ['1시간 이상 2시간 미만', less2],
+      ['2시간 초과', over2]
     ]);
 
     // Set options for Anthony's pie chart.
-    var options = { width:600,
-                   height:300};
+    var options = { width:700,
+                   height:400};
 
     // Instantiate and draw the chart for Anthony's pizza.
     var chart = new google.visualization.BarChart(document.getElementById('over_chart_div'));
@@ -22,40 +43,45 @@ function drawOverChart() {
   }
 
 
-console.log(chartObj)
 //부서별 근무 시간 월별 비교 통계
 function drawChart() {
     var chartDiv = document.getElementById('chart_div');
-
     var data = new google.visualization.DataTable();
+    var months = []; 
+
     data.addColumn('string', 'Month');
     for(let dept in chartObj){
-      console.log(dept);
-      data.addColumn("number",dept)
-    }
-    data.addColumn('number', "1차 확인 선");
-    data.addColumn('number', "2차 확인 선");
-    data.addColumn('number', "3차 확인 선");
+      if(months.length<chartObj[dept].length){
+        for(let a = 0 ; a<chartObj[dept].length;a++){
+          months.push(chartObj[dept][a].month)
+        }
 
-    data.addRows([
-      ["월", -.5, 5.7,3.2],
-      ["2024.01", .4, 8.7,5.2],
-      ["2024.02", .5, 12,7.8],
-      ["2024.03", 2.9, 15.3,0],
-      ["2024.04", 6.3, 18.6,0],
-      ["2024.05", 9, 20.9,12.6],
-      ["2024.06", 10.6, 19.8,9.5],
-      ["2024.07", 10.3, 16.6,8.5],
-      ["2024.08", 7.4, 13.3,6.5],
-      ["2024.09", 4.4, 9.9,7.6],
-      ["2024.10", 1.1, 6.6,6.4],
-      ["2024.11", -.2, 4.5,0]
-    ]);
+      }
+      data.addColumn('number', dept);
+    }
+
+  months.forEach(function(month) {
+    let rowData = [month];
+      // 각 부서에 대한 데이터 추가
+      for (let dept in chartObj) {
+          var workhours = 0; 
+          // 해당 월의 데이터가 있으면 값 추가
+          var deptData = chartObj[dept];
+          for (var i = 0; i < deptData.length; i++) {
+              if (deptData[i].month === month) {
+                  workhours = deptData[i].workhours;
+                  break;
+              }
+          }
+          rowData.push(workhours); // 해당 부서의 월별 근무 시간을 배열에 추가
+      }
+          data.addRow(rowData);
+      });
 
     var materialOptions = {
-      width: 600,
-      height: 500,
-      colors: ['#a4d4ff', '#dc3912', '#ff9900'],
+      width: 700,
+      height: 400,
+      // colors: ['#a4d4ff', '#dc3912', '#ff9900'],
     };
 
     function drawMaterialChart() {
