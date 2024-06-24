@@ -1,13 +1,10 @@
 package com.example.demo.oracledb.chat.Message;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.example.demo.oracledb.chat.Room.ChatRoomService;
-import com.example.demo.oracledb.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,6 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.demo.oracledb.chat.Room.ChatRoomService;
+import com.example.demo.oracledb.users.UsersService;
 
 @Controller
 public class MessageController {
@@ -46,6 +46,7 @@ public class MessageController {
 			String partN = usersService.getById2(chatMessage.getSender()).getUsernm(); 
 			chatMessage.setContent(osg);
 			chatMessage.setPartid(partN);
+			chatMessage.setSendDate(chatRoomService.createSendDate());
 			messageService.save(chatMessage, roomId);
 			ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 	        messagingTemplate.convertAndSend("/room/" + roomId, list);
