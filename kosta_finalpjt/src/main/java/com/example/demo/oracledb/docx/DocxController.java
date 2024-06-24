@@ -83,12 +83,9 @@ public class DocxController {
 
 	//전체문서 리스트 출력
 	@GetMapping("/list")
-	public String list(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            Model model) {
-		 Page<DocxDto> docxPage = service.getAll(page, size);
-	        model.addAttribute("list", docxPage);
-		return "docx/list";
+	public Page<DocxDto> list(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+		return service.getAll(page, size);
 	}
 	
 	//결재걸린 문서 리스트 출력

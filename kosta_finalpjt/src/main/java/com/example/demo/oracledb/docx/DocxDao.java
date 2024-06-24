@@ -2,12 +2,12 @@ package com.example.demo.oracledb.docx;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.oracledb.users.Users;
@@ -30,7 +30,13 @@ public interface DocxDao extends JpaRepository<Docx, Integer> {
 //	Page<Docx> findByDocxorder(int num,Pageable pageable);
 	//Senior이름으로 검색
 	List<Docx> findBySenior(String senior);
-	Page<Docx> findByDocxorder(int num, PageRequest pageable);
+	
+	@Query(value = "SELECT *  FROM Docx WHERE docxorder = :num " , nativeQuery = true)
+    Page<Docx> findByDocxorder(@Param("num")int num, Pageable pageable);
+    
+//  @Query("SELECT formnum FROM Docx WHERE docxorder = :num")
+//    ArrayList<Integer> asdf(int num);
+    
 	// docxkey 값이 같은 문서를 전부 삭제하는 메서드
     @Modifying
     @Transactional

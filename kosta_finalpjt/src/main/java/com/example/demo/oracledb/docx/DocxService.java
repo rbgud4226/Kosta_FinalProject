@@ -5,13 +5,12 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.oracledb.members.Members;
@@ -77,34 +76,44 @@ public class DocxService {
 	}
 
 	// 문서 전체 검색
-	public Page<DocxDto> getAll(int page, int size) {
-		PageRequest pageable = PageRequest.of(page,size);
-		Page<Docx> docxPage = dao.findByDocxorder(0,pageable);
+	public Page<DocxDto> getAll(int page) {
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.desc("created_at"));
+		Pageable pageable = PageRequest.of(page,10,Sort.by(sorts));
+		List<Object[]> docxPage = dao.findByDocxorder(0,pageable);
+//		ArrayList<Integer> xx = dao.asdf(0);
+//		System.out.println("my list:"+xx);
+		System.out.println("페이징 된 객체 생성 확인:"+docxPage);
 		// Docx 객체를 DocxDto로 변환
-		return docxPage.map(docx -> new DocxDto(
-				docx.getFormnum(),
-				docx.getWriter(),
-	            null,
-	            docx.getStartdt(),
-	            docx.getEnddt(),
-	            docx.getTitle(),
-	            docx.getContent(),
-	            docx.getNote(),
-	            docx.getTaskclasf(),
-	            docx.getTaskplan(),
-	            docx.getTaskprocs(),
-	            docx.getTaskprocsres(),
-	            docx.getDeptandmeetloc(),
-	            docx.getDayoffclasf(),
-	            docx.getParticipant(),
-	            docx.getFormtype(),
-	            docx.getAprovdoc(),
-	            docx.getDocxorder(),
-	            docx.getStatus(),
-	            docx.getDocxkey(),
-	            docx.getOrderloc()
-				));
+//		List<DocxDto> docxDtos = docxPage.getContent().stream()
+//                .map(docx -> new DocxDto(
+//                    docx.getFormnum(),
+//                    docx.getWriter(),
+//                    null,
+//                    docx.getStartdt(),
+//                    docx.getEnddt(),
+//                    docx.getTitle(),
+//                    docx.getContent(),
+//                    docx.getNote(),
+//                    docx.getTaskclasf(),
+//                    docx.getTaskplan(),
+//                    docx.getTaskprocs(),
+//                    docx.getTaskprocsres(),
+//                    docx.getDeptandmeetloc(),
+//                    docx.getDayoffclasf(),
+//                    docx.getParticipant(),
+//                    docx.getFormtype(),
+//                    docx.getAprovdoc(),
+//                    docx.getDocxorder(),
+//                    docx.getStatus(),
+//                    docx.getDocxkey(),
+//                    docx.getOrderloc()
+//                ))
+//                .collect(Collectors.toList());
+//		return new PageImpl<>(docxDtos, PageRequest.of(page, size), docxPage.getTotalElements());
+		return null;
 	}
+
 
 	// 멤버리스트 뽑기
 	public ArrayList<MembersDto> getMemAll() {
