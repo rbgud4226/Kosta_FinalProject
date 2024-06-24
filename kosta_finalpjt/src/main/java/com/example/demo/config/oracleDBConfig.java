@@ -1,5 +1,13 @@
 package com.example.demo.config;
 
+import java.util.HashMap;
+
+import javax.sql.DataSource;
+
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,11 +16,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.sql.DataSource;
-import java.util.HashMap;
 
 @Configuration
 @EnableTransactionManagement
@@ -21,6 +28,7 @@ import java.util.HashMap;
     entityManagerFactoryRef = "oracleEntityManagerFactory",
     transactionManagerRef = "oracleTransactionManager"
 )
+@EnableScheduling
 public class oracleDBConfig {
 
   @Primary
@@ -60,10 +68,27 @@ public class oracleDBConfig {
   public DataSource oracleDataSource(){
     return DataSourceBuilder.create()
         .driverClassName("oracle.jdbc.driver.OracleDriver")
-        .url("jdbc:oracle:thin:@192.168.0.36:1521/xe")
-//        .url("jdbc:oracle:thin:@localhost:1521/xe")
+//        .url("jdbc:oracle:thin:@192.168.0.36:1521/xe")
+        .url("jdbc:oracle:thin:@localhost:1521/xe")
         .username("hr")
         .password("hr")
         .build();
+  }
+  
+  @Configuration
+  public static class SchedulerConfig {
+
+      @Autowired
+      private JobLauncher jobLauncher;
+
+      @Autowired
+      private Job chatManageJob;
+
+      @Scheduled(fixedRate = 6000000)
+      public void perform() throws Exception {
+          JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
+          jobParametersBuilder.addLong("time", System.currentTimeMillis());
+          jobLauncher.run(chatManageJob, jobParametersBuilder.toJobParameters());
+      }
   }
 }
