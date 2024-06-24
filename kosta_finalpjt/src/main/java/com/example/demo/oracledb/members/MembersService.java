@@ -161,27 +161,27 @@ public class MembersService {
 		return list;
 	}
 
-	public ArrayList<MembersDto> getByDeptNm(String deptnm) {
-		List<Members> l = mdao.findByDeptid(new Depts(0, deptnm, null));
-		ArrayList<MembersDto> list = new ArrayList<>();
-		for (Members m : l) {
-			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
-					m.getMgrid(), null, null));
-		}
-		return list;
-	}
+//	public ArrayList<MembersDto> getByDeptNm(String deptnm) {
+//		List<Members> l = mdao.findByDeptid(new Depts(0, deptnm, null));
+//		ArrayList<MembersDto> list = new ArrayList<>();
+//		for (Members m : l) {
+//			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
+//					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+//					m.getMgrid(), null, null));
+//		}
+//		return list;
+//	}
 
-	public ArrayList<MembersDto> getByJobLv(String joblvnm) {
-		List<Members> l = mdao.findByJoblvid(new Joblvs(0, 0, joblvnm));
-		ArrayList<MembersDto> list = new ArrayList<>();
-		for (Members m : l) {
-			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
-					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
-					m.getMgrid(), null, null));
-		}
-		return list;
-	}
+//	public ArrayList<MembersDto> getByJobLv(String joblvnm) {
+//		List<Members> l = mdao.findByJoblvid(new Joblvs(0, 0, joblvnm));
+//		ArrayList<MembersDto> list = new ArrayList<>();
+//		for (Members m : l) {
+//			list.add(new MembersDto(m.getUserid(), m.getMemberid(), m.getBirthdt(), m.getEmail(), m.getCpnum(),
+//					m.getAddress(), m.getMemberimgnm(), m.getHiredt(), m.getLeavedt(), m.getDeptid(), m.getJoblvid(),
+//					m.getMgrid(), null, null));
+//		}
+//		return list;
+//	}
 
 	public ArrayList<MembersDto> getByDeptNmLike(String deptnm) {
 		ArrayList<Depts> dlist = ddao.findByDeptnmLike("%" + deptnm + "%");
