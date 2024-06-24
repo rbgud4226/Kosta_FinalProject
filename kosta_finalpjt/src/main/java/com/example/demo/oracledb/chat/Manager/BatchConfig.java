@@ -70,7 +70,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
     }
 
     @Bean
-    public Job helloJob(Step chatStep, PlatformTransactionManager transactionManager) {
+    public Job chatManageJob(Step chatStep, PlatformTransactionManager transactionManager) {
         return new JobBuilder("chatJob", jobRepository).start(chatStep(jobRepository, transactionManager)).build();
     }
 
