@@ -59,21 +59,21 @@ public class Members {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate leavedt;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "depts_deptid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ToString.Exclude
 	private Depts deptid;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "joblvs_joblvid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ToString.Exclude
 	private Joblvs joblvid;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "mgrid")
 	@JsonBackReference
 	@OnDelete(action = OnDeleteAction.CASCADE)

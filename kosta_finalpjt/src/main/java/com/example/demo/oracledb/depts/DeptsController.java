@@ -32,8 +32,8 @@ public class DeptsController {
 	public String deptlist(ModelMap map) {
 		ArrayList<DeptsDto> dlist = dservice.getAll();
 		map.addAttribute("dlist", dlist);
-		System.out.println(dlist.get(0).getMgrid().getMemberid());
-		System.out.println(dlist.get(0).getMgrid().getUserid());
+//		System.out.println(dlist.get(0).getMgrid().getMemberid());
+//		System.out.println(dlist.get(0).getMgrid().getUserid());
 		return "corp/deptlist";
 	}
 
@@ -98,7 +98,7 @@ public class DeptsController {
 	public String joblvlist(ModelMap map) {
 		ArrayList<JoblvsDto> jlist = jservice.getAll();
 		map.addAttribute("jlist", jlist);
-		System.out.println(jlist.get(0).getJoblvidx());
+//		System.out.println(jlist.get(0).getJoblvidx());
 		return "corp/joblvlist";
 	}
 

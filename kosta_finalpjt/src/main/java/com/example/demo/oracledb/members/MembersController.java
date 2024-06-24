@@ -172,6 +172,8 @@ public class MembersController {
 			}
 		}
 		map.addAttribute("dlist", dlist);
+		System.out.println("=================================dlist");
+		System.out.println(dlist);
 		map.addAttribute("jlist", jservice.getAll());
 		return "member/memberedit";
 	}
