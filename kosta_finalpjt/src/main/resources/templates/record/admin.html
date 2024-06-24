@@ -34,7 +34,7 @@
     <!-- 차트 테이블 -->
     <div class="chart_wrapper">
       <div class="chart">
-        <p class="chart_title">부서 근무 시간 통계</p>
+        <p class="chart_title">부서 근무 시간 평균 통계</p>
         <div class="chart_can" id="chart_div"></div>
       </div>
       <div class="chart">
@@ -43,9 +43,15 @@
       </div>
     </div>
 
+    <div class="dept_select_wrapper">
+      <div>부서 선택하기</div>
+      <select id="dept_list" name="dept">
+        <option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }"></option>
+      </select>
+    </div>
     <!-- 부서별 조회 테이블 -->
     <div class="record_table w_bg">
-      <div class="record_table_title">
+      <div class="record_table_title dept_table">
           <div class="record_month font_b24">
               <div id="record_left" class="arrow left_arrow cursor" onclick="deptrecord(-1)"></div>
               <span class="month">2022.07</span>

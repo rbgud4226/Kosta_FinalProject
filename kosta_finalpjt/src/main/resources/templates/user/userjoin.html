@@ -54,8 +54,9 @@
 				<div class="alert alert-danger" th:if="${valid_usernm}" th:text="${valid_usernm}" id="valid"></div>
 				<input type="hidden" name="type" value="emp" checked>
 				<input type="hidden" name="aprov" value="0" checked>
-				<div class="form-group">
+				<div class="form-group join_btn_wrapper">
 					<button type="submit" class="btn btn-primary bi bi-person join_btn"> 가입</button>
+					<a href="/" class="join_btn"><button type="button" class="btn btn-primary bi bi-person join_btn">로그인 페이지</button></a>
 				</div>
 				
 			</form>

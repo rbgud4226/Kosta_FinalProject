@@ -18,6 +18,17 @@ $(document).ready(function(){
         console.log('error');
       }
   });
+  $.ajax({
+    url: "/auth/record/deptlist",
+    type:"get",   
+    dataType:'json',
+    success: function(res){
+      console.log(res)
+    },
+    error:function(){			//응답 에러일때
+      console.log('error');
+    }
+});
 });
 
 // 사내 전체 추가 근무 통계
