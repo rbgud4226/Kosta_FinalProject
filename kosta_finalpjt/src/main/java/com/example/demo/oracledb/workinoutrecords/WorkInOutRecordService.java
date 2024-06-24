@@ -48,7 +48,6 @@ public class WorkInOutRecordService {
 		
 	//부서 직원 통계기록
 	public ArrayList<ChartDeptMember> chartMonthandDept(int month,int year,int dept){
-		System.out.println("부서 직원 통계");
 		List<Object[]> deptlist = dao.chartDept(month, year, dept);
 		ArrayList<ChartDeptMember> list = new ArrayList<ChartDeptMember>();
 		for(Object[] a: deptlist) {
@@ -81,6 +80,21 @@ public class WorkInOutRecordService {
 		return list;
 	}
 	
+	//전체 직원 추가 근무 기록 조회(월별)
+	public ArrayList<OverWorkData> overStatistics (int year,int month) {
+		List<Object[]> overWorkData = dao.overWorkData(year,month);
+		ArrayList<OverWorkData> list = new ArrayList<OverWorkData>();
+		
+		for(Object[] a: overWorkData) {
+			OverWorkData o = new OverWorkData();
+			o.setLess30(((Number) a[0]).intValue());
+			o.setLess1hour(((Number) a[1]).intValue());
+			o.setLess2hours(((Number) a[2]).intValue());
+			o.setOver2hours(((Number) a[3]).intValue());
+		    list.add(o);
+		}
+		return list;
+	}
 	
 	
 }

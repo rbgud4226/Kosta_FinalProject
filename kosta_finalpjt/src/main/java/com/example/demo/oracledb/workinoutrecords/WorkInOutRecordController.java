@@ -5,12 +5,13 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,8 @@ import com.example.demo.oracledb.members.MembersService;
 import com.example.demo.oracledb.users.Users;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -53,9 +56,6 @@ public class WorkInOutRecordController {
   @GetMapping("/my")
   public String myrecord(HttpSession session, ModelMap map) {
     String loginid = (String) session.getAttribute("loginId");
-    System.out.println("***************************************************************");
-    System.out.println("에러확인용"+loginid);
-    System.out.println("***************************************************************");
     MembersDto md = mservice.getByuserId(loginid);
     Members m = new Members(md.getUserid(), md.getMemberid(), md.getBirthdt(), md.getEmail(), md.getCpnum(), md.getAddress(), md.getMemberimgnm(), md.getHiredt(), md.getLeavedt(), md.getDeptid(), md.getJoblvid(), md.getMgrid(), null);
     if (m == null) {
@@ -215,7 +215,7 @@ public class WorkInOutRecordController {
   @GetMapping("/dept")
   public ModelAndView deptList(int dept) {
     ModelAndView mav = new ModelAndView("record/dept");
-    mav.addObject("record",test(deptRecord(dept, 0)));
+    mav.addObject("record",deptLeader(deptRecord(dept, 0)));
     mav.addObject("list", deptRecord(dept, 0));
     return mav;
   }
@@ -242,7 +242,7 @@ public class WorkInOutRecordController {
   }
   
   //부서 통계용
-  public Map test(ArrayList<ChartDeptMember> data) {
+  public Map deptLeader(ArrayList<ChartDeptMember> data) {
 	 int overWork = 0;
 	 int worktime = 0;
 	 ArrayList<String> latemem = new ArrayList<String>();
@@ -261,9 +261,11 @@ public class WorkInOutRecordController {
     		 }
     	 }
      }
-     overWork /= data.size();
-     worktime /= data.size();
-     
+     if(data.size()>0) {
+         overWork /= data.size();
+         worktime /= data.size();
+     }
+
      int overavgHours = overWork / 60;
      int overavgMin = overWork % 60;
 
@@ -291,7 +293,7 @@ public class WorkInOutRecordController {
       return hours * 60 + minutes;
   }
   
-  
+  //관리자용 페이지(부서별 근무시간 통계 자료)
   @GetMapping("/admin")
   public String admin(Model model) {
       LocalDate currentDate = LocalDate.now();
@@ -318,5 +320,108 @@ public class WorkInOutRecordController {
       
       return "record/admin";
   }
+  
+  @GetMapping("/over")
+  public void over() {
+	  LocalDate currentDate = LocalDate.now();
+      int currentYear = currentDate.getYear();
+      
+      
+  }
+  
+  
+  @PostMapping("/member")
+  public void test(String members, String date1, String date2) {
+    LocalDate startDate = LocalDate.parse(date1);
+    LocalDate endDate = LocalDate.parse(date2);
+    //멤버 정보
+    MembersDto md = mservice.getByuserId(members);
+    Members m = new Members(md.getUserid(), md.getMemberid(), md.getBirthdt(), md.getEmail(), md.getCpnum(), md.getAddress(), md.getMemberimgnm(), md.getHiredt(), md.getLeavedt(), md.getDeptid(), md.getJoblvid(), md.getMgrid(), null);
+    
+    //주말 제외 저장하기
+    LocalDate currentDate = startDate;
+    while (!currentDate.isAfter(endDate)) {
+      if (!isWeekend(currentDate)) {
+        String dayOfWeek = currentDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+        String type = "정상근무";
+        
+        // 출근 시간 범위 설정 (8:30 ~ 9:10)
+        LocalTime startTimeMin = LocalTime.of(8, 30);
+        LocalTime startTimeMax = LocalTime.of(9, 10);
+
+        // 퇴근 시간 범위 설정 (18:00 ~ 20:00)
+        LocalTime endTimeMin = LocalTime.of(17, 30);
+        LocalTime endTimeMax = LocalTime.of(20, 0);
+
+        // 랜덤한 출근 시간 생성 (8:30 이상, 9:10 미만)
+        LocalTime actualArrivalTime = generateRandomTime(startTimeMin, startTimeMax);
+
+        // 출근 시간 출력
+        System.out.println("출근 시간: " + actualArrivalTime);
+
+        // 출근 시간과 비교하여 지각 여부 판단
+        if (actualArrivalTime.isAfter(LocalTime.of(9, 0))) {
+        	type = "지각";
+        }
+
+        // 랜덤한 퇴근 시간 생성 (18:00 이상, 20:00 미만)
+        LocalTime actualDepartureTime = generateRandomTime(endTimeMin, endTimeMax);
+        
+        
+        // 퇴근 시간 출력
+        System.out.println("퇴근 시간: " + actualDepartureTime);
+        
+        LocalTime targetTime = LocalTime.of(18, 30);
+        LocalTime targetTime2 = LocalTime.of(17, 50);
+        if(type.equals("정상근무")) {
+            if (actualDepartureTime.isAfter(targetTime)) {
+                type = "추가근무";
+            } else if (actualDepartureTime.isBefore(targetTime2)) {
+                type = "조기퇴근";
+           }
+        }
+
+        // 출근 시간과 퇴근 시간의 차이 계산 및 출력
+
+        Duration duration = Duration.between(actualArrivalTime, actualDepartureTime);
+        
+        // 분 단위로 계산된 근무 시간을 HH:mm 형태로 변환
+        long minutesWorked = duration.toMinutes();
+        long hours = minutesWorked / 60;
+        if(hours>9) {
+        	hours--;
+        }
+        long minutes = minutesWorked % 60;
+        String formattedTime = String.format("%02d:%02d", hours, minutes);
+
+        // 실제 근무 시간 출력
+        System.out.println("실제 근무 시간: " + formattedTime);
+
+        // 결과 출력
+        System.out.println("출근 상태: " + type);
+        
+        
+        service.save(new WorkInOutRecordDto(0, m, dayOfWeek, currentDate, String.format("%02d:%02d",actualArrivalTime.getHour(), actualArrivalTime.getMinute()),
+        		String.format("%02d:%02d",actualDepartureTime.getHour(), actualDepartureTime.getMinute()), formattedTime, type));
+      }
+      currentDate = currentDate.plusDays(1);
+    }
+
+  }
+//랜덤한 시간 생성 메서드
+  private static LocalTime generateRandomTime(LocalTime minTime, LocalTime maxTime) {
+	  
+	   // 시작 시간과 종료 시간 사이의 분 단위로 변환
+      long startMinutes = minTime.toSecondOfDay() / 60;
+      long endMinutes = maxTime.toSecondOfDay() / 60;
+
+      // 랜덤한 분 값 생성
+      long randomMinutes = ThreadLocalRandom.current().nextLong(startMinutes, endMinutes + 1);
+
+      // 생성된 분 값을 LocalTime으로 변환
+      LocalTime randomTime = minTime.plus(randomMinutes - startMinutes, ChronoUnit.MINUTES);
+      return randomTime;
+  }
+  
   
 }

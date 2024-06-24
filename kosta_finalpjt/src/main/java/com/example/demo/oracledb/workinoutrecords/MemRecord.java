@@ -15,6 +15,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
+//직원 월별 기록 조회용
 public class MemRecord {
 	private String dayOfWeek;
 	private LocalDate day;
