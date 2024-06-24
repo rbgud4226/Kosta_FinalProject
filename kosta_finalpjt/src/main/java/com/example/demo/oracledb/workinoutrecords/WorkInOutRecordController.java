@@ -324,6 +324,14 @@ public class WorkInOutRecordController {
   }
   
   @ResponseBody
+  @GetMapping("/deptlist")
+  public Map deptlist() {
+	    Map map = new HashMap<>();
+	    map.put("deptlist", dservice.getAll());
+	    return map;
+  }
+  
+  @ResponseBody
   @GetMapping("/over")
   public Map over() {
 	  LocalDate currentDate = LocalDate.now();
