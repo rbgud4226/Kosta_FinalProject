@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import com.example.demo.oracledb.chat.Room.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,7 +72,7 @@ public class ChatRoomService {
 		for (String s : userIds) {
 			participantsN.add(usersService.getById2(s).getUsernm());
 		}
-		String partN = createChatRoomName(participantsN);
+		String partN = createPartName(participantsN);
 
 		ChatRoom chatRoom = new ChatRoom();
 		chatRoom.setChatroomid(UUID.randomUUID().toString());
@@ -124,7 +123,7 @@ public class ChatRoomService {
 			} else {
 				String addUserIds = createChatRoomName(userIdList);
 				chatRoom.setName(addUserIds);
-				chatRoom.setParticipants(createChatRoomName(partisList));
+				chatRoom.setParticipants(createPartName(partisList));
 				getOutMessage = part + "님이 나갔습니다";
 			}
 			chatRoomDao.save(chatRoom);
@@ -245,6 +244,11 @@ public class ChatRoomService {
 				partN = usersService.getById2(s).getUsernm(); // 이름
 				ArrayList<String> userIdList = new ArrayList<>(Arrays.asList(userIds));
 				List<String> partisList = new ArrayList<>(Arrays.asList(partis));
+				if (chatRoom.getRoomType().equals("PERSONAL") && userIds.length == 1) {
+				        inviteMessage.add("PERSONAL 방은 사용자 한 명만 있을 때 초대할 수 없습니다");
+				        return inviteMessage;
+				    }
+				 
 				if (userIdList.contains(s)) {
 					inviteMessage.add(partN + "은 이미 방에 있습니다");
 				} else if (!userIdList.contains(s)) {
@@ -261,7 +265,7 @@ public class ChatRoomService {
 	                chatRoomNameService.save(newChatRoomNameDto);
 				}
 				String addUserIds = createChatRoomName(userIdList);
-				String partNs = createChatRoomName(partisList);
+				String partNs = createPartName(partisList);
 				chatRoom.setName(addUserIds);
 				chatRoom.setParticipants(partNs);
 				ArrayList<ChatRoomNameDto> chatroomN = chatRoomNameService.getChatRoomNames(chatroomid);
@@ -294,6 +298,10 @@ public class ChatRoomService {
 		return String.join("_", userIds);
 	}
 	
+	public String createPartName(List<String> partName) {
+		return String.join("_", partName);
+	}
+	
 	public String createSendDate() {
 		LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MMMM dd일", Locale.KOREAN);
@@ -301,6 +309,15 @@ public class ChatRoomService {
         String sendDay = now.format(dateFormatter);
         String sendTime = now.format(timeFormatter);
         return sendDay + " " + sendTime;
+	}
+	
+	public List<ChatRoom> getChatRoomByStatusF(){
+		return chatRoomDao.findByStatus(false);
+	}
+	
+	
+	public void delChatRoomBychatroomid() {
+		chatRoomDao.deleteByStatus(false);
 	}
 
 }
