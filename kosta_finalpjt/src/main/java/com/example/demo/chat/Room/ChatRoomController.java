@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.example.demo.chat.Message.MessageController;
 import com.example.demo.chat.Message.MessageDto;
 import com.example.demo.chat.Message.MessageService;
@@ -139,6 +140,7 @@ public class ChatRoomController {
 	    messageController.sendMessage(inviteMessage, chatroomid);
 	    return "redirect:/chat/chatroom/" + chatroomid;
 	}
+
 	
 	@PostMapping("/chat/chatrooms/edit")
 	public String editRoomName(@RequestParam String chatroomid, String newRoomName, String userId1) {
