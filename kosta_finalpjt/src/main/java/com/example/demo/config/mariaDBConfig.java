@@ -46,9 +46,8 @@ public class mariaDBConfig {
     em.setJpaVendorAdapter(vendorAdapter);
 
     HashMap<String, Object> properties = new HashMap<>();
-    properties.put("hibernate.dialect","org.hibernate.dialect.MariaDBDialect");
+    properties.put("hibernate.dialect","org.hibernate.dialect.MariaDB103Dialect");
     properties.put("hibernate.hbm2ddl.auto","update");
-    properties.put("hibernate.format_sql",true);
 
     em.setJpaPropertyMap(properties);
 
