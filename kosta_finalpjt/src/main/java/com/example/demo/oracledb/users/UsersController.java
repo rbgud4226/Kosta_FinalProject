@@ -210,7 +210,8 @@ public class UsersController {
 			ulist = new ArrayList<UsersDto>();
 			for (UsersDto udto : uservice.getAll()) {
 				if (val != "") {
-					ArrayList<MembersDto> mlist = mservice.getByDeptNm(val);
+					ArrayList<MembersDto> mlist = mservice.getByDeptNmLike(val);
+					System.out.println("mlist:" + mlist);
 					for (MembersDto mdto : mlist) {
 						if (udto.getMemberdto() != null && udto.getId() == mdto.getUserid().getId()) {
 							udto.setMemberdto(mdto);
@@ -236,7 +237,7 @@ public class UsersController {
 			ulist = new ArrayList<UsersDto>();
 			for (UsersDto udto : uservice.getAll()) {
 				if (val != "") {
-					ArrayList<MembersDto> mlist = mservice.getByJobLv(val);
+					ArrayList<MembersDto> mlist = mservice.getByJobLvLike(val);
 					for (MembersDto mdto : mlist) {
 						if (udto.getMemberdto() != null && udto.getId() == mdto.getUserid().getId()) {
 							udto.setMemberdto(mdto);
