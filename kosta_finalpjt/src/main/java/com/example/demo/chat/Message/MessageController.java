@@ -47,6 +47,7 @@ public class MessageController {
 			String partN = usersService.getById2(chatMessage.getSender()).getUsernm(); 
 			chatMessage.setContent(osg);
 			chatMessage.setPartid(partN);
+			chatMessage.setSendDate(chatRoomService.createSendDate());
 			messageService.save(chatMessage, roomId);
 			ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 	        messagingTemplate.convertAndSend("/room/" + roomId, list);
