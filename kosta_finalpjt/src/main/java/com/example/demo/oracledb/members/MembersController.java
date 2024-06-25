@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.oracledb.depts.DeptsDto;
 import com.example.demo.oracledb.depts.DeptsService;
+import com.example.demo.oracledb.depts.JoblvsDto;
 import com.example.demo.oracledb.depts.JoblvsService;
 import com.example.demo.oracledb.users.Users;
 import com.example.demo.oracledb.users.UsersDto;
@@ -125,6 +126,19 @@ public class MembersController {
 		map.addAttribute("member", mdto);
 		map.addAttribute("aprovStr", aprovStr);
 		return "member/memberinfo";
+	}
+	
+	@GetMapping("/member/memberchatinfo")
+	@ResponseBody
+	public Map<String, Object> memberchatinfo(@RequestParam("userId") String userId) {
+	    MembersDto mdto = mservice.getByuserId(userId);
+	    DeptsDto deptN = dservice.getByDeptId(mdto.getDeptid().getDeptid());
+	    JoblvsDto jobL = jservice.getByJoblvIdx(mdto.getJoblvid().getJoblvidx());
+	    Map<String, Object> memchatinfo = new HashMap<>();
+	    memchatinfo.put("deptN", deptN);
+	    memchatinfo.put("jobL", jobL);
+	    memchatinfo.put("member", mdto);
+	    return memchatinfo;
 	}
 
 	@GetMapping("/member/memberimg")
