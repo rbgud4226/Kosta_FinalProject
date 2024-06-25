@@ -23,7 +23,10 @@ $(document).ready(function(){
     type:"get",   
     dataType:'json',
     success: function(res){
-      console.log(res)
+      for(let dept of res.deptlist){
+         var option = $(`<option value="${dept.deptid}">${dept.deptnm}</option>`);
+        $('#dept_list').append(option);  
+      }
     },
     error:function(){			//응답 에러일때
       console.log('error');
@@ -102,3 +105,24 @@ function drawChart() {
     drawMaterialChart();
 
   }
+
+
+  
+//부서 근태 조회(관리자용)
+function dept_admin(num){
+	let dept = $("select[name=dept] option:selected").val();
+	arrow_btn(num)
+	  $.ajax({
+		  url:"/auth/record/list",  //서버주소
+		  type:"get",   				//전송방식
+		  dataType:'json',			//응답데이터 형태
+		  data:{dept:dept,cnt:cnt},
+		  success:function(res){		//응답 정상일때
+        deptTable_draw(res)
+		  },
+		  error:function(){			//응답 에러일때
+			  console.log('error');
+		  }
+	  });
+  }
+

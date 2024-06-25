@@ -1,7 +1,5 @@
-
 //출근기록 조회
 const deptrecord = (num)=>{
-  console.log(num);
 	arrow_btn(num)
 	$.ajax({
 		url:"/auth/record/list",  //서버주소
@@ -20,7 +18,8 @@ const deptrecord = (num)=>{
 
 let dept_table = $(".dept_record_list")[0];
 
-const deptTable_draw = (arr)=>{	
+const deptTable_draw = (arr)=>{
+	console.log("dept_table: "+dept_table)
 	while(dept_table.rows.length > 0){
 		dept_table.deleteRow(0);
 	}
@@ -56,4 +55,3 @@ const deptTable_draw = (arr)=>{
 	        cell.textContent = a.overWork;
 	}
 }
-
