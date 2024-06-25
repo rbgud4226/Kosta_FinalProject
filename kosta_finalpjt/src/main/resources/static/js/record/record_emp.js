@@ -27,6 +27,7 @@ const workin=()=>{
 
 //퇴근 버튼 클릭
 const workout=()=>{
+	console.log("mem: "+mem+" / num: "+num)
 	$.ajax({
 		url:"/auth/record/out",  //서버주소
 		type:"post",   				//전송방식
@@ -45,22 +46,32 @@ setInterval(()=>{
     time = new Date();
     var hours = ('0' + time.getHours()).slice(-2); 
     var minutes = ('0' + time.getMinutes()).slice(-2);
-
     var timeString = hours + ':' + minutes ;
     $("#record_time").html(dateString+timeString);
-} ,60000);
+	if(hours <= 9){
+		$("#record_mention").html('근무시간 전입니다.');
+	}else if (hours >= 12 && hours <= 13) {
+		$("#record_mention").html('점심시간입니다.');
+	}else if (hours>=18) {
+		$("#record_mention").html('근무종료 시간입니다.');
+	}else{
+		$("#record_mention").html('근무시간입니다.');
+	}
+} ,1000);
 
 
 // 출근 여부에 따라서 버튼,문구 변경
 const flagCheck = ()=>{
     if(flag === 'true'){
-        console.log("출근 완료")
         $("#record_sta").html("출근 완료")
         $("#com_start").removeClass("blue_btn").addClass('gray_btn');
         $("#com_start").removeAttr("onclick");
         $("#com_end").removeClass("gray_btn").addClass('blue_btn');
-    }else{
-        console.log("출근 전")
+		if(out == 'true'){
+			$("#com_end").removeClass("blue_btn").addClass('gray_btn');
+        	$("#com_end").removeAttr("onclick");
+		}
+	}else{
         $("#record_sta").html("출근 전")
         $("#com_end").removeAttr("onclick");
     }   

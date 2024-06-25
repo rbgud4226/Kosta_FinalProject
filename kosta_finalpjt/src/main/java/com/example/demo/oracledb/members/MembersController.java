@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.oracledb.depts.DeptsDto;
 import com.example.demo.oracledb.depts.DeptsService;
+import com.example.demo.oracledb.depts.JoblvsDto;
 import com.example.demo.oracledb.depts.JoblvsService;
 import com.example.demo.oracledb.users.Users;
 import com.example.demo.oracledb.users.UsersDto;
@@ -66,7 +67,6 @@ public class MembersController {
 
 	@GetMapping("/member/test")
 	public void membertest(@RequestParam(name = "userid", required = false) List<String> userids) {
-		System.out.println("===================");
 		System.out.println(userids);
 		for (String userid : userids) {
 			System.out.println(userid);
@@ -109,22 +109,40 @@ public class MembersController {
 
 	@GetMapping("/member/memberinfo")
 	public String memberinfo(String id, ModelMap map) {
+		UsersDto udto = uservice.getById(id);
 		MembersDto mdto = mservice.getByuserId(id);
-		System.out.println(mdto.getUserid().getAprov());
-		String aprovStr = "";
-		if (mdto.getUserid().getAprov() == 0) {
-			aprovStr = "승인대기상태";
-		} else if (mdto.getUserid().getAprov() == 1) {
-			aprovStr = "재직상태";
-		} else if (mdto.getUserid().getAprov() == 2) {
-			aprovStr = "휴직상태";
-		} else if (mdto.getUserid().getAprov() == 3) {
-			aprovStr = "퇴직상태";
+		
+		ArrayList<EduWorkExperienceInfoDto> elist = new ArrayList<EduWorkExperienceInfoDto>();
+		if (mservice.getByuserId(id) != null) {
+			elist = eservice.getByMembers(mservice.getByuserId(id).getMemberid());
 		}
-
-		map.addAttribute("member", mdto);
-		map.addAttribute("aprovStr", aprovStr);
+		ArrayList<EduWorkExperienceInfoDto> edulist = new ArrayList<EduWorkExperienceInfoDto>();
+		ArrayList<EduWorkExperienceInfoDto> expwoklist = new ArrayList<EduWorkExperienceInfoDto>();
+		for (EduWorkExperienceInfoDto edto : elist) {
+			if (edto.getType() == 0) {
+				edulist.add(edto);
+			} else {
+				expwoklist.add(edto);
+			}
+		}
+		map.addAttribute("user", udto);
+		map.addAttribute("mdto", mdto);
+		map.addAttribute("edulist", edulist);
+		map.addAttribute("expwoklist", expwoklist); 
 		return "member/memberinfo";
+	}
+	
+	@GetMapping("/member/memberchatinfo")
+	@ResponseBody
+	public Map<String, Object> memberchatinfo(@RequestParam("userId") String userId) {
+	    MembersDto mdto = mservice.getByuserId(userId);
+	    DeptsDto deptN = dservice.getByDeptId(mdto.getDeptid().getDeptid());
+	    JoblvsDto jobL = jservice.getByJoblvIdx(mdto.getJoblvid().getJoblvidx());
+	    Map<String, Object> memchatinfo = new HashMap<>();
+	    memchatinfo.put("deptN", deptN);
+	    memchatinfo.put("jobL", jobL);
+	    memchatinfo.put("member", mdto);
+	    return memchatinfo;
 	}
 
 	@GetMapping("/member/memberimg")
@@ -172,8 +190,6 @@ public class MembersController {
 			}
 		}
 		map.addAttribute("dlist", dlist);
-		System.out.println("=================================dlist");
-		System.out.println(dlist);
 		map.addAttribute("jlist", jservice.getAll());
 		return "member/memberedit";
 	}

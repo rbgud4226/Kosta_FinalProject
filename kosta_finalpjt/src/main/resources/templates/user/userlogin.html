@@ -9,7 +9,7 @@
 <link rel="stylesheet" th:href="@{/css/common/reset.css}">
 <link rel="stylesheet" th:href="@{/css/userform.css}">
  <script src="https://kit.fontawesome.com/de9b677ac7.js" crossorigin="anonymous"></script>
-
+ <script th:src="@{/js/login.js}"></script>
 	<script type="text/javascript">
 		const checklogin = () => {
 			if (userloginf.id.value.length <= 0) {
@@ -24,7 +24,6 @@
 			}
 			userloginf.submit();
 		}
-
 		const home = (type) => {
 			if (type == 'admin') {
 				location.href = '/index_admin';
@@ -48,7 +47,7 @@
 				</span>
 				<div class="form-group">
 					<label>ID</label>
-					<input type="text" class="form-control" name="id" placeholder="아이디를 입력해주세요">
+					<input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력해주세요">
 				</div>
 				<div class="form-group">
 					<label>비밀번호</label>
@@ -70,5 +69,4 @@
 	</div>
 	</div>
 </body>
-
 </html>

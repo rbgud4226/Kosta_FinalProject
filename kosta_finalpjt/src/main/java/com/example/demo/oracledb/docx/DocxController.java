@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,130 +24,150 @@ public class DocxController {
 	public String addForm() {
 		return "docx/list";
 	}
-	
-	//작성폼 불러올때 멤버 리스트 데이터 가져오기
+
+	// 작성폼 불러올때 멤버 리스트 데이터 가져오기
 	@GetMapping("/addreport")
 	public String reportForm(ModelMap map) {
-		map.addAttribute("mlist",service.getMemAll());
-		
+		map.addAttribute("mlist", service.getMemAll());
+
 		return "docx/addreport";
 	}
 
-	//보고서 작성양식
+	// 보고서 작성양식
 	@PostMapping("/addreport")
 	public String addreport(DocxDto d) {
-		System.out.println("시니어값 테스트22 : " + d.getSenior());
 		String senior = d.getSenior();
-		System.out.println("시니어값 테스트 : " + senior);
-		if(senior != null) {
+		if (senior != null) {
 			int dkey = service.findByFormtypeDesc(d.getFormtype());
 			dkey += 1;
 			String[] s = d.getSenior().split(",");
-			for(int j=0; j<s.length; j++) {
-				service.save(d,s[j],null,j,dkey);
+			for (int j = 0; j < s.length; j++) {
+				service.save(d, s[j], null, j, dkey);
 			}
 		}
 		return "redirect:/auth/docx/list";
 	}
-	
-	//휴가서류 작성양식
-		@PostMapping("/addvacation")
-		public String addvacation(DocxDto d) {
-			System.out.println(d.getSenior());
-			int dkey = service.findByFormtypeDesc(d.getFormtype());
-			dkey += 1;
-			System.out.println("key값 있는지 확인 ::" +dkey);
+
+	// 휴가서류 작성양식
+	@PostMapping("/addvacation")
+	public String addvacation(DocxDto d) {
+		int dkey = service.findByFormtypeDesc(d.getFormtype());
+		dkey += 1;
+		System.out.println("key값 있는지 확인 ::" + dkey);
+		String[] s = d.getSenior().split(",");
+		for (int j = 0; j < s.length; j++) {
+			service.save(d, s[j], null, j, dkey);
+		}
+		return "redirect:/auth/docx/list";
+	}
+
+	// 회의록 작성양식
+	@PostMapping("/addmeeting")
+	public String addmeeting(DocxDto d) {
+		String senior = d.getSenior();
+		int dkey = service.findByFormtypeDesc(d.getFormtype());
+		dkey += 1;
+		if (senior != null) {
 			String[] s = d.getSenior().split(",");
-			for(int j=0; j<s.length; j++) {
-				service.save(d,s[j],null,j,dkey);
+			for (int j = 0; j < s.length; j++) {
+				service.save(d, null, d.getParticipant(), j, dkey);
 			}
-			return "redirect:/auth/docx/list";
 		}
-		
-		//회의록 작성양식
-		@PostMapping("/addmeeting")
-		public String addmeeting(DocxDto d) {
-			String senior = d.getSenior();
-			int dkey = service.findByFormtypeDesc(d.getFormtype());
-			dkey += 1;
-			if(senior != null) {
-				String[] s = d.getSenior().split(",");
-				for(int j=0; j<s.length; j++) {
-					service.save(d,null,d.getParticipant(),j,dkey);
-				}
-			}
-			return "redirect:/auth/docx/list";
-		}
+		return "redirect:/auth/docx/list";
+	}
 
-
-	//전체문서 리스트 출력
+	// 전체문서 리스트 출력
 	@GetMapping("/list")
-	public String list(ModelMap map) {
-		map.addAttribute("list", service.getAll());
+	public String list(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int size,
+			ModelMap map) {
+		List<DocxDto> docxList = service.getAllByDocxorderWithPagination(page, size);
+		int totalCount = service.getTotalCountByDocxorder();
+		int totalPage = (int) Math.ceil((double) totalCount / size);
+		map.addAttribute("list", docxList);
+		map.addAttribute("currentPage", page);
+		map.addAttribute("totalPages", totalPage);
+		map.addAttribute("pageSize", size);
 		return "docx/list";
 	}
-	
-	//결재걸린 문서 리스트 출력
+
+	// 결재걸린 문서 리스트 출력
 	@GetMapping("/slist")
 	public String slist(ModelMap map, HttpSession session) {
-		String loginId = (String)session.getAttribute("loginId");
-		map.addAttribute("list",service.SelectedList(loginId));
+		String loginId = (String) session.getAttribute("loginId");
+		map.addAttribute("list", service.SelectedList(loginId));
 		return "docx/slist";
 	}
-	
-	
-	//내가 작성한 문서만 출력
+
+	// 내가 작성한 문서만 출력
 	@GetMapping("/mylist")
-	public String myList(ModelMap map, String writer) {
-		map.addAttribute("mylist", service.getMyList(writer));
+	public String myList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int size,
+			ModelMap map, @RequestParam String writer) {
+		List<DocxDto> docxList = service.getUserDocxByPagination(writer, page, size);
+		int totalCount = service.getUserDocxCount(writer);
+		int totalPages = (int) Math.ceil((double) totalCount / size);
+		map.addAttribute("mylist", docxList);
+		map.addAttribute("currentPage", page);
+		map.addAttribute("totalPages", totalPages);
+		map.addAttribute("pageSize", size);
 		return "docx/mylist";
 	}
-	
-	//검색 컨트롤러
-	 @PostMapping("/list")
-	    public String list(ModelMap map,
-	                              @RequestParam(value = "searchType", required = false) String searchType,
-	                              @RequestParam(value = "searchValue", required = false) String searchValue) {
-		 if(searchType.equals("title")) {
-			 map.addAttribute("list", service.getByTitle(searchType, searchValue));
-		 }else if(searchType.equals("writer")) {
-			 map.addAttribute("list", service.getByWriter(searchType, searchValue));
-		 }
-	        
-	        return "docx/list";
-	    }
+
+	// 검색 컨트롤러
+	@PostMapping("/list")
+	public String list(Model model,
+            @RequestParam(value = "searchType", required = false) String searchType,
+            @RequestParam(value = "searchValue", required = false) String searchValue,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "15") int size) {
+		List<DocxDto> resultList;
+		if ("title".equals(searchType)) {
+            resultList = service.getByTitleWithPagination(searchValue, page, size);
+        } else if ("writer".equals(searchType)) {
+            resultList = service.getByWriterWithPagination(searchValue, page, size);
+        } else {
+            resultList = List.of(); // 기본 빈 리스트를 반환
+        }
+		int totalItems = resultList.size(); // 전체 아이템 수
+        int totalPages = (int) Math.ceil((double) totalItems / size); // 전체 페이지 수
+		model.addAttribute("list", resultList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchValue", searchValue);
+		return "docx/list";
+	}
 
 	@GetMapping("/getdocx")
-	public String get(int formnum, int docxkey,String formtype,ModelMap map,HttpSession session) {
+	public String get(int formnum, int docxkey, String formtype, ModelMap map, HttpSession session) {
 		boolean flag = false;
 		String loginid = (String) session.getAttribute("loginId");
 		List<DocxDto> l = service.findByDocxKeyTypeSenior(docxkey, formtype);
-		for(DocxDto d : l) {
-			if(d.getOrderloc()==d.getDocxorder() && d.getSenior().equals(loginid)) {
+		for (DocxDto d : l) {
+			if (d.getOrderloc() == d.getDocxorder() && d.getSenior().equals(loginid)) {
 				flag = true;
 				break;
 			}
 		}
 		map.addAttribute("d", service.getDocx(formnum));
 		map.addAttribute("docx", l);
-		map.addAttribute("flag",flag);
-		System.out.println( "현재 문서의 정보 출력 : "+service.findByDocxKeyTypeSenior(docxkey, formtype));
+		map.addAttribute("flag", flag);
+		System.out.println("현재 문서의 정보 출력 : " + service.findByDocxKeyTypeSenior(docxkey, formtype));
 		return "docx/detail";
 	}
-	
-	//결재처리 메서드
-	
+
+	// 결재처리 메서드
+
 	@PostMapping("/approve")
 	public String approveDocx(int docxkey, String formtype) {
-		service.approveDocx(docxkey,formtype);
+		service.approveDocx(docxkey, formtype);
 		return "redirect:/auth/docx/list";
 	}
-	
+
 	@RequestMapping("/deldocx")
 	public String deldocx(int docxkey) {
 		service.delDocx(docxkey);
 		return "redirect:/auth/docx/list";
 	}
-	
 
 }

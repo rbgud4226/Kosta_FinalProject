@@ -21,19 +21,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRoomName {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roomName_seq")
 	@SequenceGenerator(name = "roomName_seq", sequenceName = "roomName_sequence", allocationSize = 1)
 	private Long id;
-
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false)
 	@JsonBackReference
 	private ChatRoom room;
 	
 	private String host;
-
 	private String roomName;
 	private String editableName;
 

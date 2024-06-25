@@ -10,15 +10,20 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
+import com.example.demo.oracledb.chat.Message.MessageController;
 import com.example.demo.oracledb.chat.Message.MessageDto;
+import com.example.demo.oracledb.chat.Message.MessageService;
 import com.example.demo.oracledb.chat.RoomUser.RoomUserService;
 import com.example.demo.oracledb.members.MembersService;
 import com.example.demo.oracledb.users.Users;
 import com.example.demo.oracledb.users.UsersDao;
 import com.example.demo.oracledb.users.UsersService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -44,7 +49,14 @@ public class ChatRoomService {
 
 	@Autowired
 	private MembersService memberService;
+	
+	@Autowired
+	@Lazy
+	private MessageService messageService;
 
+	@Autowired
+	private MessageController messageController;
+	
 	public ChatRoomDto createChatRoom(List<String> userIds) {
 		String name = createChatRoomName(userIds);
 		ChatRoom chatRoom = chatRoomDao.findByName(name);
@@ -205,7 +217,7 @@ public class ChatRoomService {
 			return cr;
 		}
 	}
-
+	
 	@Transactional
 	public void editChatRoomName(String chatroomid, String newRoomName, String userId1) {
 		ChatRoom chatRoom = chatRoomDao.findByChatroomid(chatroomid);
@@ -318,6 +330,104 @@ public class ChatRoomService {
 	
 	public void delChatRoomBychatroomid() {
 		chatRoomDao.deleteByStatus(false);
+	}
+	
+	//controller createChatRoom
+	public ModelMap createChatRoomByUserList(List<String> userid, HttpSession session) {
+		ModelMap   map = new ModelMap();
+		String userId1 = (String) session.getAttribute("loginId");
+		if (!userid.contains(userId1)) {
+			userid.add(userId1);
+		}
+		ChatRoomDto chatRoomDto = createChatRoom(userid);
+		String partId = usersService.getById2(userId1).getUsernm();
+		map.addAttribute("partId", partId);
+		map.addAttribute("roomId", chatRoomDto.getChatroomid());
+		map.addAttribute("userId1", userId1);
+		return map;
+	}
+	
+	//controller getChatRoomsForRecentAndLoad
+	public ArrayList<ChatRoomDto> recentAndLoad(String userid) {
+		ArrayList<ChatRoomDto> cr = getAllChatRooms(userid);
+		for (ChatRoomDto chatRoom : cr) {
+			String recentMsg = messageService.getRecentMessageByRoomId(chatRoom.getChatroomid());
+			ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(chatRoom.getChatroomid());
+			List<ChatRoomName> roomNames = new ArrayList<>();
+			for (ChatRoomNameDto dto : roomNamesDto) {
+				if (dto.getHost().equals(userid)) {
+					roomNames.add(new ChatRoomName(dto.getId(), dto.getRoom(),dto.getHost(), dto.getRoomName(), dto.getEditableName()));   
+	            }
+			}
+			chatRoom.setRecentMsg(recentMsg);
+			chatRoom.setChatRoomNames(roomNames);
+		}
+		return cr;
+	}
+	
+	//controller getChatRoomsSearch
+	public ArrayList<ChatRoomDto> chatRoomsSearch(String userid, HttpSession session){
+		String loginId = (String) session.getAttribute("loginId");
+		ArrayList<ChatRoomDto> cr = getChatRoomsListByName(userid, loginId);
+		for (ChatRoomDto chatRoom : cr) {
+			String recentMsg = messageService.getRecentMessageByRoomId(chatRoom.getChatroomid());
+			ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(chatRoom.getChatroomid());
+			List<ChatRoomName> roomNames = new ArrayList<>();
+			for (ChatRoomNameDto dto : roomNamesDto) {
+				if (dto.getHost().equals(loginId)) {
+					roomNames.add(new ChatRoomName(dto.getId(), dto.getRoom(),dto.getHost(), dto.getRoomName(), dto.getEditableName()));   
+	            }
+			}
+			chatRoom.setRecentMsg(recentMsg);
+			chatRoom.setChatRoomNames(roomNames);
+		}
+		return cr;
+	}
+	
+	//controller getChatRoomsConnect
+	public ChatRoomDto chatRoomsConnect(String chatroomid, String userId1) {
+		ChatRoomDto cr = getChatRoomsByChatRoomId(chatroomid, userId1);
+	    ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(cr.getChatroomid());
+	    List<ChatRoomName> roomNames = new ArrayList<>();
+	    for (ChatRoomNameDto dto : roomNamesDto) {
+	        if (dto.getHost().equals(userId1)) {
+	            roomNames.add(new ChatRoomName(dto.getId(), dto.getRoom(), dto.getHost(), dto.getRoomName(), dto.getEditableName()));
+	        }
+	    }
+	    cr.setChatRoomNames(roomNames);
+	    return cr;
+	}
+	
+	//controller inviteChatRoom
+	public void inviteChatRoomMethod(List<String> userid, String chatroomid, HttpSession session) {
+			String loginId = (String) session.getAttribute("loginId");
+		    ArrayList<String> mes = inviteUserToChatRoom(chatroomid, userid, loginId);
+		    String inviteContent = String.join("<br/>", mes);
+		    MessageDto inviteMessage = createInviteMessage(userid, chatroomid, loginId, inviteContent);
+		    messageController.sendMessage(inviteMessage, chatroomid);
+	}
+	
+	//controller getChatRoomsByUserId
+	public ModelMap  chatroomsByUserId(String userid, HttpSession session) {
+		ModelMap map = new ModelMap();
+		String userId1 = (String) session.getAttribute("loginId");
+		ArrayList<ChatRoomDto> cr = getChatRoomsListByName(userid, userId1);
+		String partId = usersService.getById2(userId1).getUsernm();
+		map.addAttribute("partId", partId);
+		map.addAttribute("chatRooms", cr);
+		map.addAttribute("userId1", userId1);
+		return map;
+	}
+	
+	//controller getChatRoomByRoomId
+	public ModelMap chatRoomByRoomIdMethod(String roomId, HttpSession session){
+		ModelMap map = new ModelMap();
+		String userId1 = (String) session.getAttribute("loginId");
+		String partId = usersService.getById2(userId1).getUsernm();
+		map.addAttribute("partId", partId);
+		map.addAttribute("roomId", roomId);
+		map.addAttribute("userId1", userId1);
+		return map;
 	}
 
 }

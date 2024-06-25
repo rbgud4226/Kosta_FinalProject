@@ -64,12 +64,9 @@
 					<tbody class="joblvlist_list">
 						<tr th:each="jl:${jlist }">
 							<td th:text="${jl.joblvidx }"></td>
-
-							<!-- <td><a href="corp/joblvinfo.html" th:href="@{/corp/joblvinfo(joblvidx=${jl.joblvidx})}"
-									th:text="${jl.joblvid}">joblvid</a></td> -->
 							<td>
 								<a href="#" class="joblv-detail-link" th:data-joblvidx="${jl.joblvidx}"
-									data-bs-toggle="modal" data-bs-target="#exampleModal"
+									data-bs-toggle="modal" data-bs-target="#joblvsModal"
 									th:text="${jl.joblvid}">joblvid</a>
 							</td>
 
@@ -81,41 +78,21 @@
 		</div>
 		<div class="joblvlist_admin_menu">
 			<button class="btn_square border_btn font_b24 cursor" data-bs-toggle="modal"
-				data-bs-target="#exampleModal">직급추가</button>
+				data-bs-target="#joblvsModal">직급추가</button>
 			<button type="button" class="btn blue_btn" th:onclick="location.href='/admin/corp/joblvtestadd'">joblv더미 데이터
 				생성</button>
 		</div>
 
 		<!-- Joblvadd Modal -->
 		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="joblvsModal" tabindex="-1" aria-labelledby="joblvsModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">직급추가</h5>
+						<h5 class="modal-title" id="joblvsModalLabel">직급추가</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<!-- <form id="joblvform">
-							<table>
-								<tr>
-									<td class="form_td">직급번호</td>
-									<td class="form_td">
-										<input type="text" name="joblvid" id="joblvidid">
-									</td>
-								</tr>
-								<tr>
-									<td class="form_td">직급이름</td>
-									<td class="form_td">
-										<input type="text" name="joblvnm" id="joblvnmid">
-									</td>
-								</tr>
-							</table>
-							<div class="modal-footer">
-								<button type="button" class="btn blue_btn" onclick="joblvaddbtn()">직급추가</button>
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							</div>
-						</form> -->
 					</div>
 
 				</div>

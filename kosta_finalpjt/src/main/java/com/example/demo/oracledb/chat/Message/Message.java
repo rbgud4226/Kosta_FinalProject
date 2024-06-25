@@ -29,25 +29,25 @@ public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chat_seq")
 	@SequenceGenerator(name = "chat_seq", sequenceName = "chat_sequence", allocationSize = 1)
-	private Long id; 
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonBackReference
-	private ChatRoom room; 
-	
+	private ChatRoom room;
+
 	@Column(length = 2000)
-	private String content; 
+	private String content;
 	private String sendDate;
-	private String sender; 
+	private String sender;
 	private String type;
 	private String fileName;
 	private String fileId;
-	private String fileRoot; 
+	private String fileRoot;
 	private String partid;
-	
-	public Message(Long id, ChatRoom room, String sendDate, String sender, String type,String partid) {
+
+	public Message(Long id, ChatRoom room, String sendDate, String sender, String type, String partid) {
 		super();
 		this.id = id;
 		this.room = room;

@@ -91,16 +91,35 @@
                         </tr>
                     </tbody>
                 </table>
+                <!-- 페이지네이션 시작 -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/auth/docx/list(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-link" th:text="${i}" th:href="@{/auth/docx/list(page=${i}, size=${pageSize})}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                            <a class="page-link" th:href="@{/auth/docx/list(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- 페이지네이션 종료지점 -->
                 <a href="/auth/docx/addreport" class="nav_link">
-                    <div class="icon_wrapper">
+                    <!-- <div class="icon_wrapper">
                         <img th:src="@{/img/common/home.png}" class="nav_link_icon">
-                    </div>
+                    </div> -->
                     <span class="nav_link_text">서류 작성</span>
                 </a>
                 <a th:href="@{/auth/docx/mylist(writer=${session.loginId})}" class="nav_link">
-                    <div class="icon_wrapper">
+                    <!-- <div class="icon_wrapper">
                         <img th:src="@{/img/common/home.png}" class="nav_link_icon">
-                    </div>
+                    </div> -->
                     <span class="nav_link_text">내 문서 보관함</span>
                 </a>
             </div>

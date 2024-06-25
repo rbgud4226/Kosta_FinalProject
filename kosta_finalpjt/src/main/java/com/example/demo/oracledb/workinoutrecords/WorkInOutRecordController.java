@@ -50,6 +50,8 @@ public class WorkInOutRecordController {
   
   @Autowired
   private DeptsService dservice;
+  
+  
 
   //개인
   //출퇴근 기록 페이지로 이동하기
@@ -63,14 +65,17 @@ public class WorkInOutRecordController {
     }
     //출근기록x
     boolean flag = false;
-    System.out.println("dto 받기 전");
+    boolean out = false;
     ArrayList<WorkInOutRecordDto> list = service.selectByDate(m.getMemberid());
-    System.out.println("dto 반환");
     //출근기록O
     if (!list.isEmpty()) {
       flag = true;
       //오늘날짜 출근 등록번호(퇴근시 필요)
       map.put("num", list.get(0).getDaynum());
+      if(list.get(0).getWorkOutTime() != null) {
+    	  //퇴근,휴가 등 기록 된 컬럼
+    	  out = true;
+      }
     }
     //내 근무기록
     // 현재 달/년도 가져오기
@@ -84,6 +89,8 @@ public class WorkInOutRecordController {
     map.put("flag", flag);
     //사원번호 반환
     map.put("mynum", m.getMemberid());
+    //퇴근 기록 반환
+	map.put("out", out);
     return "record/my";
   }
 
@@ -134,7 +141,6 @@ public class WorkInOutRecordController {
     if (w.getState().equals("지각")) {
       type = "지각";
     }
-
     //근무한 총 시간 확인
     LocalTime workinTime = LocalTime.parse(w.getWorkinTime());
     LocalTime workoutTime = LocalTime.parse(w.getWorkOutTime());
@@ -147,7 +153,6 @@ public class WorkInOutRecordController {
       hours--;
     }
     String worktime = String.format("%02d:%02d", hours, minutes);
-
     w.setState(type);
     w.setWorkHours(worktime);
     service.save(w);
@@ -321,12 +326,27 @@ public class WorkInOutRecordController {
       return "record/admin";
   }
   
+  @ResponseBody
+  @GetMapping("/deptlist")
+  public Map deptlist() {
+	    Map map = new HashMap<>();
+	    map.put("deptlist", dservice.getAll());
+	    return map;
+  }
+  
+  @ResponseBody
   @GetMapping("/over")
-  public void over() {
+  public Map over() {
 	  LocalDate currentDate = LocalDate.now();
-      int currentYear = currentDate.getYear();
-      
-      
+	// 현재 달/년도 가져오기
+	    int currentMonth = currentDate.getMonthValue() - 1;
+	    int currentYear = currentDate.getYear();
+	    
+	    ArrayList<OverWorkData> list = service.overStatistics(currentYear, currentMonth);
+	    
+	    Map map = new HashMap<>();
+	    map.put("overAvgTime", list);
+	    return map;
   }
   
   
@@ -351,7 +371,7 @@ public class WorkInOutRecordController {
 
         // 퇴근 시간 범위 설정 (18:00 ~ 20:00)
         LocalTime endTimeMin = LocalTime.of(17, 30);
-        LocalTime endTimeMax = LocalTime.of(20, 0);
+        LocalTime endTimeMax = LocalTime.of(21, 0);
 
         // 랜덤한 출근 시간 생성 (8:30 이상, 9:10 미만)
         LocalTime actualArrivalTime = generateRandomTime(startTimeMin, startTimeMax);

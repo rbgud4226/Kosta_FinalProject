@@ -63,6 +63,7 @@
     width: 80%;
     border-top: 2px solid #E2E4EC;
     margin: 0 auto;
+    margin-bottom: 100px;
 }
 .record_rtable{
     width: 100%;
@@ -114,4 +115,45 @@
 }
 .record_text_content{
     font-size: 20px;
+}
+/* admin chart */
+.chart_wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+.chart_title{
+    font-size: 20px;
+    font-weight: 600;
+    color: #2e2f31;
+    padding-bottom: 30px;
+}
+.chart{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
+}
+.chart:first-child{
+    padding-right: 20px;
+}
+.chart_can{
+    padding: 30px 10px;
+    background: white;
+}
+.dept_table{
+    justify-content: center;
+}
+.dept_select_wrapper{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 20px;
+    padding-top: 50px;
+}
+.dept_text{
+    padding-right: 10px;
+    font-weight: 600;
 }

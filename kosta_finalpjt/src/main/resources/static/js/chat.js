@@ -35,7 +35,7 @@ function loadMessages(roomId) {
 }
 
 function loadChatRoomsBySearch() {
-	var id = document.getElementById('inlineFormInputGroup').value;
+	var id = document.getElementById('findGroupMember').value;
 	var URL = 'http://localhost:8081/chat/chatrooms/loadrooms/search/';
 	if (!id) {
 		id = userId1;
@@ -86,7 +86,7 @@ function loadChatRoomsConnectView(chatRoom, userId1) {
             chatMembers = '';
             for (var i = 0; i < names.length; i++) {
                 if (ids[i] !== userId1) {
-                    chatMembers += '<a href="#" class="chat-member" data-id="' + ids[i] + '" onclick="handleNameClick(\'' + ids[i] + '\')">' + names[i] + '</a> ';
+                    chatMembers += '<a href="#" class="chat-member" data-id="' + ids[i] + '" onmouseover="memberInfo(\'' + ids[i] + '\')">' + names[i] + '</a> ';
                 }
             }
             chatMembers = chatMembers.trim();
@@ -105,14 +105,46 @@ function loadChatRoomsConnectView(chatRoom, userId1) {
                         <input class="roomNameStyle" type="text" id="chatRoomNameInput" value="${chatRoomNames}">
                         <img class="img-chateditImg" src="/img/chat/chatedit.png" id="editRoomNameImg" onclick="editRoomName('${chatRoom.chatroomid}','${userId1}')">
                         <p>${chatMembers}</p>
+                        <div class="memberInfoCss" id="minfo" onmouseleave="exitMemberInfo()"></div>
                     </div>
                 </a>
             `;
 	centerStyle.append(chatRoomList);
 }
 
-function handleNameClick(memberId) {
-    event.preventDefault();
+
+function memberInfo(id) {
+    $.ajax({
+        url: '/member/memberchatinfo',
+        type: 'GET',
+        data: { userId: id }, 
+        success: function(response) {
+			var memberChatInfos = `
+                <p>전화번호: ${response.member.cpnum}</p>
+                <p>이메일: <a href="#" onclick="copy('${response.member.email}')">${response.member.email}</a></p>
+               	<p>직급: ${response.jobL.joblvnm}</p>
+                <p>부서: ${response.deptN.deptnm}</p>
+                <p>부서장: ${response.member.mgrid}</p>
+            `;
+            document.getElementById('minfo').innerHTML = memberChatInfos;
+        },
+        error: function() {
+            alert('회원정보를 불러오는데 실패했습니다');
+        }
+    });
+}
+
+function copy(email) {
+    navigator.clipboard.writeText(email).then(function() {
+        alert('이메일이 복사되었습니다.');
+    }).catch(function() {
+        console.error('이메일 복사에 실패했습니다.');
+    });
+}
+
+
+function exitMemberInfo(){
+	document.getElementById('minfo').innerHTML = '';
 }
 
 function editRoomName(chatRoomId, userId1) {
