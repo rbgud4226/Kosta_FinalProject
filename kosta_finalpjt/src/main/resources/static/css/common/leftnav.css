@@ -45,6 +45,8 @@
 }
 .nav_link_icon{
    opacity: 0.7;
+   /*     width: 15px;
+    object-fit: cover; */
 }
 .nav_link:hover{
     background-color: #eff2f6;

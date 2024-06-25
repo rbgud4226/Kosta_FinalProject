@@ -54,13 +54,15 @@ setInterval(()=>{
 // 출근 여부에 따라서 버튼,문구 변경
 const flagCheck = ()=>{
     if(flag === 'true'){
-        console.log("출근 완료")
         $("#record_sta").html("출근 완료")
         $("#com_start").removeClass("blue_btn").addClass('gray_btn');
         $("#com_start").removeAttr("onclick");
         $("#com_end").removeClass("gray_btn").addClass('blue_btn');
-    }else{
-        console.log("출근 전")
+		if(out == 'true'){
+			$("#com_end").removeClass("blue_btn").addClass('gray_btn');
+        	$("#com_end").removeAttr("onclick");
+		}
+	}else{
         $("#record_sta").html("출근 전")
         $("#com_end").removeAttr("onclick");
     }   
