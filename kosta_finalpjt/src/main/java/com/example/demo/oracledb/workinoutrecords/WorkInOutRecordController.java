@@ -65,14 +65,17 @@ public class WorkInOutRecordController {
     }
     //출근기록x
     boolean flag = false;
-    System.out.println("dto 받기 전");
+    boolean out = false;
     ArrayList<WorkInOutRecordDto> list = service.selectByDate(m.getMemberid());
-    System.out.println("dto 반환");
     //출근기록O
     if (!list.isEmpty()) {
       flag = true;
       //오늘날짜 출근 등록번호(퇴근시 필요)
       map.put("num", list.get(0).getDaynum());
+      if(list.get(0).getWorkOutTime() != null) {
+    	  //퇴근,휴가 등 기록 된 컬럼
+    	  out = true;
+      }
     }
     //내 근무기록
     // 현재 달/년도 가져오기
@@ -86,6 +89,8 @@ public class WorkInOutRecordController {
     map.put("flag", flag);
     //사원번호 반환
     map.put("mynum", m.getMemberid());
+    //퇴근 기록 반환
+	map.put("out", out);
     return "record/my";
   }
 
