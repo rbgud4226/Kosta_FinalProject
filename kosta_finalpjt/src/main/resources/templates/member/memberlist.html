@@ -45,6 +45,7 @@
           </table>
         </form>
         <form class="modal_list" action="/member/test">
+          <div class="modal_table_wrapper">
           <table class="table_w100 modal_table">
             <thead class="list_line ">
             <tr>
@@ -54,22 +55,9 @@
             </tr>
             </thead>
             <tbody class="modal_body">
-            <!-- <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
-              <td>
-                <input name="userid" type="checkbox" class="list_ch" th:value="${m?.userid?.usernm}">
-              </td>
-              <td class="form_td" >
-                <p class="f600 list_name" th:text="${m?.userid?.usernm }"></p>
-                <div class="list_pos">
-                  <span class="list_dept" th:text="${m?.deptid?.deptid }"></span>
-                  <span class="list_lv" th:text="${m?.joblvid?.joblvid +'대리 '}"></span>
-                </div>
-
-              </td>
-              <td class="form_td" th:text="${m?.email}"></td>
-            </tr> -->
             </tbody>
           </table>
+        </div>
           <div class="modal-footer">
             <input type="submit" value="선택" class="btn blue_btn">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
