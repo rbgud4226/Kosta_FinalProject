@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,7 +78,7 @@ public class DocxController {
 
 	// 전체문서 리스트 출력
 	@GetMapping("/list")
-	public String list(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "8") int size,
+	public String list(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int size,
 			ModelMap map) {
 		List<DocxDto> docxList = service.getAllByDocxorderWithPagination(page, size);
 		int totalCount = service.getTotalCountByDocxorder();
@@ -99,7 +100,7 @@ public class DocxController {
 
 	// 내가 작성한 문서만 출력
 	@GetMapping("/mylist")
-	public String myList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "8") int size,
+	public String myList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int size,
 			ModelMap map, @RequestParam String writer) {
 		List<DocxDto> docxList = service.getUserDocxByPagination(writer, page, size);
 		int totalCount = service.getUserDocxCount(writer);
@@ -113,14 +114,27 @@ public class DocxController {
 
 	// 검색 컨트롤러
 	@PostMapping("/list")
-	public String list(ModelMap map, @RequestParam(value = "searchType", required = false) String searchType,
-			@RequestParam(value = "searchValue", required = false) String searchValue) {
-		if (searchType.equals("title")) {
-			map.addAttribute("list", service.getByTitle(searchType, searchValue));
-		} else if (searchType.equals("writer")) {
-			map.addAttribute("list", service.getByWriter(searchType, searchValue));
-		}
-
+	public String list(Model model,
+            @RequestParam(value = "searchType", required = false) String searchType,
+            @RequestParam(value = "searchValue", required = false) String searchValue,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "15") int size) {
+		List<DocxDto> resultList;
+		if ("title".equals(searchType)) {
+            resultList = service.getByTitleWithPagination(searchValue, page, size);
+        } else if ("writer".equals(searchType)) {
+            resultList = service.getByWriterWithPagination(searchValue, page, size);
+        } else {
+            resultList = List.of(); // 기본 빈 리스트를 반환
+        }
+		int totalItems = resultList.size(); // 전체 아이템 수
+        int totalPages = (int) Math.ceil((double) totalItems / size); // 전체 페이지 수
+		model.addAttribute("list", resultList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchValue", searchValue);
 		return "docx/list";
 	}
 

@@ -48,7 +48,9 @@
             evt.currentTarget.className += " active";
         }
 
-        function addSelectedMembers() {
+        function addSelectedMembers(event) {
+            // 폼 제출 막기
+            event.preventDefault();
             // 선택된 멤버들을 가져오기
             var selectedMembers = document.querySelectorAll('.list_ch:checked');
 
@@ -84,6 +86,8 @@
                 });
             });
         });
+        // 모달 내의 추가 버튼에 클릭 이벤트 리스너 추가
+        document.querySelector('#memberModal .btn-primary').addEventListener('click', addSelectedMembers);
     </script>
     <style>
         select[readonly] {
@@ -131,8 +135,10 @@
         }
 
         option:checked {
-            background-color: #fff !important; /* 선택된 옵션 배경색 기본값으로 설정 */
-            color: #000 !important; /* 선택된 옵션 텍스트 색상 기본값으로 설정 */
+            background-color: #fff !important;
+            /* 선택된 옵션 배경색 기본값으로 설정 */
+            color: #000 !important;
+            /* 선택된 옵션 텍스트 색상 기본값으로 설정 */
         }
     </style>
 </head>
@@ -301,12 +307,12 @@
             </div>
 
             <section id="member_modal_section">
-                <div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                <div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="memberModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered mem_modal">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
+                                <h5 class="modal-title" id="memberModalLabel">멤버 선택</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -329,37 +335,23 @@
                                         </tr>
                                     </table>
                                 </form>
-                                <form class="modal_list" action="" method="post" id="memberForm">
-                                    <input style="display: none" id="share_taskid" name="taskid">
-                                    <table class="table_w100 modal_table">
-                                        <thead class="list_line ">
-                                            <tr>
-                                                <td><input type="checkbox"></td>
-                                                <td class="w40 f600">Name</td>
-                                                <td class="f600">E-mail</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="modal_body">
-                                            <tr class="list_line" th:if="${mlist != null }" th:each="m:${mlist }">
-                                                <td>
-                                                    <input name="userid" type="checkbox" class="list_ch"
-                                                        th:value="${m?.userid.id}">
-                                                </td>
-                                                <td class="form_td">
-                                                    <p class="f600 list_name" th:text="${m?.userid.id }"></p>
-                                                    <div class="list_pos">
-                                                        <span class="list_dept" th:text="${m?.deptid?.deptid }"></span>
-                                                        <span class="list_lv" th:text="${m?.joblvid?.joblvnm}"></span>
-                                                    </div>
-
-                                                </td>
-                                                <td class="form_td" th:text="${m?.email}"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <form class="modal_list" action="">
+                                    <div class="modal_table_wrapper">
+                                        <table class="table_w100 modal_table">
+                                            <thead class="list_line ">
+                                                <tr>
+                                                    <td><input type="checkbox"></td>
+                                                    <td class="w40 f600">Name</td>
+                                                    <td class="f600">E-mail</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="modal_body">
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <div class="modal-footer">
-                                        <input type="button" value="선택" class="btn blue_btn"
-                                            onclick="addSelectedMembers()">
+                                        <input type="submit" value="선택" class="btn blue_btn"
+                                            onclick="addSelectedMembers(event)">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
                                     </div>

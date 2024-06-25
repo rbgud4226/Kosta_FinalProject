@@ -66,10 +66,24 @@ public class DeptsController {
 		return "redirect:/corp/deptlist";
 	}
 
+//	@GetMapping("/corp/deptinfo")
+//	public String deptinfo(int deptid, ModelMap map) {
+//		map.addAttribute("d", dservice.getByDeptId(deptid));
+//		return "corp/deptinfo";
+//	}
+
+	@ResponseBody
 	@GetMapping("/corp/deptinfo")
-	public String deptinfo(int deptid, ModelMap map) {
-		map.addAttribute("d", dservice.getByDeptId(deptid));
-		return "corp/deptinfo";
+	public Map deptinfo(int deptid) {
+		Map map = new HashMap();
+		try {
+			map.put("d", dservice.getByDeptId(deptid));
+			map.put("mlist", mservice.getAll());
+		} catch (Exception e) {
+//			map.put("error", "Failed to fetch dept details.");
+			e.printStackTrace(); // or log the exception
+		}
+		return map;
 	}
 
 	@PostMapping("/admin/corp/deptedit")
@@ -92,6 +106,12 @@ public class DeptsController {
 		mav.addObject("val", val);
 		mav.addObject("dlist", dlist);
 		return mav;
+	}
+	
+	@GetMapping("/admin/corp/deptdel")
+	public String deptdel(int deptid) {
+		dservice.delDepts(deptid);
+		return "redirect:/corp/deptlist";
 	}
 
 	@GetMapping("/corp/joblvlist")
@@ -170,6 +190,12 @@ public class DeptsController {
 		mav.addObject("val", val);
 		mav.addObject("jlist", jlist);
 		return mav;
+	}
+	
+	@GetMapping("/admin/corp/joblvdel")
+	public String joblvdel(int joblvidx) {
+		jservice.delJoblvs(joblvidx);
+		return "redirect:/corp/joblvlist";
 	}
 
 }

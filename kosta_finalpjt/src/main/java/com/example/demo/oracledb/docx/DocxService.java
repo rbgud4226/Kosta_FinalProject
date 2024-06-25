@@ -1,10 +1,10 @@
 package com.example.demo.oracledb.docx;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.oracledb.members.Members;
 import com.example.demo.oracledb.members.MembersDao;
 import com.example.demo.oracledb.members.MembersDto;
-import com.example.demo.oracledb.users.Users;
 
 @Service
 public class DocxService {
@@ -71,20 +70,6 @@ public class DocxService {
 		}
 	}
 
-//	public List<DocxDto> getAll() {
-//		List<Docx> l = dao.findByDocxorder(0);
-//		// 작성일 기준 내림차순 정렬
-//		l.sort(Comparator.comparingInt(Docx::getFormnum).reversed());
-//		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
-//		for (Docx d : l) {
-//			list.add(new DocxDto(d.getFormnum(), d.getWriter(), null, d.getStartdt(), d.getEnddt(), d.getTitle(),
-//					d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(),
-//					d.getTaskprocsres(), d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(), d.getFormtype(),
-//					d.getAprovdoc(), d.getDocxorder(), d.getStatus(), d.getDocxkey(), d.getOrderloc()));
-//		}
-//		return list;
-//	}
-
 	// 중복제거된 리스트 페이징 결과 리턴
 	public List<DocxDto> getAllByDocxorderWithPagination(int page, int size) {
 		int startRow = (page - 1) * size + 1;
@@ -141,46 +126,36 @@ public class DocxService {
 		return dao.countUserDocx(writerId);
 	}
 
-	// 문서 작성자 검색
-	public ArrayList<DocxDto> getByWriter(String searchType, String searchValue) {
-		List<Docx> l = dao.findDistinctByWriter(new Users(searchValue, null, null, null, 0, null));
-		Set<String> seenTitles = new LinkedHashSet<>(); // 중복 제거를 위해 LinkedHashSet 사용
-		if (l == null) {
-			return null;
-		}
-		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
-		l.sort(Comparator.comparingInt(Docx::getFormnum).reversed());
-		for (Docx d : l) {
-			if (seenTitles.add(d.getTitle())) {
-				list.add(new DocxDto(d.getFormnum(), d.getWriter(), null, d.getStartdt(), d.getEnddt(), d.getTitle(),
-						d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(),
-						d.getTaskprocsres(), d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(),
-						d.getFormtype(), d.getAprovdoc(), d.getDocxorder(), d.getStatus(), d.getDocxkey(),
-						d.getOrderloc()));
-			}
-		}
-		return list;
+	// 문서 작성자 검색결과를 페이징 처리하여 가져오는 코드
+	public List<DocxDto> getByWriterWithPagination(String writerId, int page, int size) {
+		int startRow = (page - 1) * size + 1;
+		int endRow = page * size;
+		List<Docx> docxList = dao.findDistinctByWriter(writerId, startRow, endRow);
+
+		Set<String> seenTitles = new LinkedHashSet<>(); // 중복된 제목을 제거하기 위한 Set
+		return docxList.stream().filter(docx -> seenTitles.add(docx.getTitle()))
+				.map(docx -> new DocxDto(docx.getFormnum(), docx.getWriter(), null, docx.getStartdt(), docx.getEnddt(),
+						docx.getTitle(), docx.getContent(), docx.getNote(), docx.getTaskclasf(), docx.getTaskplan(),
+						docx.getTaskprocs(), docx.getTaskprocsres(), docx.getDeptandmeetloc(), docx.getDayoffclasf(),
+						docx.getParticipant(), docx.getFormtype(), docx.getAprovdoc(), docx.getDocxorder(),
+						docx.getStatus(), docx.getDocxkey(), docx.getOrderloc()))
+				.collect(Collectors.toList());
 	}
 
-	// 문서 제목으로 검색 Like문
-	public ArrayList<DocxDto> getByTitle(String searchType, String searchValue) {
-		List<Docx> l = dao.findByTitleLike("%" + searchValue + "%");
-		Set<String> seenTitles = new LinkedHashSet<>(); // 중복 제거를 위해 LinkedHashSet 사용
-		if (l == null) {
-			return null;
-		}
-		ArrayList<DocxDto> list = new ArrayList<DocxDto>();
-		l.sort(Comparator.comparingInt(Docx::getFormnum).reversed());
-		for (Docx d : l) {
-			if (seenTitles.add(d.getTitle())) {
-				list.add(new DocxDto(d.getFormnum(), d.getWriter(), null, d.getStartdt(), d.getEnddt(), d.getTitle(),
-						d.getContent(), d.getNote(), d.getTaskclasf(), d.getTaskplan(), d.getTaskprocs(),
-						d.getTaskprocsres(), d.getDeptandmeetloc(), d.getDayoffclasf(), d.getParticipant(),
-						d.getFormtype(), d.getAprovdoc(), d.getDocxorder(), d.getStatus(), d.getDocxkey(),
-						d.getOrderloc()));
-			}
-		}
-		return list;
+	// 문서 제목 검색 결과를 페이징 처리하여 가져오는 메서드
+	public List<DocxDto> getByTitleWithPagination(String title, int page, int size) {
+		int startRow = (page - 1) * size + 1;
+		int endRow = page * size;
+		List<Docx> docxList = dao.findByTitleLike("%" + title + "%", startRow, endRow);
+
+		Set<String> seenTitles = new LinkedHashSet<>(); // 중복된 제목을 제거하기 위한 Set
+		return docxList.stream().filter(docx -> seenTitles.add(docx.getTitle()))
+				.map(docx -> new DocxDto(docx.getFormnum(), docx.getWriter(), null, docx.getStartdt(), docx.getEnddt(),
+						docx.getTitle(), docx.getContent(), docx.getNote(), docx.getTaskclasf(), docx.getTaskplan(),
+						docx.getTaskprocs(), docx.getTaskprocsres(), docx.getDeptandmeetloc(), docx.getDayoffclasf(),
+						docx.getParticipant(), docx.getFormtype(), docx.getAprovdoc(), docx.getDocxorder(),
+						docx.getStatus(), docx.getDocxkey(), docx.getOrderloc()))
+				.collect(Collectors.toList());
 	}
 
 	public int findByFormtypeDesc(String formtype) {
