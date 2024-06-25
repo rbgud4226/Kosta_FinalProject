@@ -11,9 +11,9 @@
                     <p class="nav_main_title">HRM system</p>
                     <ul>
                         <li class="li_link">
-                            <a href="#" class="nav_link">
+                            <a href="/" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-house-user nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">홈</span>
                             </a>
@@ -21,7 +21,7 @@
                         <li class="li_link">
                             <a th:href="@{/user/userinfo(id=${session.loginId })}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-user nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">내 인사카드 관리</span>
                             </a>
@@ -29,7 +29,7 @@
                         <li class="li_link">
                             <a th:href="@{/auth/record/my(Members=${session.loginId})}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-business-time nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">출퇴근 관리</span>
                             </a>
@@ -37,7 +37,7 @@
                         <li  th:if="${session.mgr_deptid != null }" class="li_link">
                             <a th:href="@{/auth/record/dept(dept=${session.mgr_deptid})}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-clipboard nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">부서 근태관리</span>
                             </a>
@@ -50,7 +50,7 @@
                         <li class="li_link">
                             <a href="/" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-house-user nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">홈</span>
                             </a>
@@ -58,7 +58,7 @@
                         <li class="li_link">
                             <a th:href="@{/auth/record/admin}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-chart-simple nav_link_icon"></i>
                                 </div>
                              <span class="nav_link_text">사원 근태관리</span>
                             </a>
@@ -66,7 +66,7 @@
                         <li class="li_link">
                             <a th:href="@{/admin/user/userlist}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-address-book nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">사용자목록</span>
                             </a>
@@ -74,7 +74,7 @@
                         <li class="li_link">
                             <a th:href="@{/corp/deptlist}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-sitemap nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">부서목록</span>
                             </a>
@@ -82,7 +82,7 @@
                         <li class="li_link">
                             <a th:href="@{/corp/joblvlist}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-list nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">직급목록</span>
                             </a>
@@ -97,7 +97,7 @@
                         <li class="li_link">
                             <a href="#" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-paper-plane nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">공지게시판</span>
                             </a>
@@ -105,7 +105,7 @@
                         <li class="li_link">
                             <a th:href="@{/chat/chatrooms/{userId1}(userId1=${session.loginId})}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-comments nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">채팅</span>
                             </a>
@@ -113,7 +113,7 @@
                         <li class="li_link">
                             <a th:href="@{/auth/docx/list}" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-file nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">문서함</span>
                             </a>
@@ -121,7 +121,7 @@
                         <li class="li_link">
                             <a href="#" class="nav_link">
                                 <div class="icon_wrapper">
-                                    <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+                                    <i class="fa-solid fa-envelope nav_link_icon"></i>
                                 </div>
                                 <span class="nav_link_text">메일함</span>
                             </a>
@@ -134,13 +134,13 @@
 	<div class="left_footer">
 			<a th:href="@{/user/userinfo(id=${session.loginId })}" class="out_link">
 	            <div class="icon_wrapper">
-	                <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+	                <i class="fa-solid fa-gear nav_link_icon"></i>
 	            </div>
 	            <span class="nav_link_text">설정</span>
 	        </a>
 	        <a href="/auth/logout" class="out_link">
 	            <div class="icon_wrapper">
-	                <img th:src="@{/img/common/home.png}" class="nav_link_icon">
+	                <i class="fa-solid fa-right-from-bracket nav_link_icon"></i>
 	            </div>
 	            <span class="nav_link_text">로그아웃</span>
 	        </a>

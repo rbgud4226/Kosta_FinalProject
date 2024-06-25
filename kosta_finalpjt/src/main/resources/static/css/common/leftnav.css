@@ -44,8 +44,7 @@
     box-sizing: content-box;
 }
 .nav_link_icon{
-    width: 15px;
-    object-fit: cover;
+   opacity: 0.7;
 }
 .nav_link:hover{
     background-color: #eff2f6;
@@ -55,6 +54,7 @@
     border-top:1px solid #cbd0dd;
     height: 50px;
     display: flex;
+    justify-content: space-around;
 }
 .out_link{
     display: flex;
