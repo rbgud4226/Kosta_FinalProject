@@ -105,7 +105,7 @@ function loadChatRoomsConnectView(chatRoom, userId1) {
                         <input class="roomNameStyle" type="text" id="chatRoomNameInput" value="${chatRoomNames}">
                         <img class="img-chateditImg" src="/img/chat/chatedit.png" id="editRoomNameImg" onclick="editRoomName('${chatRoom.chatroomid}','${userId1}')">
                         <p>${chatMembers}</p>
-                        <div id="minfo" onmouseleave="exitMemberInfo()"></div>
+                        <div class="memberInfoCss" id="minfo" onmouseleave="exitMemberInfo()"></div>
                     </div>
                 </a>
             `;
