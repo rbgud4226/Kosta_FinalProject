@@ -97,22 +97,31 @@ message-area
 }
 
 .chat-content {
+	overflow-y: auto;
+	flex-direction: column-reverse;
+	overflow-y: scroll;
+	display: flex;
+}
+.chat_img_wrapper{
+	width: 100%;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 }
-
 
 .chatRoomImg {
-	width: 80%;
-	/* height: 500px; */
+	display: block;
+    max-width: 100%;
+    /* margin: 0 auto; */
+    /* height: auto; */
+    max-height: 500px;
+	/* width: 80%;
+	height: 500px;
 	object-fit: cover;
-	overflow: hidden;
-	/* margin-bottom: 6%;
+	margin-bottom: 6%;
 	margin-left: 10%; */
 }
-.modal-body {
-    padding: 0 1rem;
-}
+
 .message-area {
 	height: 100vh;
 	overflow: hidden;
@@ -343,11 +352,7 @@ a.add img {
 
 .msg-body ul li {
 	list-style: none;
-	/* margin: 15px 0; */
-    display: flex;
-    align-items: center;
-    /* height: 100%; */
-    justify-content: center
+	margin: 15px 0;
 }
 
 .msg-body ul li.reply {
