@@ -25,8 +25,8 @@ const member_table = (arr)=>{
 			cell.class = "form_td";
 			let data = `<p class="f600 list_name">${a.userid.usernm }</p>
 							<div class="list_pos">
-								<span class="list_dept">${a.deptid.deptid }</span>
-								<span class="list_lv">${a.joblvid.joblvid}</span>
+								<span class="list_dept">${a.deptid.deptnm }</span>
+								<span class="list_lv">${a.joblvid.joblvnm}</span>
 							</div>`
 			cell.innerHTML = data;
 			cell.classList.add("form_td");

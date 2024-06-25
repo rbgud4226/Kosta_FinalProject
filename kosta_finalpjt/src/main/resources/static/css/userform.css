@@ -57,4 +57,8 @@ body{
 }
 .join_btn{
     width: 100%;
+    margin-bottom: 8px;
+}
+.join_btn_wrapper{
+    flex-direction: column;
 }

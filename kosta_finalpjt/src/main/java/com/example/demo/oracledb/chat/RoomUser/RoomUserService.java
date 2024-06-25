@@ -18,7 +18,6 @@ public class RoomUserService {
 		if (!roomuserdao.findByRoomAndRoomuser(room, roomuser).isPresent()) {
 			roomuserdao.save(new RoomUser(null, room, roomuser));
 		}
-
 	}
 
 	public ArrayList<RoomUserDto> findRoom(String chatroomid) {

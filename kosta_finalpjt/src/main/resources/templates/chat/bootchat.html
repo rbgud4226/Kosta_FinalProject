@@ -16,6 +16,7 @@
     <link rel="stylesheet" th:href="@{/css/common/modal.css}">
     <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
     <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script th:inline="javascript">
     var stompClient = null;
     var roomId = null;
@@ -37,7 +38,7 @@
                                 <div class="modal-content">
                                     <div class="chat-header">
                                         <div class="msg-search"> 
-                                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="참여자이름으로 검색" aria-label="search" onkeypress="if(event.keyCode == 13){loadChatRoomsBySearch(this)}">                                       
+                                            <input type="text" class="form-control" id="findGroupMember" placeholder="참여자이름으로 검색" aria-label="search" onkeypress="if(event.keyCode == 13){loadChatRoomsBySearch(this)}">                                       
            									       	 <a class="add" href="#">
               									 	  <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add" data-bs-toggle="modal" data-bs-target="#exampleModal">
           										 	 </a>        								   		        		 
@@ -122,18 +123,7 @@
                                     <div class="modal-body chat-content"> 
                                         <div class="msg-body">
                                             <ul id="chat-content">
-<!--                                                 <li class="sender"> -->
-<!--                                                 	<span class="senderName"></span> -->
-<!--                                                 	<span class="sendN" id="sendN"></span> -->
-<!--                                                     <p></p> -->
-<!--                                                     <span class="time" id="time"></span> -->
-<!--                                                 </li> -->
-<!--                                                 <li class="reply"> -->
-<!--                                                 	<span class="replyName"></span> -->
-<!--                                                 	<span class="sendN" id="sendN"></span> -->
-<!--                                                     <p></p> -->
-<!--                                                     <span class="time"></span> -->
-<!--                                                 </li>                                           -->
+                                           <li><img class="chatRoomImg" src="/img/chat/chatRoomImg.png" data-bs-toggle="modal" data-bs-target="#exampleModal"></li> <!-- 출처<a href="https://www.freepik.com/free-psd/speech-bubble-chat-talk-communication-icon-3d-background-illustration_63586825.htm#fromView=search&page=1&position=7&uuid=c3c5694f-a27c-4b90-9faf-4bdbd1be8dae">Image by mamewmy on Freepik</a> -->
                                             </ul>
                                         </div>
                                     </div>
@@ -167,100 +157,104 @@
         </div>
   </div>
   <!-- Modal Add-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mem_modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form class="list_line" method="post">
-                        <table class="m20 table_w100">
-                            <tr>
-                                <td>
-                                    <select class="select_box" name="type">
-                                        <option value="1">부서이름</option>
-                                        <option value="2">직원이름</option>
-                                        <option value="3">직급</option>
-                                    </select>
-                                </td>
-                                <td class="list_search_wrapper">
-                                    <input class="list_input" type="text" name="val">
-                                    <button type="button" class="btn blue_btn list_search_chat" onclick="list_search_chat('0')">검색</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                    <form class="modal_list" action="/chat/chatroom">
-                        <table class="table_w100 modal_table">
-                            <thead class="list_line">
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td class="w40 f600">Name</td>
-                                    <td class="f600">E-mail</td>
-                                </tr>
-                            </thead>
-                            <tbody class="modal_body">
-                            </tbody>
-                        </table>
-                        <div class="modal-footer">
-                            <input type="submit" value="채팅방열기" class="btn blue_btn">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered mem_modal">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">멤버 선택</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <form class="list_line" method="post">
+	          <table class="m20 table_w100">
+	            <tr>
+	              <td>
+	                <select class="select_box" name="type">
+	                  <option value="1">부서이름</option>
+	                  <option value="2">직원이름</option>
+	                  <option value="3">직급</option>
+	                </select>
+	              </td>
+	              <td class="list_search_wrapper">
+	                <input class="list_input" type="text" name="val">
+					<button type="button" class="btn blue_btn list_search_chat" onclick="list_search_chat('0')">검색</button>
+	              </td>
+	            </tr>
+	          </table>
+	        </form>
+	        <form class="modal_list" action="/chat/chatroom">
+	          <div class="modal_table_wrapper">
+	          <table class="table_w100 modal_table">
+	            <thead class="list_line ">
+	            <tr>
+	              <td><input type="checkbox"></td>
+	              <td class="w40 f600">Name</td>
+	              <td class="f600">E-mail</td>
+	            </tr>
+	            </thead>
+	            <tbody class="modal_body">
+	            </tbody>
+	          </table>
+	        </div>
+	          <div class="modal-footer">
+	            <input type="submit" value="선택" class="btn blue_btn">
+	            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	          </div>
+	        </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
       <!-- Modal Invite-->
-    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mem_modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModal2Label">멤버 선택</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form class="list_line" method="post">
-                        <table class="m20 table_w100">
-                            <tr>
-                                <td>
-                                    <select class="select_box" name="type">
-                                        <option value="1">부서이름</option>
-                                        <option value="2">직원이름</option>
-                                        <option value="3">직급</option>
-                                    </select>
-                                </td>
-                                <td class="list_search_wrapper">
-                                    <input class="list_input" type="text" name="val">
-                                    <button type="button" class="btn blue_btn list_search_chat" onclick="list_search_chat('1', roomId)">검색</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                    <form class="modal_list" action="/chat/chatrooms/invite/${userId}/${roomId}">
-                      <input type="hidden" id="roomIdInput" name="chatroomid">
-                        <table class="table_w100 modal_table">
-                            <thead class="list_line">
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td class="w40 f600">Name</td>
-                                    <td class="f600">E-mail</td>
-                                </tr>
-                            </thead>
-                            <tbody class="modal_body">
-                            </tbody>
-                        </table>
-                        <div class="modal-footer">
-                            <input type="submit" value="초대" class="btn blue_btn">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered mem_modal">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModal2Label">멤버 선택</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <form class="list_line" method="post">
+	          <table class="m20 table_w100">
+	            <tr>
+	              <td>
+	                <select class="select_box" name="type">
+	                  <option value="1">부서이름</option>
+	                  <option value="2">직원이름</option>
+	                  <option value="3">직급</option>
+	                </select>
+	              </td>
+	              <td class="list_search_wrapper">
+	                <input class="list_input" type="text" name="val">
+	                <button type="button" class="btn blue_btn list_search_chat" onclick="list_search_chat('1', roomId)">검색</button>
+	              </td>
+	            </tr>
+	          </table>
+	        </form>
+	        <form class="modal_list" action="/chat/chatrooms/invite/${userId}/${roomId}">
+	         <input type="hidden" id="roomIdInput" name="chatroomid">
+	          <div class="modal_table_wrapper">
+	          <table class="table_w100 modal_table">
+	            <thead class="list_line ">
+	            <tr>
+	              <td><input type="checkbox"></td>
+	              <td class="w40 f600">Name</td>
+	              <td class="f600">E-mail</td>
+	            </tr>
+	            </thead>
+	            <tbody class="modal_body">
+	            </tbody>
+	          </table>
+	        </div>
+	          <div class="modal-footer">
+	            <input type="submit" value="선택" class="btn blue_btn">
+	            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	          </div>
+	        </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </body>
 <script th:src="@{/js/chat.js}"></script>
 <script th:src="@{/js/chat_modal.js}"></script>

@@ -1,12 +1,21 @@
 package com.example.demo.oracledb.chat.Message;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.oracledb.chat.Room.ChatRoom;
 import com.example.demo.oracledb.chat.Room.ChatRoomDao;
+import com.example.demo.oracledb.chat.Room.ChatRoomService;
+import com.example.demo.oracledb.users.UsersService;
 
 @Service
 public class MessageService {
@@ -16,6 +25,15 @@ public class MessageService {
 	@Autowired
 	private ChatRoomDao chatroomdao;
 
+	@Autowired
+	@Lazy
+	private ChatRoomService chatRoomService;
+	
+	@Autowired
+	private UsersService usersService;
+
+	@Value("${spring.servlet.multipart.location}")
+	private String path;
 
 	public Message save(MessageDto message, String roomId) {
 		ChatRoom chatroom = chatroomdao.findByChatroomid(roomId);
@@ -52,5 +70,36 @@ public class MessageService {
 			recentMsg = recentMsg.substring(0, 12) + "..."; 
 		}
 		return recentMsg;
+	}
+	
+	public void outTypeMessage(MessageDto chatMessage, String roomId) {
+		String osg = chatRoomService.getOutChatRoom(roomId, chatMessage.getSender());
+		String partN = usersService.getById2(chatMessage.getSender()).getUsernm();
+		chatMessage.setContent(osg);
+		chatMessage.setPartid(partN);
+		chatMessage.setSendDate(chatRoomService.createSendDate());
+	}
+	
+	public void fileTypeMessage(MessageDto chatMessage, String roomId) {
+		String wpath = "http://localhost:8081/files/" + chatMessage.getFileName();
+        chatMessage.setFileRoot(wpath);
+        chatMessage.setFileId(UUID.randomUUID().toString());
+        chatMessage.setContent("FILE");
+	}
+	
+	public Map<String, String> FileuploadMethod(MultipartFile file){
+		try {
+			String originalFilename = file.getOriginalFilename();
+			String fileRoot = path + "/" + originalFilename;
+			File newFile = new File(fileRoot);
+			file.transferTo(newFile);
+			Map<String, String> response = new HashMap<>();
+			String wpath = "http://localhost:8081/files/" + originalFilename;
+			response.put("fileName", originalFilename);
+			response.put("fileRoot", wpath);
+			return response;
+		} catch (Exception e) {
+			throw new RuntimeException("파일 업로드 실패: " + e.getMessage());
+		}
 	}
 }

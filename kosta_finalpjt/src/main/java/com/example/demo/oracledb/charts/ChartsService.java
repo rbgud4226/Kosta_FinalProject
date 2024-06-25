@@ -55,7 +55,7 @@ public class ChartsService {
   public ArrayList<ChartsDto> ganttList(String id) {
     List<Charts> l = dao.findByUsersOrderByTaskidDesc(new Users(id, null, null, null, 0, null));
     ArrayList<ChartsDto> fillteredList = l.stream()
-        .map(g -> new ChartsDto(g.getUsers(), g.getTaskid(), g.getChartResource(), g.getTitle(), g.getSt(), g.getEd(), g.getPercent(), g.getDependencies(), g.getChartStatus()))
+    		.map(g -> new ChartsDto(g.getUsers(), g.getTaskid(), g.getChartResource(), g.getTitle(), g.getSt(), g.getEd(), g.getPercent(), g.getDependencies(), g.getChartStatus()))
         .filter(chartsDto -> chartsDto.getChartStatus().equals("yes"))
         .collect(Collectors.toCollection(ArrayList::new));
     return fillteredList;
