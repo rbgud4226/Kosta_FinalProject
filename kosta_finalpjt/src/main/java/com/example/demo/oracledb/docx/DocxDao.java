@@ -8,23 +8,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.oracledb.users.Users;
-
 import jakarta.transaction.Transactional;
 
 @Repository
 public interface DocxDao extends JpaRepository<Docx, Integer> {
-//	@Autowired
-//	private public  JdbcTemplate jTemplate;
+	
+	 // 작성자로 문서를 검색하고 중복을 제거하여 페이징 처리된 결과를 반환하는 메서드
+    @Query(value = "SELECT * FROM (SELECT d.*, ROWNUM rnum FROM (SELECT * FROM Docx WHERE writer_id = :writerId AND docxorder = 0 ORDER BY formnum DESC) d WHERE ROWNUM <= :endRow) WHERE rnum >= :startRow",
+           nativeQuery = true)
+    List<Docx> findDistinctByWriter(@Param("writerId") String writerId, @Param("startRow") int startRow, @Param("endRow") int endRow);
 
-	// writer 검색
-	List<Docx> findDistinctByWriter(Users writer);
+    // 제목에 해당하는 문서를 Like 검색하여 페이징 처리된 결과를 반환하는 메서드
+    @Query(value = "SELECT * FROM (SELECT d.*, ROWNUM rnum FROM (SELECT * FROM Docx WHERE title LIKE :title AND docxorder = 0 ORDER BY formnum DESC) d WHERE ROWNUM <= :endRow) WHERE rnum >= :startRow",
+           nativeQuery = true)
+    List<Docx> findByTitleLike(@Param("title") String title, @Param("startRow") int startRow, @Param("endRow") int endRow);
 
 	// formtype으로 검색 num 값으로 정렬후 출력
 	List<Docx> findByFormtypeOrderByFormnumDesc(String formtype);
-
-	// title like 검색
-	List<Docx> findByTitleLike(String title);
 
 	// docxkey로 검색해서 그 문서안에 전체 시니어 검색하는 메서드
 	List<Docx> findByDocxkeyAndFormtype(int docxkey, String formtype);
