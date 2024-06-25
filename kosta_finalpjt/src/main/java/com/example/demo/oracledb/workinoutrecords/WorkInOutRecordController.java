@@ -368,7 +368,7 @@ public class WorkInOutRecordController {
 
         // 퇴근 시간 범위 설정 (18:00 ~ 20:00)
         LocalTime endTimeMin = LocalTime.of(17, 30);
-        LocalTime endTimeMax = LocalTime.of(20, 0);
+        LocalTime endTimeMax = LocalTime.of(21, 0);
 
         // 랜덤한 출근 시간 생성 (8:30 이상, 9:10 미만)
         LocalTime actualArrivalTime = generateRandomTime(startTimeMin, startTimeMax);

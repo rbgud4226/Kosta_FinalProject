@@ -34,10 +34,10 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			+ "    || ':' || \r\n"
 			+ "    LPAD(MOD(SUM(TO_NUMBER(SUBSTR(workhours, 1, 2)) * 60 + TO_NUMBER(SUBSTR(workhours, 4, 2))), 60), 2, '0') AS total_time,\r\n"
 			+ "    LPAD(FLOOR(SUM(CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
-			+ "                    + CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 4, 2)) ELSE 0 END) / 60), 2, '0')\r\n"
+			+ "                    + CASE WHEN TO_NUMBER(SUBSTR(workouttime, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workouttime, 4, 2)) ELSE 0 END) / 60), 2, '0')\r\n"
 			+ "    || ':' || \r\n"
-			+ "    LPAD(MOD(SUM(CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 1, 2)) - 18 ELSE 0 END * 60\r\n"
-			+ "                 + CASE WHEN TO_NUMBER(SUBSTR(workhours, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workhours, 4, 2)) ELSE 0 END), 60), 2, '0') AS additional_work_time\r\n"
+			+ "    LPAD(MOD(SUM(CASE WHEN TO_NUMBER(SUBSTR(workouttime, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workouttime, 1, 2)) - 18 ELSE 0 END * 60\r\n"
+			+ "                 + CASE WHEN TO_NUMBER(SUBSTR(workouttime, 1, 2)) >= 18 THEN TO_NUMBER(SUBSTR(workouttime, 4, 2)) ELSE 0 END), 60), 2, '0') AS over_work_time\r\n"
 			+ "FROM workinoutrecord W\r\n"
 			+ "JOIN members M ON W.user_id = M.memberid\r\n"
 			+ "JOIN users u ON u.id = M.userid_id\r\n"
@@ -69,7 +69,7 @@ public interface WorkInOutRecordDao extends JpaRepository<WorkInOutRecord, Integ
 			+ ")\r\n"
 			+ "SELECT "
 			+ "    월,"
-			+ "     NVL(TRUNC(총근무분 / 60), 0) AS 평균근무시간_시간 "
+			+ "     NVL(TRUNC(총근무분 / 60/근무자수), 0) AS 평균근무시간_시간 "
 			+ "FROM 근무시간계산 "
 			+ "ORDER BY 연도, 월", nativeQuery = true)
     List<Object[]> deptMonthWork(@Param("year") int year,@Param("dept")int dept);

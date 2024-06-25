@@ -44,18 +44,16 @@
     </div>
 
     <div class="dept_select_wrapper">
-      <div>부서 선택하기</div>
-      <select id="dept_list" name="dept">
-        <option th:each="d : ${dlist}" th:text="${d.deptnm}" th:value="${d.deptid }"></option>
-      </select>
+      <div class="dept_text">부서 선택하기</div>
+      <select id="dept_list" name="dept" onchange="dept_admin(0)"> </select>
     </div>
     <!-- 부서별 조회 테이블 -->
     <div class="record_table w_bg">
       <div class="record_table_title dept_table">
           <div class="record_month font_b24">
-              <div id="record_left" class="arrow left_arrow cursor" onclick="deptrecord(-1)"></div>
+              <div id="record_left" class="arrow left_arrow cursor" onclick="dept_admin(-1)"></div>
               <span class="month">2022.07</span>
-              <div id="record_right" class="arrow right_arrow arrow_off" onclick="deptrecord(+1)"></div>
+              <div id="record_right" class="arrow right_arrow arrow_off" onclick="dept_admin(+1)"></div>
           </div>
       </div>
       <div class="record_table_wrapper">
@@ -70,6 +68,7 @@
                   <td>잔업 시간</td>
               </thead>
               <tbody class="record_list dept_record_list">
+                <tr></tr>  
               </tbody>
           </table>
       </div>
