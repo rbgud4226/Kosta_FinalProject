@@ -14,11 +14,8 @@ import com.example.demo.oracledb.users.Users;
 @Repository
 public interface RoomUserDao extends JpaRepository<RoomUser, Long> {
 	List<RoomUser> findByRoom_Chatroomid(String chatroomid);
-
 	List<RoomUser> findByRoomuser_Id(String id);
-
 	Optional<RoomUser> findByRoomAndRoomuser(ChatRoom room, Users roomuser);
-	
 	@Modifying
 	@Query("DELETE FROM RoomUser WHERE room.chatroomid = :chatroomid")
 	void deleteByRoom_chatroomid(String chatroomid);
