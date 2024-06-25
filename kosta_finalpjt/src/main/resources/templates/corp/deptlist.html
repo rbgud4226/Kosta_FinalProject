@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -64,8 +64,13 @@
 					<tbody class="deptlist_list">
 						<tr th:each="dl:${dlist }">
 							<td th:text="${dl.deptid }"></td>
-							<td><a href="corp/deptinfo.html" th:href="@{/corp/deptinfo(deptid=${dl.deptid})}"
-									th:text="${dl.deptnm}">deptnm</a></td>
+							<!-- <a href="corp/deptinfo.html" th:href="@{/corp/deptinfo(deptid=${dl.deptid})}"
+								th:text="${dl.deptnm}">deptnm</a> -->
+							<td>
+								<a href="#" class="dept-detail-link" th:data-deptid="${dl.deptid}"
+									data-bs-toggle="modal" data-bs-target="#deptsModal"
+									th:text="${dl.deptnm}">deptnm</a>
+							</td>
 							<td th:text="${dl.mgrid?.userid?.usernm }"></td>
 						</tr>
 					</tbody>
@@ -74,22 +79,22 @@
 		</div>
 		<div class="deptlist_admin_menu">
 			<button class="btn_square border_btn font_b24 cursor" data-bs-toggle="modal"
-				data-bs-target="#exampleModal">부서추가</button>
+				data-bs-target="#deptsModal">부서추가</button>
 			<button type="button" class="btn blue_btn" th:onclick="location.href='/admin/corp/depttestadd'">dept더미 데이터
 				생성</button>
 		</div>
 
 		<!-- Deptadd Modal -->
 		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="deptsModal" tabindex="-1" aria-labelledby="deptsModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">부서추가</h5>
+						<h5 class="modal-title" id="deptsModalLabel">부서추가</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<form id="deptform">
+						<form id="deptform" style="display: none;">
 							<table>
 								<tr>
 									<td class="form_td">부서이름</td>
@@ -106,7 +111,45 @@
 							</table>
 							<div class="modal-footer">
 								<button type="button" class="btn blue_btn" onclick="deptaddbtn()">부서추가</button>
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-secondary" id="deptsModalClose" data-bs-dismiss="modal">Close</button>
+							</div>
+						</form>
+						<form id="depteditform" style="display: none;">
+							<table>
+								<tr>
+									<td class="form_td">부서번호</td>
+									<td class="form_td"><span id="deptidSpan" style="display:'';"></span><input
+											type="text" id="deptidInput" name="deptid" style="display:none;" readonly>
+									</td>
+								</tr>
+								<tr>
+									<td class="form_td">부서이름</td>
+									<td class="form_td"><span id="deptnmSpan" style="display:'';"></span><input
+											type="text" id="deptnmInput" name="deptnm" style="display:none;"></td>
+								</tr>
+								<tr>
+									<td class="form_td">부서장</td>
+									<td class="form_td">
+										<span id="mgridSpan" style="display:'';"></span>
+										<!-- <input type="text" id="mgridInput" name="mgrid" style="display:none;"> -->
+
+										<select id="memberlist" name="mgrid" style="display: none;">
+											<!-- <option th:each="m : ${obj.mlist}" th:text="${m.userid?.usernm}"
+												th:value="${m.memberid}"
+												th:selected="${obj.d.mgrid?.userid?.usernm} == ${m.userid?.usernm}">
+											</option> -->
+										</select>
+									</td>
+								</tr>
+							</table>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" id="depteditbtnid"
+									onclick="depteditbtn()" style="display:'';">부서수정</button>
+								<button type="button" class="btn btn-secondary" id="depteditid" onclick="deptedit()"
+									style="display:none;">부서수정</button>
+								<button type="button" class="btn btn-secondary" id="deptdelid">부서삭제</button>
+								<button type="button" class="btn btn-secondary" id="deptdetailcalid"
+									data-bs-dismiss="modal">Close</button>
 							</div>
 						</form>
 					</div>
