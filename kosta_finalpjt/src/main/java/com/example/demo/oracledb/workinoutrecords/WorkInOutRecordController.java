@@ -141,7 +141,6 @@ public class WorkInOutRecordController {
     if (w.getState().equals("지각")) {
       type = "지각";
     }
-
     //근무한 총 시간 확인
     LocalTime workinTime = LocalTime.parse(w.getWorkinTime());
     LocalTime workoutTime = LocalTime.parse(w.getWorkOutTime());
@@ -154,7 +153,6 @@ public class WorkInOutRecordController {
       hours--;
     }
     String worktime = String.format("%02d:%02d", hours, minutes);
-
     w.setState(type);
     w.setWorkHours(worktime);
     service.save(w);

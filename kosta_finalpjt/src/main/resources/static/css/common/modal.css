@@ -62,5 +62,6 @@
 }
 .modal_table_wrapper{
     height: 430px;
+    overflow: auto;
     overflow-y: scroll;
 }
