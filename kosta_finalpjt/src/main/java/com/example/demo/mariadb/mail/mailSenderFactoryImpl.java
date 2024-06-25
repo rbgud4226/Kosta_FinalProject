@@ -33,6 +33,7 @@ public class mailSenderFactoryImpl implements mailSenderFactory{
     mailSender.setPort(Integer.parseInt(port));
 
     Properties properties = mailSender.getJavaMailProperties();
+    // smtp setting
     properties.put("mail.smtp.ssl.trust", "*");
     properties.put("mail.smtp.auth", auth);
     properties.put("mail.debug", debug);
@@ -42,6 +43,7 @@ public class mailSenderFactoryImpl implements mailSenderFactory{
     // Disable SSL/TLS
     properties.put("mail.smtp.starttls.enable", enable);
     properties.put("mail.smtp.ssl.enable", "false");
+    properties.put("server.ssl.trust-store-type","none");
 
     return mailSender;
   }
