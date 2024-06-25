@@ -35,7 +35,7 @@ function loadMessages(roomId) {
 }
 
 function loadChatRoomsBySearch() {
-	var id = document.getElementById('inlineFormInputGroup').value;
+	var id = document.getElementById('findGroupMember').value;
 	var URL = 'http://localhost:8081/chat/chatrooms/loadrooms/search/';
 	if (!id) {
 		id = userId1;

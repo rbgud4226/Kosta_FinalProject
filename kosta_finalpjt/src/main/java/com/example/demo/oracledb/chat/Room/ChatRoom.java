@@ -25,10 +25,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatRoom {
 	@Id
-	private String chatroomid; 
-	private String name; 
-	private String roomType; 
-	private boolean status; 
+	private String chatroomid;
+	private String name;
+	private String roomType;
+	private boolean status;
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JsonManagedReference
@@ -37,10 +37,10 @@ public class ChatRoom {
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<RoomUser> roomUsers = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JsonManagedReference
-	private List<ChatRoomName> chatRoomNames= new ArrayList<>();
-	
+	private List<ChatRoomName> chatRoomNames = new ArrayList<>();
+
 	private String participants;
 }

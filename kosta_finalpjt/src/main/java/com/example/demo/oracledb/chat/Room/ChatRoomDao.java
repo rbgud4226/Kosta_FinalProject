@@ -17,7 +17,6 @@ public interface ChatRoomDao extends JpaRepository<ChatRoom, String> {
 	List<ChatRoom> findByRoomUsers(List<RoomUser> roomUsers);
 	List<ChatRoom> findByParticipants(String participants);
 	List<ChatRoom> findByStatus(boolean status);
-
 	@Transactional
 	void deleteByStatus(boolean status);
 }
