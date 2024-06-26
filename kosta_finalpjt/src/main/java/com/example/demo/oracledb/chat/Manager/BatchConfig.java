@@ -6,14 +6,11 @@ import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +19,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.example.demo.oracledb.chat.Room.ChatRoom;
@@ -76,7 +72,6 @@ public class BatchConfig extends DefaultBatchConfiguration {
 
     @Bean
     public Step chatStep(JobRepository jobRepository2, PlatformTransactionManager transactionManager) {
-        System.out.println(jobRepository2);
         return new StepBuilder("chatStep", jobRepository).tasklet((contribution, chunkContext) -> {
             deleteOldMessages();
             deleNotUseRoom();
@@ -84,14 +79,6 @@ public class BatchConfig extends DefaultBatchConfiguration {
         }, transactionManager).build();
     }
 
-    @Component
-    class TestTasklet implements Tasklet {
-        @Override
-        public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-            return null;
-        }
-    }
-    
     @Transactional
     private void deleteOldMessages() {
         String sql = "DELETE FROM MESSAGE WHERE TO_TIMESTAMP(SENDDATE, 'YYYY\"년 \"MM\"월 \"DD\"일 \"HH24:MI:SS') < SYSDATE - INTERVAL '3' MONTH";
