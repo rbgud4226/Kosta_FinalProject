@@ -18,16 +18,7 @@ import jakarta.servlet.http.HttpSession;
 public class ChatRoomController {
 	@Autowired
 	private ChatRoomService chatRoomService;
-
-	@GetMapping("/chat/chatroom/{roomId}")
-	public String getChatRoomByRoomId(@PathVariable String roomId, HttpSession session, ModelMap map) {
-		ModelMap chatRoomInfo = chatRoomService.chatRoomByRoomIdMethod(roomId, session);
-		map.addAttribute("partId", chatRoomInfo.get("partId"));
-		map.addAttribute("roomId", chatRoomInfo.get("roomId"));
-		map.addAttribute("userId1", chatRoomInfo.get("userId1"));
-		return "redierct:/chat/bootchat";
-	}
-
+	
 	@GetMapping("/chat/chatroom")
 	public String createChatRoom(@RequestParam(name = "userid") List<String> userid, HttpSession session, ModelMap map) {
 		ModelMap chatRoomInfo = chatRoomService.createChatRoomByUserList(userid, session);

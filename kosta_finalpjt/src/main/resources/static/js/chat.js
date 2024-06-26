@@ -181,10 +181,10 @@ function editRoomName(chatRoomId, userId1) {
 				chatroomid: chatRoomId,
 				newRoomName: newRoomName
 			},
-			success: function(response) {
+			success: function() {
 				loadChatRooms(userId1);
 			},
-			error: function(error) {
+			error: function() {
 				alert('채팅방 이름 수정에 실패했습니다.');
 			}
 		});
