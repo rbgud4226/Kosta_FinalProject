@@ -64,17 +64,18 @@ public class ChatRoomController {
 	public ChatRoomDto getChatRoomsConnect(@PathVariable String chatroomid, @PathVariable String userId1) {
 		return chatRoomService.chatRoomsConnect(chatroomid, userId1);
 	}
-
-	@GetMapping("/chat/chatrooms/out/{roomId}/{userid}")
-	@ResponseBody
-	public String getOutRooms(@PathVariable String roomId, @PathVariable String userid) {
-		 return "http://localhost:8081/chat/chatrooms/" + userid;
-	}
 	
-	@GetMapping("/chat/chatrooms/invite/{userid}/{chatroomid}")
-	public String inviteChatRoom(@RequestParam List<String> userid, String chatroomid, HttpSession session) {
-		chatRoomService.inviteChatRoomMethod(userid, chatroomid, session);
-	    return "redirect:/chat/chatroom/" + chatroomid;
+	@PostMapping("/chat/chatrooms/out")
+	@ResponseBody
+	public void getOutRoom(@RequestParam("roomId") String roomId, @RequestParam("userId") String userId) {
+		chatRoomService.getoutChatRoomMethod(roomId, userId);
+	}
+		
+	@PostMapping("/chat/chatrooms/invite")
+	@ResponseBody
+	public void inviteChatRoom(@RequestParam List<String> userid, @RequestParam String chatroomid, HttpSession session) {
+	    String loginId = (String) session.getAttribute("loginId");
+	    chatRoomService.inviteChatRoomMethod(userid, chatroomid, loginId);
 	}
 	
 	@PostMapping("/chat/chatrooms/edit")

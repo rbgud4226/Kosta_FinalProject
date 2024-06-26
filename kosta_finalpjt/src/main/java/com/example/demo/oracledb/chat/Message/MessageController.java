@@ -30,7 +30,6 @@ public class MessageController {
 	@MessageMapping("/chat/message/{roomId}")
 	public void sendMessage(@Payload MessageDto chatMessage, @DestinationVariable String roomId) {
 		if(chatMessage.getType().equals("OUT")) {
-			messageService.outTypeMessage(chatMessage, roomId);
 			messageService.save(chatMessage, roomId);
 			ArrayList<MessageDto> list = messageService.getMessageByRoomId(roomId);
 	        messagingTemplate.convertAndSend("/room/" + roomId, list);

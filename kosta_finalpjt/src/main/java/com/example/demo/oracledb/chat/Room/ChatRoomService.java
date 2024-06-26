@@ -304,6 +304,16 @@ public class ChatRoomService {
 	    inviteMessage.setSendDate(createSendDate());
 	    return inviteMessage;
 	}
+	
+	public MessageDto getOutMessage(String roomId, String userId, String outContent) {
+	    MessageDto getOutMessage = new MessageDto();
+	    getOutMessage.setType("OUT");
+	    getOutMessage.setContent(outContent);
+	    getOutMessage.setPartid(usersService.getById2(userId).getUsernm());
+	    getOutMessage.setSender(userId);
+	    getOutMessage.setSendDate(createSendDate());
+	    return getOutMessage;
+	}
 
 	public String createChatRoomName(List<String> userIds) {
 		Collections.sort(userIds);
@@ -399,12 +409,18 @@ public class ChatRoomService {
 	}
 	
 	//controller inviteChatRoom
-	public void inviteChatRoomMethod(List<String> userid, String chatroomid, HttpSession session) {
-			String loginId = (String) session.getAttribute("loginId");
+	public void inviteChatRoomMethod(List<String> userid, String chatroomid, String loginId) {
 		    ArrayList<String> mes = inviteUserToChatRoom(chatroomid, userid, loginId);
 		    String inviteContent = String.join("<br/>", mes);
 		    MessageDto inviteMessage = createInviteMessage(userid, chatroomid, loginId, inviteContent);
 		    messageController.sendMessage(inviteMessage, chatroomid);
+	}
+	
+	//controller getOutRoom
+	public void getoutChatRoomMethod(String roomId, String userId) {
+		String mes = getOutChatRoom(roomId, userId);
+		MessageDto getOutMessage = getOutMessage(roomId, userId, mes);
+		messageController.sendMessage(getOutMessage, roomId);
 	}
 	
 	//controller getChatRoomsByUserId
