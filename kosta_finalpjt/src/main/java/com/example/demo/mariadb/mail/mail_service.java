@@ -19,10 +19,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class mail_service {
@@ -36,10 +35,6 @@ public class mail_service {
     virtual_users user = service.getbybox(loginid);
     virtual_users receivd_user = service.getbybox(receiver);
     virtual_users ref_user = service.getbybox(ref);
-    System.out.println("**********************************");
-    System.out.println("sendmail service : "+user.getEmail());
-    System.out.println("sendmail service : "+user.getPassword());
-    System.out.println("**********************************");
 
     JavaMailSender emailSender = mailSenderFactory.getSender(user.getEmail(), "1234");
 
@@ -49,20 +44,16 @@ public class mail_service {
 
       helper.setSubject(title);
       helper.setText(content);
-      helper.setFrom(receivd_user.getEmail());
+      helper.setFrom(user.getEmail());
 //      helper.setCc(ref_user.getEmail());
       // set to 에 문자열 사용 가능
-      helper.setTo(user.getEmail());
+      helper.setTo(receivd_user.getEmail());
 
       // 파일 첨부
 //      File file = new File("");
 //      FileItem fileItem = new DiskFileItem("mainFile", Files.probeContentType(file.toPath()),
 //          false, file.getName(), (int) file.length(), file.getParentFile());
 
-      System.out.println("**********************************");
-      System.out.println("sendmail service : "+receivd_user.getEmail());
-      System.out.println("sendmail service : "+receivd_user.getPassword());
-      System.out.println("**********************************");
 
       emailSender.send(message);
     } catch (MessagingException e) {
@@ -79,6 +70,7 @@ public class mail_service {
     properties.put("mail.store.protocol","imap");
     ArrayList<Map<String, Object>> maillist = new ArrayList<>();
     Session session = Session.getDefaultInstance(properties);
+    SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
 
     try{
       Store store = session.getStore("imap");
@@ -92,8 +84,11 @@ public class mail_service {
         Map<String, Object> rmail = new HashMap<>();
         rmail.put("Message-ID",message.getHeader("Message-ID")[0]);
         rmail.put("Subject", message.getSubject());
-        rmail.put("From", message.getFrom()[0]);
+        String from = String.valueOf(message.getFrom()[0]).split("@")[0];
+        rmail.put("From", from);
+        rmail.put("From-mail", message.getFrom()[0]);
         rmail.put("To", message.getAllRecipients()[0]);
+        rmail.put("Format-Date", formatter.format(message.getSentDate()));
         rmail.put("Date", message.getSentDate());
         rmail.put("Content", message.getContent());
         maillist.add(rmail);

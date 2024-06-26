@@ -24,24 +24,13 @@ public class mail_controller {
   }
 
   @GetMapping("/list")
-  @ResponseBody
-  public ArrayList<Map<String, Object>> maillist(HttpSession session, ModelMap map){
+  public void maillist(HttpSession session, ModelMap map){
     String loginid = (String) session.getAttribute("loginId");
     ArrayList<Map<String, Object>> list = service.recieveMail(loginid);
-    for(Map m : list){
-      System.out.println("===============================");
-      System.out.println(m.get("Subject"));
-      System.out.println(m.get("From"));
-      System.out.println(m.get("To"));
-      System.out.println(m.get("Date"));
-      System.out.println(m.get("Content"));
-      System.out.println("===============================");
-    }
-    return list;
+    map.addAttribute("list", list);
   }
 
   @GetMapping("/mail")
-  @ResponseBody
   public Map<String, Object> maildetail(HttpSession session, @RequestParam String messageId){
     String loginId = (String) session.getAttribute("loginId");
     return service.selectMail(loginId, messageId);
