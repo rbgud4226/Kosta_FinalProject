@@ -8,8 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class virtual_users_dto {
-  private Integer id;
-  private Integer domainId;
+  private int id;
+  private int domainId;
   private String password;
   private String email;
   private String box;

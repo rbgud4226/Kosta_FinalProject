@@ -38,7 +38,7 @@ public class SecurityConfiguration {
 						.requestMatchers("/css/**","/img/**","/js/**").permitAll()
 						.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
 						.requestMatchers("/auth/**", "/index_**", "/admin/**").authenticated()
-						.requestMatchers("/", "/error", "/login", "/idcheck", "/user/**", "/member/**", "/corp/**", "/files/**", "/chat/**").permitAll())
+						.requestMatchers("/", "/error", "/login", "/idcheck", "/user/**", "/member/**", "/corp/**", "/files/**", "/chat/**","/mail/**").permitAll())
 				.formLogin((login) -> login.loginPage("/loginform")
 						.loginProcessingUrl("/login")
 						.failureForwardUrl("/loginerror")

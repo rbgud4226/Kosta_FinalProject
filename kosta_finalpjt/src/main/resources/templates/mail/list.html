@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/common/leftnav.css}">
+  <link rel="stylesheet" th:href="@{/css/common/header.css}">
+  <link rel="stylesheet" th:href="@{/css/charts/charts.css}">
+
+</head>
+<body>
+<div th:replace="~{/common/header :: header}"></div>
+<div th:replace="~{/common/leftnav :: leftNav}"></div>
+<div class="main_body">
+  <section id="mailbox">
+    <div class="chart_body" style="height: 90%">
+      <div class="chart_head">
+        <b th:text="${session.usernm}"></b>
+        <b> 님의 메일함</b>
+        <hr>
+      </div>
+      <div class="chart_area">
+        <div class="chart_area_head"></div>
+        <div class="chart_area_scroll" style="height: 100%">
+        <table>
+          <tr>
+            <th>From</th>
+            <th style="width: 400px">title</th>
+            <th>Date</th>
+          </tr>
+          <tr th:each="m:${list}">
+            <td th:text="${m['From']}"></td>
+            <td th:text="${m['Subject']}"></td>
+            <td th:text="${m['Format-Date']}"></td>
+          </tr>
+        </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
