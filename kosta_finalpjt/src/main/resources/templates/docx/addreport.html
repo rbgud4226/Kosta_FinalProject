@@ -61,10 +61,11 @@
             // 결재권한 태그에 선택된 멤버들 추가
             selectedMembers.forEach(function (member) {
                 var username = member.closest('tr').querySelector('.list_name').textContent;
+                var userid = member.closest('tr').querySelector('.list_id').textContent;
                 var jobLevel = member.closest('tr').querySelector('.list_lv').textContent;
                 var option = document.createElement('option');
-                option.text = username + ' / ' + jobLevel;
-                option.value = username; // 실제 값으로 설정
+                option.text = username + ' / ' + userid + ' / ' +jobLevel;
+                option.value = userid; // 실제 값으로 설정
                 option.selected = true;
                 seniorSelect.appendChild(option);
             });

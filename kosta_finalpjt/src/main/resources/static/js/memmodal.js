@@ -24,6 +24,7 @@ const member_table = (arr)=>{
 	        cell = tr_row.insertCell(1);
 			cell.class = "form_td";
 			let data = `<p class="f600 list_name">${a.userid.usernm }</p>
+						<p class="f600 list_id">${a.userid.id }</p>
 							<div class="list_pos">
 								<span class="list_dept">${a.deptid.deptnm }</span>
 								<span class="list_lv">${a.joblvid.joblvnm}</span>

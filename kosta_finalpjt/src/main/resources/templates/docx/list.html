@@ -31,18 +31,19 @@
         // }
     </script>
     <style>
-		/* 문서 제목 text color */
-		.record_rtable .title-cell a {
-            font-weight: bold; 
-            color: #007bff; 
-            text-decoration: none; 
+        /* 문서 제목 text color */
+        .record_rtable .title-cell a {
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
         }
-		/* 문서 제목 호버 */
-		.record_rtable .title-cell a:hover {
-            color: #0056b3; 
-            text-decoration: underline; 
+
+        /* 문서 제목 호버 */
+        .record_rtable .title-cell a:hover {
+            color: #0056b3;
+            text-decoration: underline;
         }
-	</style>
+    </style>
 </head>
 
 <body>
@@ -74,8 +75,14 @@
                     <tbody class="record_list">
                         <tr th:each="s:${list}">
                             <input type="hidden" value="${s.formnum}">
-                            <td class="title-cell"><a th:href="@{/auth/docx/getdocx(formnum=${s.formnum},docxkey=${s.docxkey},formtype=${s.formtype})}"
-                                    th:text="${s.title}" id="title" name="title"></a></td>
+                            <td class="title-cell">
+                                <a th:if="${s.formtype == '보고서'}"
+                                    th:href="@{/auth/docx/getdocx(formnum=${s.formnum},docxkey=${s.docxkey},formtype=${s.formtype})}"
+                                    th:text="${s.title}"></a>
+                                <a th:if="${s.formtype == '휴가 신청서'}"
+                                    th:href="@{/auth/docx/getvacation(formnum=${s.formnum},docxkey=${s.docxkey},formtype=${s.formtype})}"
+                                    th:text="${s.title}"></a>
+                            </td>
                             <td th:text="${s.writer.id}" id="writer" name="writer"></td>
                             <td th:text="${s.formtype}"></td>
                             <td th:text="${s.startdt}"></td>
@@ -86,7 +93,8 @@
                                 <span th:case="*">알 수 없음</span>
                             </td>
                             <td th:if="${s.writer.id} == ${session.loginId} and ${s.status} == 1">
-                                <a th:href="@{/auth/docx/deldocx(docxkey=${s.docxkey})}"><i class="fa-sharp fa-solid fa-trash"></i></a>
+                                <a th:href="@{/auth/docx/deldocx(docxkey=${s.docxkey})}"><i
+                                        class="fa-sharp fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -95,15 +103,19 @@
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                            <a class="page-link" th:href="@{/auth/docx/list(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                            <a class="page-link" th:href="@{/auth/docx/list(page=${currentPage - 1}, size=${pageSize})}"
+                                aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="${currentPage == i} ? 'active'">
-                            <a class="page-link" th:text="${i}" th:href="@{/auth/docx/list(page=${i}, size=${pageSize})}"></a>
+                        <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item"
+                            th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-link" th:text="${i}"
+                                th:href="@{/auth/docx/list(page=${i}, size=${pageSize})}"></a>
                         </li>
                         <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                            <a class="page-link" th:href="@{/auth/docx/list(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                            <a class="page-link" th:href="@{/auth/docx/list(page=${currentPage + 1}, size=${pageSize})}"
+                                aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

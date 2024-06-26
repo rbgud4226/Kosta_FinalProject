@@ -29,7 +29,7 @@
             <div class="container mt-5">
                 <div class="row">
                     <div class="col-12 text-center">
-                        <h3 class="font_b24 m_b2">보고서 상세 페이지</h3>
+                        <h3 class="font_b24 m_b2">휴가 신청서</h3>
                     </div>
                     <div class="mb-3" style="display: table;">
                         <label class="form-label"><strong>결재 권한:</strong></label>
@@ -38,6 +38,7 @@
                         </ul>
                     </div>
                 </div>
+                
                 <div class="record_table w_bg p-3">
                     <form>
                         <div class="mb-3">
@@ -53,12 +54,12 @@
                             <input type="text" id="enddt" class="form-control" th:value="${d.enddt}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="taskplan" class="form-label"><strong>업무 계획:</strong></label>
-                            <textarea id="taskplan" class="form-control" readonly th:text="${d.taskplan}"></textarea>
+                            <label for="reason" class="form-label"><strong>휴가 구분:</strong></label>
+                            <textarea id="reason" class="form-control" readonly th:text="${d.dayoffclasf}"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="taskprocs" class="form-label"><strong>업무 진행 과정:</strong></label>
-                            <textarea id="taskprocs" class="form-control" readonly th:text="${d.taskprocs}"></textarea>
+                            <label for="reason" class="form-label"><strong>휴가 사유:</strong></label>
+                            <textarea id="reason" class="form-control" readonly th:text="${d.note}"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="status" class="form-label"><strong>결재 현황:</strong></label>
