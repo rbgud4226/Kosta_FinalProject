@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class UsersEqualPwdValidator extends UsersAbstractValidator<UsersDto> {
 	@Override
 	protected void doValidate(UsersDto dto, Errors errors) {
-		if (!dto.getConfirm_pwd().equals(dto.getPwd())) {
+		if (!dto.getConfirm_pwd().equals(dto.getOldpwd())) {
 			errors.rejectValue("confirm_pwd", "비밀번호 일치 오류", "비밀번호가 일치하지 않습니다.");
 		}
 	}

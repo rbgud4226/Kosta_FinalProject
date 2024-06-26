@@ -37,9 +37,9 @@ public class UsersService {
 	private PasswordEncoder passwordEncoder;
 
 	public UsersDto save(UsersDto dto) {
-		Users u = dao.save(new Users(dto.getId(), dto.getUsernm(), passwordEncoder.encode(dto.getPwd()), dto.getType(),
+		Users u = dao.save(new Users(dto.getId(), dto.getUsernm(), passwordEncoder.encode(dto.getOldpwd()), dto.getType(),
 				dto.getAprov(), dto.getRoomUsers()));
-		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 				new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 				u.getRoomUsers());
 	}
@@ -51,7 +51,7 @@ public class UsersService {
 
 	// 비밀번호 수정
 	public void updatePwd(UsersDto dto) {
-		dao.updatePwd(dto.getId(), passwordEncoder.encode(dto.getPwd()));
+		dao.updatePwd(dto.getId(), passwordEncoder.encode(dto.getNewpwd()));
 	}
 
 	// user 더미 데이터 생성 용도
@@ -88,7 +88,7 @@ public class UsersService {
 		if (dao.findById(testId) != null) {
 			Users u = dao.save(new Users(testId, testNm, passwordEncoder.encode("111"), type, aprov, null));
 			System.out.println("u:" + u);
-			return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+			return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 					u.getRoomUsers());
 		}
@@ -100,7 +100,7 @@ public class UsersService {
 		if (u == null) {
 			return null;
 		}
-		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 				new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 				u.getRoomUsers());
 	}
@@ -110,7 +110,7 @@ public class UsersService {
 		if (u == null) {
 			return null;
 		}
-		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+		return new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 				new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 				u.getRoomUsers());
 	}
@@ -119,7 +119,7 @@ public class UsersService {
 		List<Users> l = dao.findByAprov(aprov);
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
-			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 					u.getRoomUsers()));
 		}
@@ -130,7 +130,7 @@ public class UsersService {
 		List<Users> l = dao.findByIdLike("%" + id + "%");
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
-			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 					u.getRoomUsers()));
 		}
@@ -141,7 +141,7 @@ public class UsersService {
 		List<Users> l = dao.findByUsernmLike("%" + usernm + "%");
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
-			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 					u.getRoomUsers()));
 		}
@@ -152,7 +152,7 @@ public class UsersService {
 		List<Users> l = dao.findAll();
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
-			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(),
+			list.add(new UsersDto(u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(),
 					new MembersDto(u, 0, null, null, null, null, null, null, null, null, null, null, null, null),
 					u.getRoomUsers()));
 		}
@@ -164,7 +164,7 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(
-					u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(), new MembersDto(u, 0, null,
+					u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(), new MembersDto(u, 0, null,
 							null, null, null, null, null, null, new Depts(deptid, null, null), null, null, null, null),
 					u.getRoomUsers()));
 		}
@@ -176,7 +176,7 @@ public class UsersService {
 		ArrayList<UsersDto> list = new ArrayList<UsersDto>();
 		for (Users u : l) {
 			list.add(new UsersDto(
-					u.getId(), u.getUsernm(), u.getPwd(), null, u.getType(), u.getAprov(), new MembersDto(u, 0, null,
+					u.getId(), u.getUsernm(), u.getPwd(), null, null, u.getType(), u.getAprov(), new MembersDto(u, 0, null,
 							null, null, null, null, null, null, null, new Joblvs(0, joblv, ""), null, null, null),
 					u.getRoomUsers()));
 		}
