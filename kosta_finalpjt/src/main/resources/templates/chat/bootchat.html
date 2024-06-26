@@ -237,7 +237,7 @@
 	            </tr>
 	          </table>
 	        </form>
-	        <form class="modal_list" action="/chat/chatrooms/invite/${userId}/${roomId}">
+	        <form class="modal_list">
 	         <input type="hidden" id="roomIdInput" name="chatroomid">
 	          <div class="modal_table_wrapper">
 	          <table class="table_w100 modal_table">
@@ -253,7 +253,7 @@
 	          </table>
 	        </div>
 	          <div class="modal-footer">
-	            <input type="submit" value="선택" class="btn blue_btn">
+	            <input type="button" value="선택" class="btn blue_btn" onclick="inviteMembers()">
 	            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 	          </div>
 	        </form>

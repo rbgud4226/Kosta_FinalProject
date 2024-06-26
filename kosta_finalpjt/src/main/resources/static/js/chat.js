@@ -20,6 +20,32 @@ function connect(newRoomId) {
 	});
 }
 
+function inviteMembers() {
+    var roomId = $('#roomIdInput').val();
+    var selectedUsers = [];
+    $('input[name="userid"]:checked').each(function() {
+        selectedUsers.push($(this).val());
+    });
+    
+    var params = $.param({
+        userid: selectedUsers,
+        chatroomid: roomId
+    });
+    $.ajax({
+        type: 'POST',
+        url: '/chat/chatrooms/invite?' + params,
+        contentType: 'application/json',
+        success: function() {
+            $('#exampleModal2').modal('hide');
+            loadChatRoomsConnect(roomId, userId1)
+        },
+        error: function() {
+            alert('초대를 실패했습니다.');
+        }
+    });
+}
+
+
 function loadMessages(roomId) {
 	var URL = 'http://localhost:8081/chat/message/room/';
 	$.ajax({
@@ -67,7 +93,6 @@ function loadChatRoomsConnect(chatroomid, userId1) {
 	});
 }
 
-
 function loadChatRoomsConnectView(chatRoom, userId1) {
 	var centerStyle = $('#centerstyle');
 	centerStyle.empty();
@@ -92,7 +117,7 @@ function loadChatRoomsConnectView(chatRoom, userId1) {
             chatMembers = chatMembers.trim();
 		}
 	} else {
-		chatRoomNames = chatRoom.chatRoomNames[0].roomName;
+		chatRoomNames = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
 		chatMembers = '개인방';
 	}
 	var chatRoomList = `
@@ -111,7 +136,6 @@ function loadChatRoomsConnectView(chatRoom, userId1) {
             `;
 	centerStyle.append(chatRoomList);
 }
-
 
 function memberInfo(id) {
     $.ajax({
@@ -141,7 +165,6 @@ function copy(email) {
         console.error('이메일 복사에 실패했습니다.');
     });
 }
-
 
 function exitMemberInfo(){
 	document.getElementById('minfo').innerHTML = '';
@@ -216,7 +239,7 @@ function loadChatRoomsView(data, userId1) {
 				chatRoomNames = name;
 			}
 		} else {
-			chatRoomNames = chatRoom.chatRoomNames[0].roomName;
+			chatRoomNames = chatRoom.chatRoomNames[0].editableName.replace(/_/g, ' ').trim();
 			chatMembers = '개인방';
 		}
 		var chatRoomList = `
@@ -245,34 +268,10 @@ function checkGetOutRoom(roomId) {
         }
     }
     
-function getOutRoom(roomId) {
-	const date = new Date();
-	const yoptions = {
-		year: 'numeric',
-		month: 'long',
-		day: '2-digit'
-	};
-	const hoptions = {
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit',
-		hour12: false
-	}
-	const sendDay = date.toLocaleString('ko-KR', yoptions);
-	const sendTime = date.toLocaleString('ko-KR', hoptions);
-	var message = {
-		'type': 'OUT',
-		'sender': userId1,
-		'content': userId1 + "님이 퇴장했습니다.",
-		'sendDate': sendDay + ' ' + sendTime
-	};
-	stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message));
-	document.getElementById('message').value = '';
-
-
+function getOutRoom(roomId) {	
 	$.ajax({
-		url: 'http://localhost:8081/chat/chatrooms/out/' + roomId + '/' + userId1,
-		type: 'GET',
+		url: '/chat/chatrooms/out?roomId=' + roomId + '&userId=' + userId1,
+		type: 'POST',
 		success: function(response) {
 			window.location.href = response;
 		},
@@ -280,8 +279,7 @@ function getOutRoom(roomId) {
 			console.error(error);
 		}
 	});
-}
-
+}    
 
 function sendMessage(roomId) {
 	const date = new Date();
@@ -420,7 +418,6 @@ function showMessage(messages) {
 		response.appendChild(li);
 	});
 }
-
 
 function searchChatRooms() {
 	var user = document.getElementById('search').value;
