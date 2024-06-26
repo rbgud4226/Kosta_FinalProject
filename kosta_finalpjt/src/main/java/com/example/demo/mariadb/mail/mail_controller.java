@@ -1,7 +1,5 @@
 package com.example.demo.mariadb.mail;
 
-import com.example.demo.mariadb.users.virtual_users;
-import com.example.demo.mariadb.users.virtual_users_service;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,23 +15,19 @@ public class mail_controller {
   @Autowired
   private mail_service service;
 
-  @Autowired
-  private virtual_users_service virtualservice;
-
-
   @PostMapping("/sendmail")
   public void sendmail(HttpSession session, @RequestParam String title, @RequestParam String content,
                        @RequestParam String ref, @RequestParam String receiver){
     String loginId = (String) session.getAttribute("loginId");
-
-    service.sendMail("testaaa","title_test", "test_content", "testbbb", "testccc");
+    System.out.println("메일발신자 : " + loginId);
+    service.sendMail(loginId,title, content, ref, receiver);
   }
 
   @GetMapping("/list")
-  public void maillist(HttpSession session, ModelMap map){
+  @ResponseBody
+  public ArrayList<Map<String, Object>> maillist(HttpSession session, ModelMap map){
     String loginid = (String) session.getAttribute("loginId");
-    virtual_users user = virtualservice.getbybox(loginid);
-    ArrayList<Map<String, Object>> list = service.recieveMail("test@mail.yserver.iptime.org", "1234");
+    ArrayList<Map<String, Object>> list = service.recieveMail(loginid);
     for(Map m : list){
       System.out.println("===============================");
       System.out.println(m.get("Subject"));
@@ -43,6 +37,20 @@ public class mail_controller {
       System.out.println(m.get("Content"));
       System.out.println("===============================");
     }
+    return list;
+  }
+
+  @GetMapping("/mail")
+  @ResponseBody
+  public Map<String, Object> maildetail(HttpSession session, @RequestParam String messageId){
+    String loginId = (String) session.getAttribute("loginId");
+    return service.selectMail(loginId, messageId);
+  }
+
+  @RequestMapping("/del")
+  public void delmail(HttpSession session, @RequestParam String messageId){
+    String loginId = (String) session.getAttribute("loginId");
+    service.delMail(loginId, messageId);
   }
 
 }

@@ -42,7 +42,7 @@ public class mailSenderFactoryImpl implements mailSenderFactory{
 
     // Disable SSL/TLS
     properties.put("mail.smtp.starttls.enable", enable);
-    properties.put("mail.smtp.ssl.enable", "false");
+    properties.put("mail.smtp.ssl.enable", false);
     properties.put("server.ssl.trust-store-type","none");
 
     return mailSender;

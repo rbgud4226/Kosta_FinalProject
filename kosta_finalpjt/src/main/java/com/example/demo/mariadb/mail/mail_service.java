@@ -36,8 +36,12 @@ public class mail_service {
     virtual_users user = service.getbybox(loginid);
     virtual_users receivd_user = service.getbybox(receiver);
     virtual_users ref_user = service.getbybox(ref);
+    System.out.println("**********************************");
+    System.out.println("sendmail service : "+user.getEmail());
+    System.out.println("sendmail service : "+user.getPassword());
+    System.out.println("**********************************");
 
-    JavaMailSender emailSender = mailSenderFactory.getSender(user.getEmail(), user.getPassword());
+    JavaMailSender emailSender = mailSenderFactory.getSender(user.getEmail(), "1234");
 
     try {
       MimeMessage message = emailSender.createMimeMessage();
@@ -55,13 +59,19 @@ public class mail_service {
 //      FileItem fileItem = new DiskFileItem("mainFile", Files.probeContentType(file.toPath()),
 //          false, file.getName(), (int) file.length(), file.getParentFile());
 
+      System.out.println("**********************************");
+      System.out.println("sendmail service : "+receivd_user.getEmail());
+      System.out.println("sendmail service : "+receivd_user.getPassword());
+      System.out.println("**********************************");
+
       emailSender.send(message);
     } catch (MessagingException e) {
       e.printStackTrace();
     }
   }
 
-  public ArrayList<Map<String, Object>> recieveMail(String mail, String password){
+  public ArrayList<Map<String, Object>> recieveMail(String loginId){
+    virtual_users user = service.getbybox(loginId);
     Properties properties = new Properties();
     properties.put("mail.imap.host", "192.168.0.9");
     properties.put("mail.imap.port", "143");
@@ -72,7 +82,7 @@ public class mail_service {
 
     try{
       Store store = session.getStore("imap");
-      store.connect(mail, password);
+      store.connect(user.getEmail(), "1234");
 
       Folder inbox = store.getFolder("INBOX");
       inbox.open(Folder.READ_WRITE);
@@ -102,7 +112,8 @@ public class mail_service {
     return maillist;
   }
 
-  public Map<String, Object> selectMail(String mail, String password, String messageID){
+  public Map<String, Object> selectMail(String loginId, String messageID){
+    virtual_users user = service.getbybox(loginId);
     Properties properties = new Properties();
     properties.put("mail.imap.host", "192.168.0.9");
     properties.put("mail.imap.port", "143");
@@ -113,7 +124,7 @@ public class mail_service {
 
     try{
       Store store = session.getStore("imap");
-      store.connect(mail, password);
+      store.connect(user.getEmail(), user.getPassword());
 
       Folder inbox = store.getFolder("INBOX");
       inbox.open(Folder.READ_WRITE);
@@ -140,7 +151,8 @@ public class mail_service {
     return rmail;
   }
 
-  public void delMail(String mail, String password, String messageID){
+  public void delMail(String loginId, String messageID){
+    virtual_users user = service.getbybox(loginId);
     Properties properties = new Properties();
     properties.put("mail.imap.host", "192.168.0.9");
     properties.put("mail.imap.port", "143");
@@ -151,7 +163,7 @@ public class mail_service {
 
     try{
       Store store = session.getStore("imap");
-      store.connect(mail, password);
+      store.connect(user.getEmail(), user.getPassword());
 
       Folder inbox = store.getFolder("INBOX");
       inbox.open(Folder.READ_WRITE);
