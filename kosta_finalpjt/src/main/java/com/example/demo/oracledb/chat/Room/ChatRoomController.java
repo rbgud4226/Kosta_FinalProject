@@ -25,7 +25,7 @@ public class ChatRoomController {
 		map.addAttribute("partId", chatRoomInfo.get("partId"));
 		map.addAttribute("roomId", chatRoomInfo.get("roomId"));
 		map.addAttribute("userId1", chatRoomInfo.get("userId1"));
-		return "chat/bootchat";
+		return "redierct:/chat/bootchat";
 	}
 
 	@GetMapping("/chat/chatroom")
@@ -79,8 +79,8 @@ public class ChatRoomController {
 	}
 	
 	@PostMapping("/chat/chatrooms/edit")
-	public String editRoomName(@RequestParam String chatroomid, String newRoomName, String userId1) {
+	@ResponseBody
+	public void editRoomName(@RequestParam String chatroomid, String newRoomName, String userId1) {
 		chatRoomService.editChatRoomName(chatroomid, newRoomName, userId1);
-		return "chat/bootchat";
 	}
 }
