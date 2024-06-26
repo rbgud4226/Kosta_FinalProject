@@ -37,7 +37,7 @@
 				<div class="alert alert-danger" th:if="${valid_id}" th:text="${valid_id}" id="valid"></div>
 				<div class="form-group">
 					<label class="w25">비밀번호</label>
-					<input type="password" name="pwd" th:value="${user != null ? user.pwd : ''}" class="form-control"
+					<input type="password" name="oldpwd" th:value="${user != null ? user.oldpwd : ''}" class="form-control"
 					placeholder="비밀번호를 입력해주세요" >
 				</div>
 				<div class="alert alert-danger" th:if="${valid_pwd}" th:text="${valid_pwd}" id="valid"></div>
