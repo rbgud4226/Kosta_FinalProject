@@ -1,6 +1,8 @@
 package com.example.demo.oracledb.docx;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -168,6 +171,18 @@ public class DocxController {
 	public String deldocx(int docxkey) {
 		service.delDocx(docxkey);
 		return "redirect:/auth/docx/list";
+	}
+	
+	// 전체문서 리스트 출력
+	@ResponseBody
+	@GetMapping("/mainList")
+	public Map mainList() {
+		List<DocxDto> docxList = service.getAllByDocxorderWithPagination(1, 5);
+		int totalCount = service.getTotalCountByDocxorder();
+		int totalPage = (int) Math.ceil((double) totalCount / 5);
+	    Map map = new HashMap<>();
+	    map.put("list", docxList);
+		return map;
 	}
 
 }

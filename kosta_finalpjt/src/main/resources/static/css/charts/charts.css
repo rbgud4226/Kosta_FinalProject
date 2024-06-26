@@ -81,9 +81,9 @@
     justify-content: space-between;
 }
 .board_body_box {
-    border: 1px black solid;
+    /* border: 1px black solid; */
     width: 48%;
-    height: 200px;
+    height: 300px;
 }
 
 /********************** modal **********************/

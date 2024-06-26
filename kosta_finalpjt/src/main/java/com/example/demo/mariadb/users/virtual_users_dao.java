@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface virtual_users_dao extends JpaRepository<virtual_users, Long> {
+public interface virtual_users_dao extends JpaRepository<virtual_users, Integer> {
 
   @Query(value = "INSERT INTO virtual_users (domain_id, password, email, box) " +
       "VALUES (:domainId, ENCRYPT(:password, CONCAT('$6$', SUBSTRING(SHA(RAND()), -16))), :email, :box)",
