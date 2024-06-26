@@ -53,7 +53,7 @@ public interface DocxDao extends JpaRepository<Docx, Integer> {
 
 	// Senior이름으로 검색
 	List<Docx> findBySenior(String senior);
-
+	
 	// docxkey 값이 같은 문서를 전부 삭제하는 메서드
 	@Modifying
 	@Transactional

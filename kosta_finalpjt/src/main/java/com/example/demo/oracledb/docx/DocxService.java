@@ -17,6 +17,7 @@ import com.example.demo.oracledb.members.MembersDto;
 public class DocxService {
 	@Autowired
 	private DocxDao dao;
+	
 	@Autowired
 	private MembersDao mdao;
 
@@ -228,5 +229,6 @@ public class DocxService {
 		}
 		return list;
 	}
+	
 
 }

@@ -29,7 +29,7 @@ public interface UsersDao extends JpaRepository<Users, String> {
 	ArrayList<Users> findByUsernmLike(String usernm);
 
 	ArrayList<Users> findAllByRoomUsers(RoomUser roomuser);
-
+	
 	@Transactional
 	@Modifying
 	@Query(value = "update users set id=:id, usernm=:usernm, type=:type, aprov=:aprov where id=:id", nativeQuery = true)

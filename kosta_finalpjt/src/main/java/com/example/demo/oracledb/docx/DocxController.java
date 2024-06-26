@@ -137,7 +137,8 @@ public class DocxController {
         model.addAttribute("searchValue", searchValue);
 		return "docx/list";
 	}
-
+	
+	//보고서 상세페이지 출력
 	@GetMapping("/getdocx")
 	public String get(int formnum, int docxkey, String formtype, ModelMap map, HttpSession session) {
 		boolean flag = false;
@@ -154,6 +155,26 @@ public class DocxController {
 		map.addAttribute("flag", flag);
 		System.out.println("현재 문서의 정보 출력 : " + service.findByDocxKeyTypeSenior(docxkey, formtype));
 		return "docx/detail";
+	}
+	
+	//휴가 신청서 상세페이지
+	@GetMapping("/getvacation")
+	public String getVacation(int formnum, int docxkey, String formtype, ModelMap map, HttpSession session) {
+		boolean flag = false;
+		String loginid = (String) session.getAttribute("loginId");
+
+		List<DocxDto> l = service.findByDocxKeyTypeSenior(docxkey, formtype);
+		for (DocxDto d : l) {
+			if (d.getOrderloc() == d.getDocxorder() && d.getSenior().equals(loginid)) {
+				flag = true;
+				break;
+			}
+		}
+		map.addAttribute("d", service.getDocx(formnum));
+		map.addAttribute("docx", l);
+		map.addAttribute("flag", flag);
+		System.out.println("현재 문서의 정보 출력 : " + service.findByDocxKeyTypeSenior(docxkey, formtype));
+		return "docx/vacationdetail";
 	}
 
 	// 결재처리 메서드
