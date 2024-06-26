@@ -19,6 +19,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script th:src="@{/js/charts.js}"></script>
     <script th:src="@{/js/memmodal.js}"></script>
+    <script>
+        function approveDocx(docxkey, formtype) {
+            // Confirm if user really wants to approve
+            if (confirm('문서를 결재하시겠습니까?')) {
+                // AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '/auth/docx/approve', // 서버에서 결재 처리를 담당하는 URL로 수정하세요
+                    data: {
+                        docxkey: docxkey,
+                        formtype: formtype
+                    },
+                    success: function(response) {
+                        // 결재 성공 시 할 작업 (예: 성공 메시지 표시, 페이지 새로고침 등)
+                        alert('문서가 성공적으로 결재되었습니다.');
+                        window.location.reload(); // 예시로 페이지 새로고침
+                    },
+                    error: function(xhr, status, error) {
+                        // 오류 발생 시 처리
+                        alert('문서 결재 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                        console.error('결재 오류:', error);
+                    }
+                });
+            } else {
+                // 사용자가 결재를 취소한 경우 처리
+                alert('결재가 취소되었습니다.');
+            }
+        }
+    </script>
 </head>
 
 <body>
