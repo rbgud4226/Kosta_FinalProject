@@ -40,11 +40,11 @@ public class UsersController {
 	private EduWorkExperienceInfoService eservice;
 
 	@Autowired
-	private UsersCheckIdValidator usersCheckIdValidator;
-
-	@Autowired
 	private virtual_users_service virtualservice;
 
+	@Autowired
+	private UsersCheckIdValidator usersCheckIdValidator;
+	
 //	@Autowired
 //	private UsersCheckUsernmValidator usersCheckUsernmValidator;
 
@@ -117,6 +117,21 @@ public class UsersController {
 		uservice.updatePwd(udto);
 		return "redirect:/user/userinfo?id=" + udto.getId();
 	}
+	
+	@PostMapping("/user/userpwdedit")
+	public String userpwdedit(UsersDto udto, String aprovStr) {
+		if (aprovStr == "승인대기상태") {
+			udto.setAprov(0);
+		} else if (aprovStr == "재직상태") {
+			udto.setAprov(1);
+		} else if (aprovStr == "휴직상태") {
+			udto.setAprov(2);
+		} else if (aprovStr == "퇴직상태") {
+			udto.setAprov(3);
+		}
+		uservice.updatePwd(udto);
+		return "redirect:/user/userinfo?id=" + udto.getId();
+	}
 
 	@ResponseBody
 	@GetMapping("/admin/user/useraprov")
@@ -153,6 +168,13 @@ public class UsersController {
 		} else if (udto.getAprov() == 3) {
 			aprovStr = "퇴직상태";
 		}
+		
+		String typeStr = "";
+		if (udto.getType().equals("admin")) {
+			typeStr = "관리자";
+		} else if (udto.getType().equals("emp")) {
+			typeStr = "직원";
+		}
 		udto.setMemberdto(mservice.getByuserId(udto.getId()));
 		ArrayList<EduWorkExperienceInfoDto> elist = new ArrayList<EduWorkExperienceInfoDto>();
 		if (mservice.getByuserId(id) != null) {
@@ -169,6 +191,7 @@ public class UsersController {
 		}
 		map.addAttribute("user", udto);
 		map.addAttribute("aprovStr", aprovStr);
+		map.addAttribute("typeStr", typeStr);
 		map.addAttribute("edulist", edulist);
 		map.addAttribute("expwoklist", expwoklist);
 		return "user/userinfo";
