@@ -195,7 +195,7 @@ public class MembersController {
 	}
 
 	@PostMapping("/member/memberadd")
-	public String memberadd(MembersDto dto) {
+	public String memberadd(MembersDto dto, EduWorkExperienceInfoDto edto) {
 		MembersDto mdto = mservice.save(dto);
 		if (!dto.getMemberimgf().isEmpty()) {
 			String oname = dto.getMemberimgf().getOriginalFilename();
@@ -216,11 +216,23 @@ public class MembersController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			System.out.println("mdto.getMemberid():" + mdto.getMemberid());
+			EduWorkExperienceInfoDto eweidto = eservice.save(edto);
+			eweidto.setMemberid(new Members(null, mdto.getMemberid(), null, null, null, null, null, null, null, null, null, null, null));
+			eservice.save(eweidto);
 		}
-		return "redirect:/user/userinfo?id=" + dto.getUserid().getId();
+		return "redirect:/member/memberinfo?id=" + dto.getUserid().getId();
 	}
 
+//	@PostMapping("/member/eweiadd")
+//	public String eweiadd(EduWorkExperienceInfoDto edto) {
+//		System.out.println("eweidto:" + edto);
+//		EduWorkExperienceInfoDto eweidto = eservice.save(edto);
+//		eweidto.setMemberid(edto.getMemberid());
+//		eservice.save(eweidto);
+//		return "redirect:/user/userinfo?id=" + edto.getMemberid().getUserid().getId();
+//	}
+	
 	//
 	@PostMapping("/admin/member/membertestadd")
 	public String membertestadd(String dummyuserid) {
@@ -229,13 +241,5 @@ public class MembersController {
 
 	}
 
-	@PostMapping("/member/eweiadd")
-	public String eweiadd(EduWorkExperienceInfoDto edto) {
-		System.out.println("eweidto:" + edto);
-		EduWorkExperienceInfoDto eweidto = eservice.save(edto);
-		eweidto.setMemberid(edto.getMemberid());
-		eservice.save(eweidto);
-		return "redirect:/user/userinfo?id=" + edto.getMemberid().getUserid().getId();
-	}
 
 }
