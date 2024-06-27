@@ -18,9 +18,11 @@
 }
 /********************** chart **********************/
 .chart_head {
-	font-size: 20px;
+	font-size: 30px;
+	margin-left: 10px;
 	margin-bottom: 15px;
-	height: 110px;
+	margin-top: 10px;
+	height: 60px;
 }
 
 .chart_menu {
@@ -38,6 +40,7 @@
 .chart_area {
 	padding: 5px;
 	height: 400px;
+	margin-bottom: 15px;
 }
 
 .chart_area_gantt {
@@ -47,6 +50,7 @@
 .chart_area_head {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 10px;
 }
 
 .chart_area_scroll {
@@ -161,3 +165,21 @@
 }
 
 /********************** gantt **********************/
+.board_table{
+	width: 100%;
+	text-align: center;
+	border-top: black 2px solid;
+	border-bottom: black 2px solid;
+	border-collapse: collapse;
+}
+
+.board_table th{
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background-color: rgba(13, 98, 253, 0.83);
+	color: white;
+	align-content: center;
+	border-bottom: black 1px;
+	height: 25px;
+}

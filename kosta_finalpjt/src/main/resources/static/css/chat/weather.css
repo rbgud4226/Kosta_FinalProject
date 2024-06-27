@@ -1,8 +1,7 @@
 .weather-table {
-    width: auto;
+    width: 100%;
     border-collapse: collapse;
-    float: right;
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 
 .weather-table th, .weather-table td {

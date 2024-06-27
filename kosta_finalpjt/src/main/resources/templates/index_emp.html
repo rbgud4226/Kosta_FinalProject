@@ -25,25 +25,20 @@
 <body>
 <div th:replace="~{/common/header :: header}"></div>
 <div th:replace="~{/common/leftnav :: leftNav}"></div>
-<div class="main_body">
+<div class="main_body" style="padding-bottom: 80px">
   <section id="main_section">
     <div class="chart_body">
-      <div class="chart_head" style="display:flex; justify-content:space-between; margin-bottom:30px">
-      	<div>
+      <div class="chart_head" style="display:flex; justify-content:space-between; margin-bottom:30px; vertical-align: center">
+      	<div style="display: flex; align-items: center">
 	        <b th:text="${session.usernm}"></b>
 	        <b> 님 반갑습니다.</b>
         </div>
-        <!-- weather -->
-        <div>
-        	<b class="weather-table chart_head_weather" id="weather"></b>
-        </div>
       </div>
-       <hr>
       <!--  테이블 출력 영역-->
       <div class="chart_area">
         <div class="chart_area_head">
           <div style="padding-top: 5px">
-            <p>일정 관리</p>
+            <p class="board_title" style="margin-bottom: 20px">일정 관리</p>
           </div>
           <div class="chart_menu">
             <button type="button" onclick="location.href='/auth/chart/gantt'">간트차트</button>
@@ -95,21 +90,24 @@
       </div>
       <div class="board_body">
         <div class="board_body_box">
-          <p>공지 게시판_________</p>
+          <div class="board_title" style="margin-bottom: 10px">서류 게시판</div>
+          <div class="main_table_wrapper">
+            <table class="table_w100 board_table">
+              <thead class="table_bottom_style">
+              <th style="width: 20%;">번호</th>
+              <th style="width: 60%;">제목</th>
+              <th style="width: 20%;">작성자</th>
+              </thead>
+              <tbody class="main_docx_list">
+              <tr></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="board_body_box">
-          <div class="board_title">서류 게시판</div>
-          <div class="main_table_wrapper">
-          <table class="table_w100">
-            <thead class="table_bottom_style">
-              <td style="width: 20%;">번호</td>
-              <td style="width: 60%;">제목</td>
-              <td style="width: 20%;">작성자</td>
-            </thead>
-            <tbody class="main_docx_list">
-              <tr></tr>
-            </tbody>
-          </table>
+          <div class="board_title" style="margin-bottom: 10px">날씨</div>
+          <div>
+            <b class="weather-table chart_head_weather" id="weather"></b>
           </div>
         </div>
       </div>
