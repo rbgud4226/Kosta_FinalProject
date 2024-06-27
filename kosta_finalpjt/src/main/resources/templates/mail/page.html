@@ -25,8 +25,8 @@
             <div><a th:href="@{/mail/list}"><i class="fa-solid fa-angle-left"></i> 받은 메일함</a></div>
           </div>
           <div style="display: flex; justify-content: space-between; width: 130px">
-            <div><a th:href="@{/mail/reply(Id=${mail['From']})}">답장</a></div>
-            <div><a th:href="@{/mail/tp(Content=${mail['Content']})}">전달</a></div>
+            <div><a th:href="@{/mail/reply(From=${mail['From']}, Subject=${mail['Subject']})}">답장</a></div>
+            <div><a th:href="@{/mail/tp(Content=${mail['Content']}, From=${mail['From']})}">전달</a></div>
             <div><a th:href="@{/mail/del(messageId=${mail['Message-ID']})}">삭제</a></div>
           </div>
         </div>

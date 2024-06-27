@@ -81,8 +81,10 @@ public class mail_service {
     properties.put("mail.imap.ssl.enable", "false");
     properties.put("mail.store.protocol","imap");
     ArrayList<Map<String, Object>> maillist = new ArrayList<>();
+    Map<String, Object> spaceMap = new HashMap<>();
     Session session = Session.getDefaultInstance(properties);
     SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+    int i = 0;
 
     try{
       Store store = session.getStore("imap");
@@ -104,6 +106,14 @@ public class mail_service {
         rmail.put("Date", message.getSentDate());
         rmail.put("Content", getEmailContent(message.getContent()));
         maillist.add(rmail);
+        i++;
+      }
+      // 메일 순서 뒤집기
+      Collections.reverse(maillist);
+
+      // 여백 채우기용도
+      for(int j=0; j<20-i; j++){
+        maillist.add(spaceMap);
       }
 
       inbox.close();
@@ -174,7 +184,7 @@ public class mail_service {
 
     try{
       Store store = session.getStore("imap");
-      store.connect(user.getEmail(), user.getPassword());
+      store.connect(user.getEmail(), "1234");
 
       Folder inbox = store.getFolder("INBOX");
       inbox.open(Folder.READ_WRITE);
@@ -196,6 +206,7 @@ public class mail_service {
       e.printStackTrace();
     }
   }
+
   private String getEmailContent(Object content) throws MessagingException, IOException {
     String result = "";
     if (content instanceof MimeMultipart) {
