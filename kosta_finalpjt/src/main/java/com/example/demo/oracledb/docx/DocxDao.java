@@ -35,6 +35,14 @@ public interface DocxDao extends JpaRepository<Docx, Integer> {
 	// 중복제거 해서 전체 리스트 가져오기
 	List<Docx> findByDocxorder(int docxorder);
 
+//	// 승인된 문서 목록 페이징 조회
+//    @Query(value = "SELECT * FROM (SELECT A.*, ROWNUM RNUM FROM (SELECT * FROM DOCX WHERE STATUS = 1 ORDER BY FORMNUM DESC) A WHERE ROWNUM <= ?2) WHERE RNUM >= ?1", nativeQuery = true)
+//    List<Docx> findApprovedDocxWithPagination(int startRow, int endRow);
+//
+//    // 미승인된 문서 목록 페이징 조회
+//    @Query(value = "SELECT * FROM (SELECT A.*, ROWNUM RNUM FROM (SELECT * FROM DOCX WHERE STATUS = 0 ORDER BY FORMNUM DESC) A WHERE ROWNUM <= ?2) WHERE RNUM >= ?1", nativeQuery = true)
+//    List<Docx> findUnapprovedDocxWithPagination(int startRow, int endRow);
+
 	@Query(value = "SELECT * FROM (SELECT a.*, ROWNUM rnum FROM (SELECT * FROM docx where docxorder = 0 ORDER BY formnum DESC) a where ROWNUM <= :endRow) WHERE rnum >= :startRow", nativeQuery = true)
 	List<Docx> findAllByDocxorderWithPagination(@Param("startRow") int startRow, @Param("endRow") int endRow);
 
@@ -50,6 +58,14 @@ public interface DocxDao extends JpaRepository<Docx, Integer> {
 
 	@Query("SELECT COUNT(DISTINCT d) FROM Docx d WHERE d.writer.id = :writerId")
 	int countUserDocx(@Param("writerId") String writerId);
+	
+//	// 승인된 문서 총 개수
+//    @Query("SELECT COUNT(d) FROM Docx d WHERE d.status = 1")
+//    int countApprovedDocx();
+//
+//    // 미승인된 문서 총 개수
+//    @Query("SELECT COUNT(d) FROM Docx d WHERE d.status = 0")
+//    int countUnapprovedDocx();
 
 	// Senior이름으로 검색
 	List<Docx> findBySenior(String senior);
