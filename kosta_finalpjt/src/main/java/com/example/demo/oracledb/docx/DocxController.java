@@ -86,6 +86,7 @@ public class DocxController {
 		List<DocxDto> docxList = service.getAllByDocxorderWithPagination(page, size);
 		int totalCount = service.getTotalCountByDocxorder();
 		int totalPage = (int) Math.ceil((double) totalCount / size);
+		
 		map.addAttribute("list", docxList);
 		map.addAttribute("currentPage", page);
 		map.addAttribute("totalPages", totalPage);
@@ -114,6 +115,32 @@ public class DocxController {
 		map.addAttribute("pageSize", size);
 		return "docx/mylist";
 	}
+	
+//	 // 승인된 문서 목록 페이징 처리
+//    @GetMapping("/approved")
+//    public String getApprovedDocx(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int size, ModelMap map) {
+//        List<DocxDto> approvedList = service.getApprovedDocx(page, size);
+//        int totalCount = service.getApprovedDocxCount();
+//        int totalPages = (int) Math.ceil((double) totalCount / size);
+//        map.addAttribute("approvedList", approvedList);
+//        map.addAttribute("approvedCurrentPage", page);
+//        map.addAttribute("approvedTotalPages", totalPages);
+//        map.addAttribute("approvedPageSize", size);
+//        return "docx/approved";
+//    }
+//    
+//    // 미승인된 문서 목록 페이징 처리
+//    @GetMapping("/unapproved")
+//    public String getUnapprovedDocx(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int size, ModelMap map) {
+//        List<DocxDto> unapprovedList = service.getUnapprovedDocx(page, size);
+//        int totalCount = service.getUnapprovedDocxCount();
+//        int totalPages = (int) Math.ceil((double) totalCount / size);
+//        map.addAttribute("unapprovedList", unapprovedList);
+//        map.addAttribute("currentPage", page);
+//        map.addAttribute("totalPages", totalPages);
+//        map.addAttribute("pageSize", size);
+//        return "docx/unapproved";
+//    }
 
 	// 검색 컨트롤러
 	@PostMapping("/list")
@@ -156,9 +183,10 @@ public class DocxController {
 		map.addAttribute("d", service.getDocx(formnum));
 		map.addAttribute("docx", l);
 		map.addAttribute("flag", flag);
-		System.out.println("현재 문서의 정보 출력 : " + service.findByDocxKeyTypeSenior(docxkey, formtype));
 		return "docx/detail";
 	}
+	
+	
 	
 	//휴가 신청서 상세페이지
 	@GetMapping("/getvacation")

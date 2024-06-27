@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.oracledb.members.Members;
 import com.example.demo.oracledb.members.MembersDao;
 import com.example.demo.oracledb.members.MembersDto;
+import com.example.demo.oracledb.users.Users;
 
 @Service
 public class DocxService {
@@ -84,6 +85,14 @@ public class DocxService {
 					docx.getDayoffclasf(), docx.getParticipant(), docx.getFormtype(), docx.getAprovdoc(),
 					docx.getDocxorder(), docx.getStatus(), docx.getDocxkey(), docx.getOrderloc()));
 		}
+		 // 현재 페이지에 표시된 문서 수가 size보다 적을 경우 빈 행을 추가하여 페이지 크기를 유지
+	
+			int currentSize = docxDtoList.size();
+	        int emptyRows = size - currentSize;
+	        for (int i = 0; i < emptyRows; i++) {
+	            // 빈 행을 추가할 때 빈 문자열("") 또는 필요한 경우 null로 초기화된 DTO 객체를 추가할 수 있음
+	            docxDtoList.add(new DocxDto(0,new Users(),null,null,null,null,null,null,0,null,null,null,null,null,null,null,0,0,0,0,0));
+	        }
 		return docxDtoList;
 	}
 
@@ -118,14 +127,46 @@ public class DocxService {
 						docx.getDayoffclasf(), docx.getParticipant(), docx.getFormtype(), docx.getAprovdoc(),
 						docx.getDocxorder(), docx.getStatus(), docx.getDocxkey(), docx.getOrderloc()));
 			}
+			int currentSize = docxDtoList.size();
+	        int emptyRows = size - currentSize;
+	        for (int i = 0; i < emptyRows; i++) {
+	            // 빈 행을 추가할 때 빈 문자열("") 또는 필요한 경우 null로 초기화된 DTO 객체를 추가할 수 있음
+	            docxDtoList.add(new DocxDto(0,new Users(),null,null,null,null,null,null,0,null,null,null,null,null,null,null,0,0,0,0,0));
+	        }
 
 		}
 		return docxDtoList;
 	}
+	
+//	//승인된 문서들 페이징처리 출력
+//	public List<DocxDto> getApprovedDocx(int page, int size){
+//		int startRow = (page - 1) * size+1;
+//		int endRow = page * size;
+//		List<Docx> docxList = dao.findApprovedDocxWithPagination(startRow, endRow);
+//		return convertToDtoList(docxList);
+//	}
+//	
+//	 // 미승인된 문서 목록 반환
+//    public List<DocxDto> getUnapprovedDocx(int page, int size) {
+//        int startRow = (page - 1) * size + 1;
+//        int endRow = page * size;
+//        List<Docx> docxList = dao.findUnapprovedDocxWithPagination(startRow, endRow);
+//        return convertToDtoList(docxList);
+//    }
 
 	public int getUserDocxCount(String writerId) {
 		return dao.countUserDocx(writerId);
 	}
+	
+//	 // 승인된 문서 총 개수 반환
+//    public int getApprovedDocxCount() {
+//        return dao.countApprovedDocx();
+//    }
+//
+//    // 미승인된 문서 총 개수 반환
+//    public int getUnapprovedDocxCount() {
+//        return dao.countUnapprovedDocx();
+//    }
 
 	// 문서 작성자 검색결과를 페이징 처리하여 가져오는 코드
 	public List<DocxDto> getByWriterWithPagination(String writerId, int page, int size) {
@@ -229,6 +270,20 @@ public class DocxService {
 		}
 		return list;
 	}
+	
+	
+//	  // Docx 엔티티를 DocxDto로 변환하는 메서드
+//    private List<DocxDto> convertToDtoList(List<Docx> docxList) {
+//        List<DocxDto> dtoList = new ArrayList<>();
+//        for (Docx docx : docxList) {
+//            dtoList.add(new DocxDto(docx.getFormnum(), docx.getWriter(), docx.getSenior(), docx.getStartdt(),
+//                    docx.getEnddt(), docx.getTitle(), docx.getContent(), docx.getNote(), docx.getTaskclasf(),
+//                    docx.getTaskplan(), docx.getTaskprocs(), docx.getTaskprocsres(), docx.getDeptandmeetloc(),
+//                    docx.getDayoffclasf(), docx.getParticipant(), docx.getFormtype(), docx.getAprovdoc(),
+//                    docx.getDocxorder(), docx.getStatus(), docx.getDocxkey(), docx.getOrderloc()));
+//        }
+//        return dtoList;
+//    }
 	
 
 }
