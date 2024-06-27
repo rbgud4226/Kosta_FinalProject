@@ -119,11 +119,11 @@
 				</table>
 
 				<div class="memberinfo_admin_menu"
-					th:if="${session.loginId == mdto.userid?.id } or ${session.type == 'admin' }">
+					th:if="${session.loginId == user.id } or ${session.type == 'admin' }">
 					<button type="button" class="btn blue_btn"
-						th:onclick="location.href='/member/memberedit?id=' + [[${mdto.userid?.id }]]">내정보수정페이지이동버튼</button>
+						th:onclick="location.href='/member/memberedit?id=' + [[${user.id }]]">내정보수정페이지이동버튼</button>
 				</div>
-				<input type="hidden" name="id" th:value="${mdto.userid?.id }"><br />
+				<input type="hidden" name="id" th:value="${user.id }"><br />
 			</div>
 		</div>
 	</div>

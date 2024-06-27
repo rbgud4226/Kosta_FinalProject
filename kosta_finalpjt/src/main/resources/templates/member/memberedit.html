@@ -19,6 +19,7 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
 		window.onload = () => {
+			console.log('[[${member?.memberid }]]');
 			if ('[[${member?.memberid }]]' != '[[null]]') {
 				let memberaddvar = document.getElementById('memberaddid');
 				memberaddvar.innerHTML = '내정보수정하기';
