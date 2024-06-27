@@ -1,5 +1,6 @@
 package com.example.demo.mariadb.mail;
 
+import jakarta.persistence.criteria.From;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,16 @@ public class mail_controller {
   private mail_service service;
 
   @GetMapping("/post") // 메일 발송 페이지
-  public void mailform(){
+  public void mailform(ModelMap map){
+    map.addAttribute("title","");
+    map.addAttribute("From","");
+    map.addAttribute("Content","");
   }
 
   @PostMapping("/sendmail") // 메일 발송
   public String sendmail(HttpSession session, @RequestParam String title, @RequestParam String content,
                        @RequestParam String ref, @RequestParam String receiver){
     String loginId = (String) session.getAttribute("loginId");
-    System.out.println("메일발신자 : " + loginId);
-    System.out.println("메일발신자 : " + title);
-    System.out.println("메일발신자 : " + content);
-    System.out.println("메일발신자 : " + ref);
-    System.out.println("메일발신자 : " + receiver);
     // 비동기 메일발신 처리
     service.sendMail(loginId, title, content, ref, receiver);
     return "redirect:/mail/list";
@@ -49,20 +48,23 @@ public class mail_controller {
   }
 
   @GetMapping("/del") //메일 삭제
-  public void delmail(HttpSession session, @RequestParam String messageId){
+  public String delmail(HttpSession session, @RequestParam String messageId){
     String loginId = (String) session.getAttribute("loginId");
     service.delMail(loginId, messageId);
+    return "redirect:/mail/list";
   }
 
   @GetMapping("/reply") // 메일 회신
-  public String replymail(HttpSession session, @RequestParam String id, ModelMap map){
-
+  public String replymail(@RequestParam String Subject, @RequestParam String From, ModelMap map){
+    String title = "Re:"+Subject;
+    map.addAttribute("title", title);
+    map.addAttribute("From", From);
     return "/mail/post";
   }
 
   @GetMapping("/tp") // 메일 전달
-  public String transportmail(HttpSession session, @RequestParam String content, ModelMap map){
-
+  public String transportmail(@RequestParam String Content, @RequestParam String From, ModelMap map){
+    map.addAttribute("Content", Content);
     return "/mail/post";
   }
 

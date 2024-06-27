@@ -44,10 +44,15 @@ public class ChartsService {
 
   public ArrayList<ChartsDto> getbyUsers(String id) {
     List<Charts> l = dao.findByUsersOrderByTaskidDesc(new Users(id, null, null, null, 0, null));
+    int i=0;
     ArrayList<ChartsDto> list = new ArrayList<>();
     for (Charts g : l) {
       list.add(new ChartsDto(g.getUsers(), g.getTaskid(), g.getChartResource(), g.getTitle(), g.getSt(),
           g.getEd(), g.getPercent(), g.getDependencies(), g.getChartStatus()));
+      i++;
+    }
+    for(int j=0; j<10-i;j++){
+      list.add(new ChartsDto());
     }
     return list;
   }
