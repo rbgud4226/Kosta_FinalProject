@@ -20,6 +20,7 @@
   <script th:src="@{/js/charts.js}"></script>
   <script th:src="@{/js/memmodal.js}"></script>
   <script th:src="@{/js/docxMain.js}"></script>
+  <script th:src="@{/js/weather.js}"></script>
 </head>
 <body>
 <div th:replace="~{/common/header :: header}"></div>
@@ -27,11 +28,17 @@
 <div class="main_body">
   <section id="main_section">
     <div class="chart_body">
-      <div class="chart_head">
-        <b th:text="${session.usernm}"></b>
-        <b> 님 반갑습니다.</b>
-        <hr>
+      <div class="chart_head" style="display:flex; justify-content:space-between; margin-bottom:30px">
+      	<div>
+	        <b th:text="${session.usernm}"></b>
+	        <b> 님 반갑습니다.</b>
+        </div>
+        <!-- weather -->
+        <div>
+        	<b class="weather-table chart_head_weather" id="weather"></b>
+        </div>
       </div>
+       <hr>
       <!--  테이블 출력 영역-->
       <div class="chart_area">
         <div class="chart_area_head">
@@ -221,4 +228,5 @@
 </div>
 <div class="modal_background"></div>
 </body>
+ <link rel="stylesheet" th:href="@{/css/chat/weather.css}">
 </html>
