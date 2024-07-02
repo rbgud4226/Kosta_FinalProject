@@ -34,6 +34,7 @@ function inviteMembers() {
     $.ajax({
         type: 'POST',
         url: '/chat/chatrooms/invite?' + params,
+		cache: false,
         contentType: 'application/json',
         success: function() {
             $('#exampleModal2').modal('hide');
@@ -272,6 +273,7 @@ function getOutRoom(roomId) {
 	$.ajax({
 		url: '/chat/chatrooms/out?roomId=' + roomId + '&userId=' + userId1,
 		type: 'POST',
+		cache: false,
 		success: function(response) {
 			window.location.href = response;
 		},
@@ -282,21 +284,11 @@ function getOutRoom(roomId) {
 }    
 
 function sendMessage(roomId) {
-	const date = new Date();
-	const yoptions = {
-		year: 'numeric',
-		month: 'long',
-		day: '2-digit'
-	};
-	const hoptions = {
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit',
-		hour12: false
-	}
-	const sendDay = date.toLocaleString('ko-KR', yoptions);
-	const sendTime = date.toLocaleString('ko-KR', hoptions);
-
+	var date = new Date();
+	var timezoneOffset = date.getTimezoneOffset() * 60000;
+	var seoulOffset = (9 * 3600000); 
+	var seoulTime = new Date(date.getTime() + timezoneOffset + seoulOffset);
+	
 	var content = document.getElementById('message').value;
 	var sender = document.getElementById('sender').value;
 	var partId = document.getElementById('partid').value;
@@ -305,28 +297,17 @@ function sendMessage(roomId) {
 		'content': content,
 		'sender': sender,
 		'partid': partId,
-		'sendDate': sendDay + ' ' + sendTime
+		'sendDate': seoulTime.toISOString()
 	};
 	stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message));
 	document.getElementById('message').value = '';
 }
 
 function sendFileMessage(roomId) {
-	const date = new Date();
-	const yoptions = {
-		year: 'numeric',
-		month: 'long',
-		day: '2-digit'
-	};
-	const hoptions = {
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit',
-		hour12: false
-	}
-	const sendDay = date.toLocaleString('ko-KR', yoptions);
-	const sendTime = date.toLocaleString('ko-KR', hoptions);
-
+	var date = new Date();
+	var timezoneOffset = date.getTimezoneOffset() * 60000; 
+	var seoulOffset = (9 * 3600000); 
+	var seoulTime = new Date(date.getTime() + timezoneOffset + seoulOffset);
 	var sender = document.getElementById('sender').value;
 	var partId = document.getElementById('partid').value;
 	var fileInput = document.getElementById('upload');
@@ -347,7 +328,7 @@ function sendFileMessage(roomId) {
 				'fileRoot': response.fileRoot,
 				'sender': sender,
 				'partid': partId,
-				'sendDate': sendDay + ' ' + sendTime
+				'sendDate': seoulTime.toISOString()
 			};
 			stompClient.send("/send/chat/message/" + roomId, {}, JSON.stringify(message), function() {
 				loadChatRooms(userId1);
@@ -362,21 +343,6 @@ function sendFileMessage(roomId) {
 }
 
 function showMessage(messages) {
-	const date = new Date();
-	const yoptions = {
-		year: 'numeric',
-		month: 'long',
-		day: '2-digit'
-	};
-	const hoptions = {
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit',
-		hour12: false
-	}
-	const sendDay = date.toLocaleString('ko-KR', yoptions);
-	const sendTime = date.toLocaleString('ko-KR', hoptions);
-
 	var response = document.getElementById('chat-content');
 	response.innerHTML = "";
 	messages.forEach(function(message) {
@@ -392,11 +358,16 @@ function showMessage(messages) {
 		} else {
 			li.className = 'reply';
 		}
+		
+		var utcDateString = message.sendDate;
+		var utcDate = new Date(utcDateString);
+		var localDateString = utcDate.toLocaleString('en-US', {timeZone: 'Asia/Seoul'});
+		var localDate = new Date(localDateString);
+		spanTime.textContent = localDate.toLocaleString();
 
 		if (message.type === 'INVITE' || message.type === 'MESSAGE' || message.type === 'OUT') {
 			spanName.textContent = message.partid;
 			p.innerHTML = message.content;
-			spanTime.textContent = message.sendDate.substring(13, 18);
 		} else if (message.type === "FILE") {
 			var fileLink;
 			var fileType = message.fileName.split('.').pop().toLowerCase();
@@ -404,12 +375,10 @@ function showMessage(messages) {
 				fileLink = '<img src="' + message.fileRoot + '" alt="' + message.fileName + '" style="width:200px; height:200px;">';
 				spanName.textContent = message.partid;
 				p.innerHTML = fileLink;
-				spanTime.textContent = message.sendDate.substring(13, 18);
 			} else {
 				fileLink = '<a href="' + message.fileRoot + '" download="' + message.fileName + '">' + message.fileName + '</a>';
 				spanName.textContent = message.partid;
 				p.innerHTML = fileLink;
-				spanTime.textContent = message.sendDate.substring(13, 18);
 			}
 		}
 		li.appendChild(spanName);

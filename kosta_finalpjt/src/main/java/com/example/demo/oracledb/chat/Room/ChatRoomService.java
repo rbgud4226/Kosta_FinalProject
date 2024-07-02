@@ -1,6 +1,8 @@
 package com.example.demo.oracledb.chat.Room;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -301,7 +303,9 @@ public class ChatRoomService {
 	    inviteMessage.setContent(inviteContent);
 	    inviteMessage.setPartid(usersService.getById2(loginId).getUsernm());
 	    inviteMessage.setSender(loginId);
-	    inviteMessage.setSendDate(createSendDate());
+	    LocalDateTime seoulDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+	    Timestamp timestamp = Timestamp.valueOf(seoulDateTime);
+	    inviteMessage.setSendDate(timestamp);
 	    return inviteMessage;
 	}
 	
@@ -311,7 +315,9 @@ public class ChatRoomService {
 	    getOutMessage.setContent(outContent);
 	    getOutMessage.setPartid(usersService.getById2(userId).getUsernm());
 	    getOutMessage.setSender(userId);
-	    getOutMessage.setSendDate(createSendDate());
+	    LocalDateTime seoulDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+	    Timestamp timestamp = Timestamp.valueOf(seoulDateTime);
+	    getOutMessage.setSendDate(timestamp);
 	    return getOutMessage;
 	}
 
@@ -322,15 +328,6 @@ public class ChatRoomService {
 	
 	public String createPartName(List<String> partName) {
 		return String.join("_", partName);
-	}
-	
-	public String createSendDate() {
-		LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MMMM dd일", Locale.KOREAN);
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.KOREAN);
-        String sendDay = now.format(dateFormatter);
-        String sendTime = now.format(timeFormatter);
-        return sendDay + " " + sendTime;
 	}
 	
 	public List<ChatRoom> getChatRoomByStatusF(){
