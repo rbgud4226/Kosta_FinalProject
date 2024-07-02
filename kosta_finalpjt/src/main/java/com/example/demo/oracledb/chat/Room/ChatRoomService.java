@@ -60,20 +60,16 @@ public class ChatRoomService {
 	private MessageController messageController;
 	
 	public ChatRoomDto createChatRoom(List<String> userIds) {
-		String name = createChatRoomName(userIds);
-		ChatRoom chatRoom = chatRoomDao.findByName(name);
-		if (chatRoom != null) {
-			if (!chatRoom.isStatus()) {
-				chatRoom.setStatus(true);
-				chatRoomDao.save(chatRoom);
-			}
+		String name = createChatRoomName(userIds); //채팅방 이름 생성 메서드 
+		ChatRoom chatRoom = chatRoomDao.findByName(name); //이름으로 채팅방 객체 찾아서 
+		if (chatRoom != null) { // 채팅방이 존재하면
 			if (!chatRoom.getRoomType().equals("PERSONAL") && !chatRoom.getRoomType().equals("PRIVATE")) {
 				chatRoom = createNewChatRoom(userIds, name);
 			}
 			return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getChatRoomNames(),
 					chatRoom.getRoomType(), chatRoom.getChats(), chatRoom.getRoomUsers(), chatRoom.isStatus(), null,
 					null, null);
-		} else {
+		} else { //채팅방이 존재안하면 새로 생성
 			chatRoom = createNewChatRoom(userIds, name);
 		}
 		return new ChatRoomDto(chatRoom.getChatroomid(), chatRoom.getName(), chatRoom.getChatRoomNames(),
@@ -202,12 +198,10 @@ public class ChatRoomService {
 				nameL.add(l);
 			}
 			for (String l : nameL) {
-				if (l.equals(userId1)) {
-					String userid = usersService.getById2(userId1).getId();
+				if (!l.equals(userId1)) {
+					String userid = usersService.getById2(l).getId();
 					imgL = memberService.getByuserId(userid).getMemberimgnm();
 				}
-				String userid = usersService.getById2(l).getId();
-				imgL = memberService.getByuserId(userid).getMemberimgnm();
 			}
 			ChatRoomDto cr = new ChatRoomDto(c.getChatroomid(), c.getName(), c.getChatRoomNames(), c.getRoomType(),
 					c.getChats(), c.getRoomUsers(), c.isStatus(), null, c.getParticipants(), imgL);
@@ -359,6 +353,7 @@ public class ChatRoomService {
 		ArrayList<ChatRoomDto> cr = getAllChatRooms(userid);
 		for (ChatRoomDto chatRoom : cr) {
 			String recentMsg = messageService.getRecentMessageByRoomId(chatRoom.getChatroomid());
+			System.out.println("이미지ㅁㄴㅇㄻㄴㅇㄻㄴㅇㄹ" + chatRoom.getImg());
 			ArrayList<ChatRoomNameDto> roomNamesDto = chatRoomNameService.getChatRoomNames(chatRoom.getChatroomid());
 			List<ChatRoomName> roomNames = new ArrayList<>();
 			for (ChatRoomNameDto dto : roomNamesDto) {
