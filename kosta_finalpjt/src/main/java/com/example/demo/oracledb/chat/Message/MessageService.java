@@ -59,9 +59,7 @@ public class MessageService {
 	public String getRecentMessageByRoomId(String roomId) {
 		List<Message> l = messagedao.findByRoom_ChatroomidOrderByIdAsc(roomId);
 		String recentMsg = "";
-		for(int i=0; i<l.size(); i++) {
-			recentMsg = l.get(l.size()-1).getContent();
-		}
+		recentMsg = l.get(l.size()-1).getContent();
 		if(recentMsg == null) {
 			recentMsg = "";
 		}
