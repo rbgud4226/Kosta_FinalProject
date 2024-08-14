@@ -89,9 +89,10 @@
 
 
 > #### 공지게시판 리스트(전체부서, 내부서)
+자신이 작성한 공지만 삭제 가능, 전체/내 부서로 나눠서 리스트 출력
 전체공지<br/>
 ![공지리스트](https://github.com/user-attachments/assets/ca80e62c-685b-4a63-af16-47d9c0114956)<br/>
-내부서 공지<br/>
+내 부서 공지<br/>
 ![공지리스트2](https://github.com/user-attachments/assets/fb117b18-eb90-498c-8ce5-ab491d5a479a)
 
 
