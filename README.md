@@ -6,6 +6,7 @@
 * [상세 기능](#상세-기능)
 * [프로젝트 ERD](#프로젝트-ERD)
 * [프로젝트 흐름도](#프로젝트-흐름도)
+* [담당영역 화면](#담당영역-화면)
 
 ## 프로젝트 개요
 
@@ -62,23 +63,41 @@
 ## 프로젝트 흐름도
 ![kosta_final_pjt_ppt_ver_fianl_flow](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/ea5a340a-7cc2-4041-86d2-10a8f2ea69bb)
 
-## 담당영역 화면
+## 담당영역 화면(실시간 메신저, 공지게시판)
 > #### 채팅방 화면
 ![채팅화면](https://github.com/user-attachments/assets/601596ec-e4bb-4d22-b960-fb7dad3ff624)
 <br/>
-채팅방 이름변경
+채팅방 이름변경<br/>
 ![채팅방 이름변경](https://github.com/user-attachments/assets/d45393da-80ca-4779-96cb-7f89cbc61a01)
 
 > #### 채팅방 초대 및 생성 화면
 모달창을 통해 채팅방 생성 및 사용자 초대 기능 제공
 ![초대및생성](https://github.com/user-attachments/assets/cd8aed73-4b49-40ce-9112-1054d3ea111a)
 
+
 > #### 단체방 화면
 ![단체방](https://github.com/user-attachments/assets/484ee636-58bb-42cb-821e-61d4a402da14)
+
 
 > #### 사용자 정보 화면
 ![사용자정보](https://github.com/user-attachments/assets/8f166a27-c83a-4c4f-b75b-4e2edb76e43d)
 
+
 > #### 파일업로드
 ![업로드](https://github.com/user-attachments/assets/d86e48e0-91b3-46ca-8052-03704a1e1e43)
 ![업로드결과](https://github.com/user-attachments/assets/427910ff-7597-4f75-a441-81e470ac502e)
+
+
+> #### 초대완료 및 나가기 결과 화면
+![초대및나가기](https://github.com/user-attachments/assets/f0a16063-4733-4fdf-904e-b6a819c0e4c5)
+
+
+> #### 공지게시판 리스트(전체부서, 내부서)
+전체공지<br/>
+![공지리스트](https://github.com/user-attachments/assets/ca80e62c-685b-4a63-af16-47d9c0114956)<br/>
+내부서 공지<br/>
+![공지리스트2](https://github.com/user-attachments/assets/fb117b18-eb90-498c-8ce5-ab491d5a479a)
+
+
+> #### 공지 작성
+![공지작성](https://github.com/user-attachments/assets/e0f7f299-8e1f-4733-8803-b6584243388e)
