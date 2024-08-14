@@ -63,7 +63,7 @@
 ## 프로젝트 흐름도
 ![kosta_final_pjt_ppt_ver_fianl_flow](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/ea5a340a-7cc2-4041-86d2-10a8f2ea69bb)
 
-## 담당영역 화면(실시간 메신저, 공지게시판)
+## 담당영역 화면
 > #### 채팅방 화면
 ![채팅화면](https://github.com/user-attachments/assets/601596ec-e4bb-4d22-b960-fb7dad3ff624)
 <br/>
@@ -86,10 +86,6 @@
 > #### 파일업로드
 ![업로드](https://github.com/user-attachments/assets/d86e48e0-91b3-46ca-8052-03704a1e1e43)
 ![업로드결과](https://github.com/user-attachments/assets/427910ff-7597-4f75-a441-81e470ac502e)
-
-
-> #### 초대완료 및 나가기 결과 화면
-![초대및나가기](https://github.com/user-attachments/assets/f0a16063-4733-4fdf-904e-b6a819c0e4c5)
 
 
 > #### 공지게시판 리스트(전체부서, 내부서)
