@@ -58,7 +58,7 @@
 ## 상세 기능
 ![kosta_final_pjt_ppt_ver_fianl_detail](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/d0703273-192e-4ec7-a438-5878009a7adc)
 ## 프로젝트 ERD
-![kosta_final_pjt_ppt_ver_fianl_erd](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/e12c9fed-4f67-4b2f-a7a6-3d98bfde1fa7)
+![파이널erd](https://github.com/user-attachments/assets/cf7108cb-3928-4efe-bade-31c4395794d5)
 
 ## 프로젝트 흐름도
 ![kosta_final_pjt_ppt_ver_fianl_flow](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/ea5a340a-7cc2-4041-86d2-10a8f2ea69bb)
