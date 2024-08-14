@@ -51,10 +51,10 @@
 
 ## 프로젝트 소개
 > #### 관리 시스템 정의
-![kosta_final_pjt_ppt_ver_fianl_1](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/4eea3baf-dee1-4870-a23b-0be259766d20)
+![관리시스템](https://github.com/user-attachments/assets/2b361b8d-37bb-4122-83f4-8bb05c5a4b6a)
 
 > #### 협업 시스템 정의
-![kosta_final_pjt_ppt_ver_fianl_2](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/1251d3cb-8b0b-4156-887f-bc72f0a11aac)
+![협업시스템](https://github.com/user-attachments/assets/1dfa333b-9e3d-4833-b6c3-c09ae0a3765f)
 
 ## 상세 기능
 ![kosta_final_pjt_ppt_ver_fianl_detail](https://github.com/choiwanmin/kosta_final_pjt/assets/111493653/d0703273-192e-4ec7-a438-5878009a7adc)
